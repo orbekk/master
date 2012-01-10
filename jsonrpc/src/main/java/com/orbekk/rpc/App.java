@@ -16,6 +16,8 @@ public class App {
         String networkName = args[1];
 
         SameState sameState = new SameState(networkName);
+        sameState.start();
+
         SameServiceImpl service = new SameServiceImpl(sameState);
         JsonRpcServer jsonServer = new JsonRpcServer(service,
                 SameService.class);   
