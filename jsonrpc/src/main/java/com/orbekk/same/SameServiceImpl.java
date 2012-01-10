@@ -6,13 +6,18 @@ import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SameServiceImpl implements SameService {
+public class SameServiceImpl implements SameService, CallerInfoListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private List<String> participants = new LinkedList<String>();
-    private String networkName;
+    private SameState sameState;
+    private String currentCallerIp;
 
-    public SameServiceImpl(String networkName) {
-        this.networkName = networkName;
+    public SameServiceImpl(SameState sameState) {
+        this.sameState = sameState;
+    }
+
+    @Override
+    public void setCaller(String callerIp) {
+        currentCallerIp = callerIp;
     }
 
     @Override
@@ -21,12 +26,25 @@ public class SameServiceImpl implements SameService {
     }
 
     @Override
-    public String participateNetwork(String networkName) {
-        logger.info("Got participation request.");
-        if (!networkName.equals(this.networkName)) {
+    public void participateNetwork(String networkName, int remotePort) {
+        if (!networkName.equals(sameState.getNetworkName())) {
             logger.warn("Client tried to join {}, but network name is {}.",
-                    networkName, this.networkName);
+                    networkName, sameState.getNetworkName());
         }
-        return "<Not implemented>";
+        String url = "http://" + currentCallerIp + ":" + remotePort;
+        sameState.addParticipant(url);
+    }
+
+    @Override
+    public void notifyParticipation(String networkName,
+            List<String> participants) {
+        logger.info("Joining network {}.", networkName);
+        int i = 1;
+        for (String participant : participants) {
+            logger.info("  {} participant {}: {}",
+                    new Object[]{networkName, i, participant});
+            i++;
+        }
+        logger.warn("Joining not implemented.");
     }
 }

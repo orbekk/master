@@ -1,6 +1,7 @@
 package com.orbekk.rpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.same.SameState;
 import com.orbekk.same.SameService;
 import com.orbekk.same.SameServiceImpl;
 import org.eclipse.jetty.server.Server;
@@ -14,12 +15,13 @@ public class App {
         int port = Integer.parseInt(args[0]);
         String networkName = args[1];
 
-        SameService service = new SameServiceImpl(networkName);
+        SameState sameState = new SameState(networkName);
+        SameServiceImpl service = new SameServiceImpl(sameState);
         JsonRpcServer jsonServer = new JsonRpcServer(service,
                 SameService.class);   
     
         Server server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(jsonServer);
+        RpcHandler rpcHandler = new RpcHandler(jsonServer, service);
         server.setHandler(rpcHandler);
 
         try {

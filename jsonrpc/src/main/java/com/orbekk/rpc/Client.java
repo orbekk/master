@@ -10,11 +10,12 @@ import com.googlecode.jsonrpc4j.ProxyUtil;
 public class Client {
     
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.err.println("Arguments: networkAddress");
+        if (args.length < 2) {
+            System.err.println("Arguments: networkAddress port");
             System.exit(1);
         }
         String networkAddress = args[0];
+        int port = Integer.parseInt(args[1]);
         JsonRpcHttpClient client = null;
         try {
             client = new JsonRpcHttpClient(new URL(networkAddress));
@@ -26,6 +27,6 @@ public class Client {
                 SameService.class,
                 client);
         service.notifyNetwork("NoNetwork");
-        System.out.println(service.participateNetwork("FirstNetwork"));
+        service.participateNetwork("FirstNetwork", port);
     }
 }
