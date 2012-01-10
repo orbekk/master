@@ -1,7 +1,8 @@
 package com.orbekk;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.rpc.PingService;
@@ -9,8 +10,8 @@ import com.orbekk.rpc.PingServiceImpl;
 import com.orbekk.rpc.RpcHandler;
 
 public class PingServer {
-    Server server;
-    Logger logger = Logger.getLogger(getClass());
+    private Server server;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public PingServer(Server server) {
         this.server = server;

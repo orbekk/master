@@ -7,7 +7,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.content.Context;
 import android.net.DhcpInfo;
@@ -15,7 +16,7 @@ import android.net.wifi.WifiManager;
 
 public class Broadcast {
     private Context context;
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
     
     public Broadcast(Context context) {
         this.context = context;
