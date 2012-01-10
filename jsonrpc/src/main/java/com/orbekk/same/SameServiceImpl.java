@@ -23,8 +23,9 @@ public class SameServiceImpl implements SameService {
     @Override
     public String participateNetwork(String networkName) {
         logger.info("Got participation request.");
-        if (networkName != this.networkName) {
-            logger.info("Network name mismatch.");
+        if (!networkName.equals(this.networkName)) {
+            logger.warn("Client tried to join {}, but network name is {}.",
+                    networkName, this.networkName);
         }
         return "<Not implemented>";
     }
