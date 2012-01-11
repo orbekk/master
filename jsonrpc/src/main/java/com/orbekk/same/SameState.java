@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory;
  */
 public class SameState extends Thread {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private ConnectionManager connections;
     private List<String> participants = new LinkedList<String>();
     private String currentState = "";
     private String networkName;
+    // The client id of this participant.
+    private String clientId;
     private boolean stopped = false;
 
     /**
@@ -22,12 +25,19 @@ public class SameState extends Thread {
      */
     private List<String> pendingParticipants = new LinkedList<String>();
 
-    public SameState(String networkName) {
+    public SameState(String networkName, String clientId,
+            ConnectionManager connections) {
         this.networkName = networkName;
+        this.clientId = clientId;
+        this.connections = connections;
     }
 
     public synchronized List<String> getParticipants() {
         return participants;
+    }
+
+    public String getClientId() {
+        return clientId;
     }
 
     public String getNetworkName() {
@@ -38,18 +48,24 @@ public class SameState extends Thread {
         return currentState;
     }
 
-    public synchronized void addParticipant(String url) {
+    public synchronized void addParticipant(String clientId, String url) {
         synchronized(this) {
-            logger.info("Add pending participant: {}", url);
+            logger.info("Add pending participant: {} ({})", clientId, url);
             pendingParticipants.add(url);
             notifyAll();
         }
     }
 
     private synchronized void handleNewParticipants() {
+        // Adding all pending participants ensures that each of the new
+        // participants is informed of all participants.
+        //
+        // TODO: Does not inform old participants.
+        participants.addAll(pendingParticipants);
         for (String url : pendingParticipants) {
             logger.info("New participant: {}", url);
-            participants.add(url);
+            SameService remoteService = connections.getConnection(url);
+            remoteService.notifyParticipation(networkName, participants);
         }
         pendingParticipants.clear();
     }

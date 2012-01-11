@@ -1,6 +1,7 @@
 package com.orbekk.rpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.same.ConnectionManagerImpl;
 import com.orbekk.same.SameState;
 import com.orbekk.same.SameService;
 import com.orbekk.same.SameServiceImpl;
@@ -8,14 +9,18 @@ import org.eclipse.jetty.server.Server;
 
 public class App {
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("Arguments: port networkName");
+        if (args.length < 3) {
+            System.err.println("Arguments: port networkName clientId");
             System.exit(1);
         }
         int port = Integer.parseInt(args[0]);
         String networkName = args[1];
+        String clientId = args[2];
 
-        SameState sameState = new SameState(networkName);
+        ConnectionManagerImpl connections = new ConnectionManagerImpl();
+
+        SameState sameState = new SameState(networkName, clientId,
+                connections);
         sameState.start();
 
         SameServiceImpl service = new SameServiceImpl(sameState);

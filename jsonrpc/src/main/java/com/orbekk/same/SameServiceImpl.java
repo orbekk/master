@@ -26,13 +26,16 @@ public class SameServiceImpl implements SameService, CallerInfoListener {
     }
 
     @Override
-    public void participateNetwork(String networkName, int remotePort) {
+    public void participateNetwork(String networkName, String clientId,
+            String url, int remotePort) {
         if (!networkName.equals(sameState.getNetworkName())) {
             logger.warn("Client tried to join {}, but network name is {}.",
                     networkName, sameState.getNetworkName());
         }
-        String url = "http://" + currentCallerIp + ":" + remotePort;
-        sameState.addParticipant(url);
+        if (url.equals("")) {
+            url = "http://" + currentCallerIp + ":" + remotePort;
+        }
+        sameState.addParticipant(clientId, url);
     }
 
     @Override
