@@ -56,5 +56,18 @@ public class SameStateTest {
         assertTrue(state1.getParticipants().size() == 2);
         assertTrue(state2.getParticipants().size() == 2);
         assertEquals(state1.getNetworkName(), state2.getNetworkName());
+
+        connections.getConnection(state2.getUrl()).
+            participateNetwork("Network1", state3.getClientId(),
+                    state3.getUrl());
+        state2.internalRun();
+        state1.internalRun();
+        state3.internalRun();
+
+        assertTrue(state1.getParticipants().size() == 3);
+        assertTrue(state2.getParticipants().size() == 3);
+        assertTrue(state3.getParticipants().size() == 3);
+        assertEquals(state1.getNetworkName(), state2.getNetworkName());
+        assertEquals(state2.getNetworkName(), state3.getNetworkName());
     }
 }
