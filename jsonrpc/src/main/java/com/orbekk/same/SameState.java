@@ -143,9 +143,19 @@ public class SameState extends Thread implements UrlReceiver {
         pendingParticipants.clear();
     }
 
+    /**
+     * This method runs the pending commands to SameState.
+     *
+     * It should be called by the worker thread, but can be called directly
+     * for testing purposes to avoid threading in unit tests.
+     */
+    synchronized void internalRun() {
+        handleNewParticipants();
+    }
+
     public synchronized void run() {
         while (!stopped) {
-            handleNewParticipants();
+            internalRun();
             try {
                 wait(1000);
             } catch (InterruptedException e) {
