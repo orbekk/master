@@ -20,6 +20,6 @@ public interface SameService {
     /**
      * Notification of participation in network.
      */
-    void notifyParticipation(String networkName,
+    void notifyParticipation(String networkName, String masterId,
             Map<String, String> participants);
 }

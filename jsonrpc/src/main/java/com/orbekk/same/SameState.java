@@ -19,6 +19,18 @@ public class SameState extends Thread implements UrlReceiver {
     private String networkName;
 
     /**
+     * The master participant id.
+     */
+    private String masterId;
+
+    /**
+     * TODO: Remove.
+     */
+    public void setMasterId(String masterId) {
+        this.masterId = masterId;
+    }
+
+    /**
      * The participants of this network.
      *
      * Maps clientId to url.
@@ -43,6 +55,7 @@ public class SameState extends Thread implements UrlReceiver {
         this.networkName = networkName;
         this.clientId = clientId;
         this.connections = connections;
+        this.masterId = clientId;
         participants.put(clientId, null);
     }
 
@@ -53,6 +66,24 @@ public class SameState extends Thread implements UrlReceiver {
      */
     public synchronized Map<String, String> getParticipants() {
         return participants;
+    }
+
+    /**
+     * Reset this SameService to an initial state.
+     *
+     * TODO: Implement fully.
+     */
+    private synchronized void resetState() {
+        pendingParticipants.clear();
+    }
+
+    public synchronized void joinNetwork(String networkName, String masterId,
+            Map<String, String> participants) {
+        resetState();
+        this.networkName = networkName;
+        this.masterId = masterId;
+        this.participants = participants;
+        logger.info("Joined network {}.", networkName);
     }
 
     public String getClientId() {
@@ -83,18 +114,31 @@ public class SameState extends Thread implements UrlReceiver {
         notifyAll();
     }
 
+    private boolean isMaster() {
+        return masterId.equals(clientId);
+    }
+
     private synchronized void handleNewParticipants() {
-        // Adding all pending participants ensures that each of the new
-        // participants is informed of all participants.
-        //
-        // TODO: Does not inform old participants.
-        participants.putAll(pendingParticipants);
-        for (Map.Entry<String, String> e : pendingParticipants.entrySet()) {
-            String clientId = e.getKey();
-            String url = e.getValue();
-            logger.info("New participant: {} URL({})", clientId, url);
-            SameService remoteService = connections.getConnection(url);
-            remoteService.notifyParticipation(networkName, participants);
+        if (!isMaster()) {
+            for (Map.Entry<String, String> e : pendingParticipants.entrySet()) {
+                SameService master = connections.getConnection(
+                        participants.get(masterId));
+                logger.info("Redirecting participant request to {}", masterId);
+                String clientId = e.getKey();
+                String url = e.getValue();
+                master.participateNetwork(networkName, clientId, url);
+            }
+        } else {
+            participants.putAll(pendingParticipants);
+            for (Map.Entry<String, String> e :
+                    pendingParticipants.entrySet()) {
+                String clientId = e.getKey();
+                String url = e.getValue();
+                logger.info("New participant: {} URL({})", clientId, url);
+                SameService remoteService = connections.getConnection(url);
+                remoteService.notifyParticipation(networkName, masterId,
+                        participants);
+            }
         }
         pendingParticipants.clear();
     }

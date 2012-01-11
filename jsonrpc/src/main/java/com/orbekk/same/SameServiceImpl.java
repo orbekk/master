@@ -35,9 +35,9 @@ public class SameServiceImpl implements SameService {
     }
 
     @Override
-    public void notifyParticipation(String networkName,
+    public void notifyParticipation(String networkName, String masterId,
             Map<String, String> participants) {
-        logger.info("Joining network {}.", networkName);
+        logger.info("Joining network {}. Master is {}", networkName, masterId);
         int i = 1;
         for (Map.Entry<String, String> e : participants.entrySet()) {
             String clientId = e.getKey();
@@ -46,6 +46,6 @@ public class SameServiceImpl implements SameService {
                     new Object[]{networkName, i, clientId, url});
             i++;
         }
-        logger.warn("Joining not implemented.");
+        sameState.joinNetwork(networkName, masterId, participants);
     }
 }
