@@ -1,0 +1,4 @@
+* com.orbekk.same.SameState → SameControl
+* jsonrpc → same
+* master → same-android
+* com.orbekk.rpc → com.orbekk.same? 
