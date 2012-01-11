@@ -1,6 +1,6 @@
 package com.orbekk.same;
 
-import java.util.List;
+import java.util.Map;
 
 public interface SameService {
     /**
@@ -20,5 +20,6 @@ public interface SameService {
     /**
      * Notification of participation in network.
      */
-    void notifyParticipation(String networkName, List<String> participants);
+    void notifyParticipation(String networkName,
+            Map<String, String> participants);
 }

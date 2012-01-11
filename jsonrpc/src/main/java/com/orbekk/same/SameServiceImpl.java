@@ -1,7 +1,6 @@
 package com.orbekk.same;
 
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +36,14 @@ public class SameServiceImpl implements SameService {
 
     @Override
     public void notifyParticipation(String networkName,
-            List<String> participants) {
+            Map<String, String> participants) {
         logger.info("Joining network {}.", networkName);
         int i = 1;
-        for (String participant : participants) {
-            logger.info("  {} participant {}: {}",
-                    new Object[]{networkName, i, participant});
+        for (Map.Entry<String, String> e : participants.entrySet()) {
+            String clientId = e.getKey();
+            String url = e.getValue();
+            logger.info("  {} participant {}: {}, {}",
+                    new Object[]{networkName, i, clientId, url});
             i++;
         }
         logger.warn("Joining not implemented.");
