@@ -15,33 +15,10 @@ import org.slf4j.LoggerFactory;
 public class SameState extends Thread implements UrlReceiver {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
-    private String currentState = "";
-    private String _setState = null;
 
-    private String networkName;
-
-    /**
-     * The master participant id.
-     */
-    private String masterId;
-
-    public String getMasterId() {
-        return this.masterId;
-    }
-
-    /**
-     * The participants of this network.
-     *
-     * Maps clientId to url.
-     */
-    private Map<String, String> participants = new HashMap<String, String>();
-
-    /**
-     * New participants.
-     *
-     * New participants map to replace participants.
-     */
-    private Map<String, String> _setParticipants = null;
+    // TODO: Change the name of State.
+    private com.orbekk.same.State state =
+            new com.orbekk.same.State();
 
     /**
      * The client id of this participant.
@@ -53,25 +30,27 @@ public class SameState extends Thread implements UrlReceiver {
      */
     private boolean stopped = false;
 
+    private String _setState = null;
+    private Map<String, String> _setParticipants = null;
+
     private Map<String, String> pendingParticipants =
             new HashMap<String, String>();
 
     public SameState(String networkName, String clientId,
             ConnectionManager connections) {
-        this.networkName = networkName;
+        state.setNetworkName(networkName);
         this.clientId = clientId;
         this.connections = connections;
-        this.masterId = clientId;
-        participants.put(clientId, null);
+        state.setMasterId(clientId);
+        state.getParticipants().put(clientId, null);
     }
 
-    /**
-     * Get participants as a list.
-     *
-     * List format: ["clientId1,url1", "clientId2,url2", ...]
-     */
+    public String getMasterId() {
+        return state.getMasterId();
+    }
+
     public synchronized Map<String, String> getParticipants() {
-        return participants;
+        return state.getParticipants();
     }
 
     /**
@@ -80,16 +59,14 @@ public class SameState extends Thread implements UrlReceiver {
      * TODO: Implement fully.
      */
     private synchronized void resetState() {
-        networkName = "";
-        masterId = "";
+        state = new com.orbekk.same.State();
         pendingParticipants.clear();
-        participants.clear();
     }
 
     public synchronized void joinNetwork(String networkName, String masterId) {
         resetState();
-        this.networkName = networkName;
-        this.masterId = masterId;
+        state.setNetworkName(networkName);
+        state.setMasterId(masterId);
         logger.info("Joined network {}.", networkName);
     }
 
@@ -98,29 +75,30 @@ public class SameState extends Thread implements UrlReceiver {
     }
 
     public String getNetworkName() {
-        return networkName;
+        return state.getNetworkName();
     }
 
     public String getCurrentState() {
-        return currentState;
+        return state.getData();
     }
 
     /**
      * TODO: Move to a separate library.
      */
     public void librarySetNewState(String newState) {
-        connections.getConnection(participants.get(masterId))
+        connections.getConnection(
+                state.getParticipants().get(state.getMasterId()))
                 .setState(newState);
     }
 
     public String getUrl() {
-        return participants.get(clientId);
+        return state.getParticipants().get(clientId);
     }
 
     @Override
     public void setUrl(String url) {
         logger.info("My URL is {}", url);
-        participants.put(clientId, url);
+        state.getParticipants().put(clientId, url);
     }
 
     public synchronized void addParticipant(String clientId, String url) {
@@ -147,7 +125,8 @@ public class SameState extends Thread implements UrlReceiver {
                 logger.error("{}: Master received setParticipants.", clientId);
             } else {
                 logger.info("{}: New participants committed.", clientId);
-                participants = _setParticipants;
+                state.getParticipants().clear();
+                state.getParticipants().putAll(_setParticipants);
             }
         }
         _setParticipants = null;
@@ -162,37 +141,40 @@ public class SameState extends Thread implements UrlReceiver {
                     }
                 });
             }
-            currentState = _setState;
+            state.setData(_setState);
             _setState = null;
         }
     }
 
     private boolean isMaster() {
-        return masterId.equals(clientId);
+        return state.getMasterId().equals(clientId);
     }
 
     private synchronized void handleNewParticipants() {
         if (!isMaster()) {
             for (Map.Entry<String, String> e : pendingParticipants.entrySet()) {
                 SameService master = connections.getConnection(
-                        participants.get(masterId));
-                logger.info("Redirecting participant request to {}", masterId);
+                        state.getParticipants().get(state.getMasterId()));
+                logger.info("Redirecting participant request to {}",
+                        state.getMasterId());
                 String clientId = e.getKey();
                 String url = e.getValue();
-                master.participateNetwork(networkName, clientId, url);
+                master.participateNetwork(state.getNetworkName(), clientId,
+                        url);
             }
         } else {
-            participants.putAll(pendingParticipants);
+            state.getParticipants().putAll(pendingParticipants);
             for (Map.Entry<String, String> e :
                     pendingParticipants.entrySet()) {
                 String clientId = e.getKey();
                 String url = e.getValue();
                 logger.info("New participant: {} URL({})", clientId, url);
                 SameService remoteService = connections.getConnection(url);
-                remoteService.notifyParticipation(networkName, masterId);
+                remoteService.notifyParticipation(state.getNetworkName(),
+                        state.getMasterId());
                 broadcast(new ServiceOperation(){
                     @Override void run(SameService service) {
-                        service.setParticipants(participants);
+                        service.setParticipants(state.getParticipants());
                     }
                 });
             }
@@ -239,7 +221,8 @@ public class SameState extends Thread implements UrlReceiver {
     }
     
     public synchronized void broadcast(ServiceOperation operation) {
-        for (Map.Entry<String, String> e : participants.entrySet()) {
+        for (Map.Entry<String, String> e :
+                state.getParticipants().entrySet()) {
             String clientId = e.getKey();
             String url = e.getValue();
             if (!clientId.equals(this.clientId)) {

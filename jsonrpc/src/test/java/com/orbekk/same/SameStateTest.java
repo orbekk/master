@@ -79,6 +79,7 @@ public class SameStateTest {
         state2.internalRun();
         state1.internalRun();
         state3.internalRun();
+        state2.internalRun();
 
         assertTrue(state1.getParticipants().size() == 3);
         assertTrue(state2.getParticipants().size() == 3);
