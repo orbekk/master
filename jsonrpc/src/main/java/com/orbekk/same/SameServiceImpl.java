@@ -6,18 +6,12 @@ import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SameServiceImpl implements SameService, CallerInfoListener {
+public class SameServiceImpl implements SameService {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameState sameState;
-    private String currentCallerIp;
 
     public SameServiceImpl(SameState sameState) {
         this.sameState = sameState;
-    }
-
-    @Override
-    public void setCaller(String callerIp) {
-        currentCallerIp = callerIp;
     }
 
     @Override
@@ -27,13 +21,16 @@ public class SameServiceImpl implements SameService, CallerInfoListener {
 
     @Override
     public void participateNetwork(String networkName, String clientId,
-            String url, int remotePort) {
+            String url) {
         if (!networkName.equals(sameState.getNetworkName())) {
             logger.warn("Client tried to join {}, but network name is {}.",
                     networkName, sameState.getNetworkName());
+            return;
         }
-        if (url.equals("")) {
-            url = "http://" + currentCallerIp + ":" + remotePort;
+        if (clientId.equals("") || url.equals("")) {
+            logger.warn("Missing client info: ClientId({}), URL({}).",
+                    clientId, url);
+            return;
         }
         sameState.addParticipant(clientId, url);
     }

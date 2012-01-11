@@ -5,6 +5,7 @@ import com.orbekk.same.ConnectionManagerImpl;
 import com.orbekk.same.SameState;
 import com.orbekk.same.SameService;
 import com.orbekk.same.SameServiceImpl;
+import com.orbekk.net.HttpUtil;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.eclipse.jetty.server.Server;
@@ -33,7 +34,7 @@ public class Client {
                 SameService.class);   
     
         Server server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(jsonServer, service);
+        RpcHandler rpcHandler = new RpcHandler(jsonServer, sameState);
         server.setHandler(rpcHandler);
 
         try {
@@ -42,11 +43,20 @@ public class Client {
             System.out.println("Could not start jetty server.");
             e.printStackTrace();
         }
+
+        while (sameState.getUrl() == null) {
+            HttpUtil.sendHttpRequest(remoteAddr + "ping?port=" + port);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                // Ignore interrupt in wait loop.
+            }
+        }
         
         SameService remoteService = connections.getConnection(remoteAddr);
         remoteService.notifyNetwork("NoNetwork");
         remoteService.participateNetwork("FirstNetwork",
-                sameState.getClientId(), "", port);
+                sameState.getClientId(), sameState.getUrl());
 
         try {
             server.join();

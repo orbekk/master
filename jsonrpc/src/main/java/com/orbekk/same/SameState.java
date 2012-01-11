@@ -10,14 +10,30 @@ import org.slf4j.LoggerFactory;
  *
  * This class manages the current state of the Same protocol.
  */
-public class SameState extends Thread {
+public class SameState extends Thread implements UrlReceiver {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private List<String> participants = new LinkedList<String>();
     private String currentState = "";
     private String networkName;
-    // The client id of this participant.
+
+    /**
+     * The client id of this participant.
+     */
     private String clientId;
+
+    /**
+     * The URL of this participant.
+     *
+     * Important note: Our URL is unknown initially. Url is null until we
+     * receive our first request. The URL is then taken to be the target URL
+     * from the request.
+     */
+    private String url = null;
+
+    /**
+     * Stopping condition for this thread.
+     */
     private boolean stopped = false;
 
     /**
@@ -48,12 +64,20 @@ public class SameState extends Thread {
         return currentState;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public void setUrl(String url) {
+        logger.info("My URL is {}", url);
+        this.url = url;
+    }
+
     public synchronized void addParticipant(String clientId, String url) {
-        synchronized(this) {
-            logger.info("Add pending participant: {} ({})", clientId, url);
-            pendingParticipants.add(url);
-            notifyAll();
-        }
+        logger.info("PendingParticipant.add: {} ({})", clientId, url);
+        pendingParticipants.add(url);
+        notifyAll();
     }
 
     private synchronized void handleNewParticipants() {

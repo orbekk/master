@@ -13,14 +13,9 @@ public interface SameService {
 
     /**
      * A request from the callee to participate in 'networkName'.
-     *
-     * A client may not know its URL. If the url parameter is empty,
-     * use info from the HttpServletRequest.
-     *
-     * TODO: Always pass a valid URL and get rid of the port parameter.
      */
     void participateNetwork(String networkName, String clientId,
-            String url, int remotePort);
+            String url);
 
     /**
      * Notification of participation in network.

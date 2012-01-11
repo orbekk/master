@@ -28,7 +28,7 @@ public class App {
                 SameService.class);   
     
         Server server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(jsonServer, service);
+        RpcHandler rpcHandler = new RpcHandler(jsonServer, sameState);
         server.setHandler(rpcHandler);
 
         try {
