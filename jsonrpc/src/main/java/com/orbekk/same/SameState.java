@@ -16,6 +16,8 @@ public class SameState extends Thread implements UrlReceiver {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private String currentState = "";
+    private String _setState = null;
+
     private String networkName;
 
     /**
@@ -23,11 +25,8 @@ public class SameState extends Thread implements UrlReceiver {
      */
     private String masterId;
 
-    /**
-     * TODO: Remove.
-     */
-    public void setMasterId(String masterId) {
-        this.masterId = masterId;
+    public String getMasterId() {
+        return this.masterId;
     }
 
     /**
@@ -106,6 +105,14 @@ public class SameState extends Thread implements UrlReceiver {
         return currentState;
     }
 
+    /**
+     * TODO: Move to a separate library.
+     */
+    public void librarySetNewState(String newState) {
+        connections.getConnection(participants.get(masterId))
+                .setState(newState);
+    }
+
     public String getUrl() {
         return participants.get(clientId);
     }
@@ -128,6 +135,12 @@ public class SameState extends Thread implements UrlReceiver {
         notifyAll();
     }
 
+    public synchronized void setState(String newState) {
+        logger.info("Pending operation: _setState");
+        _setState = newState;
+        notifyAll();
+    }
+
     private synchronized void handleSetParticipants() {
         if (_setParticipants != null) {
             if (isMaster()) {
@@ -138,6 +151,20 @@ public class SameState extends Thread implements UrlReceiver {
             }
         }
         _setParticipants = null;
+    }
+
+    public synchronized void handleSetState() {
+        if (_setState != null) {
+            if (isMaster()) {
+                broadcast(new ServiceOperation() {
+                    @Override void run(SameService service) {
+                        service.setState(_setState);
+                    }
+                });
+            }
+            currentState = _setState;
+            _setState = null;
+        }
     }
 
     private boolean isMaster() {
@@ -181,6 +208,7 @@ public class SameState extends Thread implements UrlReceiver {
      */
     synchronized void internalRun() {
         handleNewParticipants();
+        handleSetState();
         handleSetParticipants();
     }
 

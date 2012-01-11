@@ -55,6 +55,6 @@ public class SameServiceImpl implements SameService {
 
     @Override
     public void setState(String newState) {
-        logger.error("setState not implemented.");
+        sameState.setState(newState);
     }
 }

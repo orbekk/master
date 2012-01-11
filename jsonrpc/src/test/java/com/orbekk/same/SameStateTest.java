@@ -43,6 +43,22 @@ public class SameStateTest {
         connections.connections.put(state3.getUrl(), service3);
     }
 
+    public void joinNetwork() {
+        connections.getConnection(state1.getUrl()).
+            participateNetwork("Network1", state2.getClientId(),
+                    state2.getUrl());
+        connections.getConnection(state1.getUrl()).
+            participateNetwork("Network1", state3.getClientId(),
+                    state3.getUrl());
+        state1.internalRun();
+        state2.internalRun();
+        state3.internalRun();
+
+        assertTrue(state1.getParticipants().size() == 3);
+        assertTrue(state2.getParticipants().size() == 3);
+        assertTrue(state3.getParticipants().size() == 3);
+    }
+
     @Test public void testJoinNetwork() {
         connections.getConnection(state1.getUrl()).
             participateNetwork("Network1", state2.getClientId(),
@@ -69,5 +85,19 @@ public class SameStateTest {
         assertTrue(state3.getParticipants().size() == 3);
         assertEquals(state1.getNetworkName(), state2.getNetworkName());
         assertEquals(state2.getNetworkName(), state3.getNetworkName());
+
+        assertEquals("Client1", state1.getMasterId());
+        assertEquals("Client1", state2.getMasterId());
+        assertEquals("Client1", state3.getMasterId());
+    }
+
+    @Test public void setState() {
+        joinNetwork();
+        state1.librarySetNewState("New state1");
+        state1.internalRun();
+        state2.internalRun();
+        state3.internalRun();
+        assertEquals(state1.getCurrentState(), state2.getCurrentState());
+        assertEquals(state2.getCurrentState(), state3.getCurrentState());
     }
 }
