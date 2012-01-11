@@ -97,7 +97,8 @@ public class SameStateTest {
         state1.internalRun();
         state2.internalRun();
         state3.internalRun();
-        assertEquals(state1.getCurrentState(), state2.getCurrentState());
-        assertEquals(state2.getCurrentState(), state3.getCurrentState());
+        assertEquals("New state1", state1.getCurrentState());
+        assertEquals("New state1", state2.getCurrentState());
+        assertEquals("New state1", state2.getCurrentState());
     }
 }
