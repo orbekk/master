@@ -1,8 +1,7 @@
-package com.orbekk.rpc;
+package com.orbekk.same;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
-import com.orbekk.same.UrlReceiver;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
