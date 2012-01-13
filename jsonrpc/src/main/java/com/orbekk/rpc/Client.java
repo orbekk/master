@@ -6,8 +6,6 @@ import com.orbekk.same.SameState;
 import com.orbekk.same.SameService;
 import com.orbekk.same.SameServiceImpl;
 import com.orbekk.net.HttpUtil;
-import java.net.MalformedURLException;
-import java.net.URL;
 import org.eclipse.jetty.server.Server;
 
 public class Client {
