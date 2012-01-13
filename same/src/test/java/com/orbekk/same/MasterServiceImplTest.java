@@ -34,4 +34,11 @@ public class MasterServiceImplTest {
         List<String> participants = state.getList(".participants");
         assertTrue(participants.contains("http://clientUrl"));
     }
+    
+    @Test
+    public void workLoopClearsUpdatedComponents() {
+        state.update("Test", "Content", 0);
+        assertTrue(master._performWork());
+        assertTrue(state.getAndClearUpdatedComponents().isEmpty());
+    }
 }

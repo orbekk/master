@@ -17,18 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is not thread-safe. In particular, modifications to this class
- * while getUpdatedComponents() is being used is unsafe. When accessing
- * updatedComponents, synchronize on State:
- * 
- * <code>
- * synchronize (state) {
- *   for (String component : state.updatedComponents()) {
- *     // Do work.
- *   }
- *   state.clearUpdatedComponents();
- * }
- * </code>
+ * This class is thread-safe.
  */
 public class State {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -128,12 +117,17 @@ public class State {
         }
     }
     
-    public Set<String> getUpdatedComponents() {
-        return updatedComponents;
+    /**
+     * Pretty print a component.
+     */
+    public String show(String componentName) {
+        return componentName + ": " + state.get(componentName);
     }
-
-    public void clearUpdatedComponents() {
-        this.updatedComponents.clear();
+    
+    public synchronized Set<String> getAndClearUpdatedComponents() {
+        Set<String> copy = new TreeSet<String>(updatedComponents);
+        updatedComponents.clear();
+        return copy;
     }
 
     public static class Component {
