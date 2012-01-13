@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -14,11 +16,26 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class is not thread-safe. In particular, modifications to this class
+ * while getUpdatedComponents() is being used is unsafe. When accessing
+ * updatedComponents, synchronize on State:
+ * 
+ * <code>
+ * synchronize (state) {
+ *   for (String component : state.updatedComponents()) {
+ *     // Do work.
+ *   }
+ *   state.clearUpdatedComponents();
+ * }
+ * </code>
+ */
 public class State {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Map<String, Component> state = new HashMap<String, Component>(); 
     private ObjectMapper mapper = new ObjectMapper();
-
+    private Set<String> updatedComponents = new TreeSet<String>();
+    
     public State(String networkName) {
         update(".networkName", networkName, 0);
         updateFromObject(".participants", new ArrayList<String>(), 0);
@@ -36,6 +53,7 @@ public class State {
             component.setRevision(revision + 1);
             component.setData(data);
             state.put(componentName, component);
+            updatedComponents.add(componentName);
             return true;
         } else {
             return false;
@@ -110,6 +128,14 @@ public class State {
         }
     }
     
+    public Set<String> getUpdatedComponents() {
+        return updatedComponents;
+    }
+
+    public void clearUpdatedComponents() {
+        this.updatedComponents.clear();
+    }
+
     public static class Component {
         private long revision;
         private String data;
