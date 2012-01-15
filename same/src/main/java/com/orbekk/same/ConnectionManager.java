@@ -6,5 +6,6 @@ package com.orbekk.same;
  * When testing, this interface can be mocked to use local participants only.
  */
 public interface ConnectionManager {
-    SameService getConnection(String url);
+    ClientService getClient(String url);
+    MasterService getMaster(String url);
 }
