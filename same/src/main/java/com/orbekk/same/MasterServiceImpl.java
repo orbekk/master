@@ -10,10 +10,10 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private ConnectionManager connections;
     private State state;
     private boolean stopped = false;
-    private BroadcastRunner broadcaster;
+    private Broadcaster broadcaster;
 
     public MasterServiceImpl(State initialState, ConnectionManager connections,
-            BroadcastRunner broadcaster) {
+            Broadcaster broadcaster) {
         state = initialState;
         this.broadcaster = broadcaster;
 }
@@ -45,7 +45,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
             logger.info("Broadcasting new component {}", state.show(component));
             
             broadcaster.broadcast(participants(), new ServiceOperation() {
-               @Override void run(ClientService client) {
+               @Override public void run(ClientService client) {
                    client.setState(component, state.getDataOf(component),
                            state.getRevision(component));
                }

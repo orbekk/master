@@ -9,7 +9,8 @@ import org.junit.Test;
 
 public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
-    private MasterServiceImpl master = new MasterServiceImpl(state);
+    private MasterServiceImpl master = new MasterServiceImpl(state, null,
+            null);
         
     @Test
     public void setsMasterUrl() {
