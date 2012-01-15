@@ -7,17 +7,21 @@ import org.slf4j.LoggerFactory;
 
 public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private ConnectionManager connections;
     private State state;
     private boolean stopped = false;
-  
-    public MasterServiceImpl(State initialState) {
+    private BroadcastRunner broadcaster;
+
+    public MasterServiceImpl(State initialState, ConnectionManager connections,
+            BroadcastRunner broadcaster) {
         state = initialState;
-    }
+        this.broadcaster = broadcaster;
+}
     
     @Override
     public void joinNetworkRequest(String networkName, String clientUrl) {
         if (networkName.equals(state.getDataOf(".networkName"))) {
-            List<String> participants = state.getList(".participants");
+            List<String> participants = participants();
             if (!participants.contains(clientUrl)) {
                 participants.add(clientUrl);
                 synchronized(this) {
@@ -35,16 +39,26 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
                             state.getDataOf(".networkName") });
         }
     }
-    
     public boolean _handleJoinNetworkRequests() {
         boolean worked = false;
-        for (String component : state.getAndClearUpdatedComponents()) {
-            logger.error("TODO: Send state update for component {}",
-                    state.show(component));
+        for (final String component : state.getAndClearUpdatedComponents()) {
+            logger.info("Broadcasting new component {}", state.show(component));
+            
+            broadcaster.broadcast(participants(), new ServiceOperation() {
+               @Override void run(ClientService client) {
+                   client.setState(component, state.getDataOf(component),
+                           state.getRevision(component));
+               }
+            });
             worked = true;
         }
         return worked;
     }
+    
+    private List<String> participants() {
+        return state.getList(".participants");
+    }
+    
     
     @Override
     public boolean updateStateRequest(String component, String newData, long revision) {
