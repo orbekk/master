@@ -28,10 +28,11 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         List<String> participants = participants();
         if (!participants.contains(clientUrl)) {
             participants.add(clientUrl);
+            _fullStateReceivers.add(clientUrl);
             synchronized(this) {
-                notifyAll();
                 state.updateFromObject(".participants", participants,
                         state.getRevision(".participants"));
+                notifyAll();
             }
         } else {                
             logger.warn("Client {} already part of network. " +
@@ -58,7 +59,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         boolean hasWork = _fullStateReceivers.size() != 0;
         if (hasWork) {
             final List<State.Component> components = state.getComponents();
-            broadcaster.broadcast(participants(), new ServiceOperation() {
+            broadcaster.broadcast(_fullStateReceivers, new ServiceOperation() {
                 @Override public void run(ClientService client) {
                     for (Component c : components) {
                         client.setState(c.getName(), c.getData(), c.getRevision());
