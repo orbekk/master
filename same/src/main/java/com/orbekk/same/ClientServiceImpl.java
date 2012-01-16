@@ -21,12 +21,16 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
 
     @Override
     public void setState(String component, String data, long revision) {
-        logger.error("SetState not yet implemented.");
+        state.forceUpdate(component, data, revision);
     }
 
     @Override
     public void setUrl(String myUrl) {
         logger.info("My URL is {}.", myUrl);
         this.myUrl = myUrl;
+    }
+    
+    State testGetState() {
+        return state;
     }
 }

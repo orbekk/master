@@ -1,9 +1,12 @@
 package com.orbekk.same;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.orbekk.same.State.Component;
 
 public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -11,12 +14,13 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private State state;
     private boolean stopped = false;
     private Broadcaster broadcaster;
-
+    private List<String> _fullStateReceivers = new ArrayList<String>();
+    
     public MasterServiceImpl(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
         state = initialState;
         this.broadcaster = broadcaster;
-}
+    }
     
     @Override
     public void joinNetworkRequest(String networkName, String clientUrl) {
@@ -26,20 +30,21 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
                 participants.add(clientUrl);
                 synchronized(this) {
                     notifyAll();
+                    state.updateFromObject(".participants", participants,
+                            state.getRevision(".participants"));
                 }
             } else {                
                 logger.warn("Client {} already part of network. " +
                         "Ignoring participation request", clientUrl);
             }
-            state.updateFromObject(".participants", participants,
-                    state.getRevision(".participants"));
         } else {
             logger.warn("Client {} tried to join {}, but network name is {}",
                     new Object[]{ clientUrl, networkName, 
                             state.getDataOf(".networkName") });
         }
     }
-    public boolean _handleJoinNetworkRequests() {
+    
+    public boolean _sendUpdatedComponents() {
         boolean worked = false;
         for (final String component : state.getAndClearUpdatedComponents()) {
             logger.info("Broadcasting new component {}", state.show(component));
@@ -51,6 +56,19 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
             });
             worked = true;
         }
+        return worked;
+    }
+    
+    public boolean _sendFullState() {
+        boolean worked = _fullStateReceivers.size() != 0;
+        final List<State.Component> components = state.getComponents();
+        broadcaster.broadcast(participants(), new ServiceOperation() {
+            @Override public void run(ClientService client) {
+                for (Component c : components) {
+                    client.setState(c.getName(), c.getData(), c.getRevision());
+                }
+            }
+        });
         return worked;
     }
     
@@ -74,7 +92,8 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
 
     boolean _performWork() {
         boolean worked = false;
-        worked |= _handleJoinNetworkRequests();
+        worked |= _sendUpdatedComponents();
+        worked |= _sendFullState();
         return worked;
     }
     

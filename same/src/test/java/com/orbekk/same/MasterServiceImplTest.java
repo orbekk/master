@@ -56,5 +56,6 @@ public class MasterServiceImplTest {
         master.joinNetworkRequest("TestNetwork", "http://client");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client"));
+        assertEquals(state, client.testGetState());
     }
 }

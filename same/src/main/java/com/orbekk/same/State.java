@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is thread-safe.
  */
-public class State {
+public class State implements Comparable<State> {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Map<String, Component> state = new HashMap<String, Component>(); 
     private ObjectMapper mapper = new ObjectMapper();
@@ -30,15 +30,26 @@ public class State {
         updateFromObject(".participants", new ArrayList<String>(), 0);
     }
     
-    public boolean update(String componentName, String data, long revision) {
+    public synchronized void forceUpdate(String componentName,
+            String data, long revision) {
+        Component oldComponent = state.get(componentName);
+        Component newComponent = new Component(componentName, revision, data);
+        logger.info("Force update: {} => {}", oldComponent, newComponent);
+        state.put(componentName, newComponent);
+        updatedComponents.add(componentName);
+    }
+    
+    public synchronized boolean update(String componentName, String data,
+            long revision) {
         Component component = null;
         if (!state.containsKey(componentName)) {
-            component = new Component(0, "");
+            component = new Component("", 0, "");
         } else {
-            component = state.get(componentName);           
+            component = state.get(componentName);       
         }
         
         if (revision == component.getRevision()) {
+            component.setName(componentName);
             component.setRevision(revision + 1);
             component.setData(data);
             state.put(componentName, component);
@@ -124,6 +135,19 @@ public class State {
         return componentName + ": " + state.get(componentName);
     }
     
+    /**
+     * Returns a list of all the components in this State.
+     * 
+     * This method is thread-safe, and returns a deep copy.
+     */
+    public synchronized List<Component> getComponents() {
+        ArrayList<Component> list = new ArrayList<Component>();
+        for (Component component : state.values()) {
+            list.add(new Component(component));
+        }
+        return list;
+    }
+    
     public synchronized Set<String> getAndClearUpdatedComponents() {
         Set<String> copy = new TreeSet<String>(updatedComponents);
         updatedComponents.clear();
@@ -131,10 +155,21 @@ public class State {
     }
 
     public static class Component {
+        private String name;
         private long revision;
         private String data;
         
-        public Component(long revision, String data) {
+        /**
+         * Copy constructor.
+         */
+        public Component(Component other) {
+            this.name = other.name;
+            this.revision = other.revision;
+            this.data = other.data;
+        }
+        
+        public Component(String name, long revision, String data) {
+            this.name = name;
             this.revision = revision;
             this.data = data;
         }
@@ -142,6 +177,7 @@ public class State {
         public long getRevision() {
             return revision;
         }
+        
         public void setRevision(long revision) {
             this.revision = revision;
         }
@@ -149,14 +185,28 @@ public class State {
         public String getData() {
             return data;
         }
+
         public void setData(String data) {
             this.data = data;
         }       
+        
+        public String getName() {
+            return name;
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
         
         @Override public String toString() {
             return this.data + " @" + revision;
         }
     }
+    @Override
+    public int compareTo(State other) {
+        return -1;
+    }
+    
 //    
 //    @Override
 //    public String toString() {
@@ -187,4 +237,6 @@ public class State {
 //            ")", stateIteration, networkName, masterId, data,
 //            participantsString);
 //    }
+
+
 }
