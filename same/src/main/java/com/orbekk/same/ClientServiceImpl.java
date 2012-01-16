@@ -26,8 +26,12 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
 
     @Override
     public void setUrl(String myUrl) {
-        logger.info("My URL is {}.", myUrl);
-        this.myUrl = myUrl;
+        this.myUrl = myUrl + "ClientService.json";
+        logger.info("My URL is {}.", this.myUrl);
+    }
+    
+    public String getUrl() {
+        return myUrl;
     }
     
     State testGetState() {

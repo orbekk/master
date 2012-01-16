@@ -5,12 +5,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.net.HttpUtil;
 
 public class ClientApp {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Server server;
     
-    public void run(int port, String networkName) {
+    public void run(int port, String networkName, String masterUrl) {
+        logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
+                new Object[]{port, networkName, masterUrl});
         ConnectionManagerImpl connections = new ConnectionManagerImpl();
         State state = new State(networkName);
         Broadcaster broadcaster =
@@ -30,6 +33,15 @@ public class ClientApp {
             logger.error("Could not start jetty server: {}", e);
         }
         
+        while (client.getUrl() == null) {
+            HttpUtil.sendHttpRequest(masterUrl + "ping?port=" + port);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                // Ignore interrupt in wait loop.
+            }
+        }
+        
         try {
             server.join();
         } catch (InterruptedException e) {
@@ -38,12 +50,13 @@ public class ClientApp {
     }
     
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.err.println("Usage: port networkName");
+        if (args.length < 3) {
+            System.err.println("Usage: port networkName masterUrl");
             System.exit(1);
         }
         int port = Integer.parseInt(args[0]);
         String networkName = args[1];
-        (new ClientApp()).run(port, networkName);
+        String masterUrl = args[2];
+        (new ClientApp()).run(port, networkName, masterUrl);
     }
 }
