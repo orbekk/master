@@ -78,9 +78,13 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     
     
     @Override
-    public boolean updateStateRequest(String component, String newData, long revision) {
-        // TODO Auto-generated method stub
-        return false;
+    public synchronized boolean updateStateRequest(String component,
+            String newData, long revision) {
+        boolean updated = state.update(component, newData, revision);
+        if (updated) {
+            notifyAll();
+        }
+        return updated;
     }
 
     @Override

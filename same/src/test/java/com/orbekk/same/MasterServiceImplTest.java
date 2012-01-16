@@ -48,14 +48,48 @@ public class MasterServiceImplTest {
 
     @Test
     public void clientJoin() {
-        master.setUrl("http://master");
+        master.setUrl("http://master/");
         ClientServiceImpl client = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
-        client.setUrl("http://client");
-        connections.clientMap.put("http://client", client);
-        master.joinNetworkRequest("TestNetwork", "http://client");
+        client.setUrl("http://client/");
+        connections.clientMap.put("http://client/ClientService.json", client);
+        master.joinNetworkRequest("TestNetwork", "http://client/ClientService.json");
         assertTrue(master._performWork());
-        assertTrue(state.getList(".participants").contains("http://client"));
+        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
+    }
+    
+    @Test
+    public void validStateRequest() {
+        master.setUrl("http://master/");
+        ClientServiceImpl client1 = new ClientServiceImpl(
+                new State("ClientNetwork"), connections);
+        client1.setUrl("http://client/");
+        connections.clientMap.put("http://client/ClientService.json", client1);
+        ClientServiceImpl client2 = new ClientServiceImpl(
+                new State("ClientNetwork"), connections);
+        client1.setUrl("http://client2/");
+        connections.clientMap.put("http://client2/ClientService.json", client2);
+        
+        master.joinNetworkRequest("TestNetwork", "http://client/ClientService.json");
+        master.joinNetworkRequest("TestNetwork", "http://client2/ClientService.json");
+        
+        assertTrue(master._performWork());
+        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
+        assertTrue(state.getList(".participants").contains("http://client2/ClientService.json"));
+        assertEquals(state, client1.testGetState());
+        
+        assertTrue(master.updateStateRequest("A", "1", 0));
+        assertTrue(master._performWork());
+        
+        assertEquals(state, client1.testGetState());
+        assertEquals(state, client2.testGetState());
+        
+        assertFalse(master.updateStateRequest("A", "2", 0));
+        assertTrue(master.updateStateRequest("A", "3", 1));
+        assertTrue(master._performWork());
+        
+        assertEquals(state, client1.testGetState());
+        assertEquals(state, client2.testGetState());
     }
 }
