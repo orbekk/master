@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is thread-safe.
  */
-public class State implements Comparable<State> {
+public class State {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Map<String, Component> state = new HashMap<String, Component>(); 
     private ObjectMapper mapper = new ObjectMapper();
@@ -199,12 +199,34 @@ public class State implements Comparable<State> {
         }
         
         @Override public String toString() {
-            return this.data + " @" + revision;
+            return "[" + this.name + ": " + this.data + "@" + revision + "]";
+        }
+        
+        @Override public boolean equals(Object other) {
+            if (!(other instanceof Component)) {
+                return false;
+            }
+            Component o = (Component)other;
+            return name == o.name && data == o.data && revision == o.revision;
         }
     }
-    @Override
-    public int compareTo(State other) {
-        return -1;
+    
+    @Override public String toString() {
+        StringBuilder output = new StringBuilder();
+        output.append("State(\n");
+        for (Component c : getComponents()) {
+            output.append("    " + c.toString() + "\n");
+        }
+        output.append(")");
+        return output.toString();
+    }
+    
+    @Override public boolean equals(Object other) {
+        if (!(other instanceof State)) {
+            return false;
+        }
+        State o = (State)other;
+        return state.equals(o.state);
     }
     
 //    
