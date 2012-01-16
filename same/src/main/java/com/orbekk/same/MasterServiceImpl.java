@@ -23,24 +23,18 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     }
     
     @Override
-    public void joinNetworkRequest(String networkName, String clientUrl) {
-        if (networkName.equals(state.getDataOf(".networkName"))) {
-            List<String> participants = participants();
-            if (!participants.contains(clientUrl)) {
-                participants.add(clientUrl);
-                synchronized(this) {
-                    notifyAll();
-                    state.updateFromObject(".participants", participants,
-                            state.getRevision(".participants"));
-                }
-            } else {                
-                logger.warn("Client {} already part of network. " +
-                        "Ignoring participation request", clientUrl);
+    public void joinNetworkRequest(String clientUrl) {
+        List<String> participants = participants();
+        if (!participants.contains(clientUrl)) {
+            participants.add(clientUrl);
+            synchronized(this) {
+                notifyAll();
+                state.updateFromObject(".participants", participants,
+                        state.getRevision(".participants"));
             }
-        } else {
-            logger.warn("Client {} tried to join {}, but network name is {}",
-                    new Object[]{ clientUrl, networkName, 
-                            state.getDataOf(".networkName") });
+        } else {                
+            logger.warn("Client {} already part of network. " +
+                    "Ignoring participation request", clientUrl);
         }
     }
     
