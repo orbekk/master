@@ -30,7 +30,7 @@ public class RpcHandler extends AbstractHandler {
 
         if (urlReceiver != null) {
             String sameServiceUrl = "http://" + request.getLocalAddr() + 
-                ":" + request.getLocalPort() + "/SameService.json";
+                ":" + request.getLocalPort() + "/";
             urlReceiver.setUrl(sameServiceUrl);
             urlReceiver = null;
         }
