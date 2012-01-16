@@ -43,7 +43,6 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         boolean worked = false;
         for (final String component : state.getAndClearUpdatedComponents()) {
             logger.info("Broadcasting new component {}", state.show(component));
-            
             broadcaster.broadcast(participants(), new ServiceOperation() {
                @Override public void run(ClientService client) {
                    client.setState(component, state.getDataOf(component),

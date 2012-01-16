@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
+import org.junit.Before;
 
 public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
-    private MasterServiceImpl master = new MasterServiceImpl(state, null,
-            null);
+    private TestConnectionManager connections = new TestConnectionManager();
+    private TestBroadcaster broadcaster = new TestBroadcaster(connections);
+    private MasterServiceImpl master = new MasterServiceImpl(state,
+            connections, broadcaster);
         
     @Test
     public void setsMasterUrl() {

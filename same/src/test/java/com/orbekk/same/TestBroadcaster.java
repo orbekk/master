@@ -1,9 +1,14 @@
 package com.orbekk.same;
 
 import java.util.List;
+import org.junit.Ignore;
 
+@Ignore
 public class TestBroadcaster implements Broadcaster {
-    private ConnectionManager connections;
+    public ConnectionManager connections;
+
+    public TestBroadcaster() {
+    }
 
     public TestBroadcaster(ConnectionManager connections) {
         this.connections = connections;
