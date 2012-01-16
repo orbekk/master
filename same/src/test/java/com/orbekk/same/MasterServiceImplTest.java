@@ -55,5 +55,6 @@ public class MasterServiceImplTest {
         connections.clientMap.put("http://client", client);
         master.joinNetworkRequest("TestNetwork", "http://client");
         assertTrue(master._performWork());
+        assertTrue(state.getList(".participants").contains("http://client"));
     }
 }
