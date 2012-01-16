@@ -34,6 +34,16 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
         return myUrl;
     }
     
+    public void joinNetwork(String masterUrl) {
+        if (myUrl != null) {
+            MasterService master = connections.getMaster(masterUrl);
+            master.joinNetworkRequest(myUrl);          
+        } else {
+            logger.error("Tried to join network at {}, but my url is unknown. " +
+                    "Run discovery service.", masterUrl);
+        }
+    }
+    
     State testGetState() {
         return state;
     }

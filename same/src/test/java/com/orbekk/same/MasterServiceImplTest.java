@@ -34,7 +34,7 @@ public class MasterServiceImplTest {
     
     @Test
     public void joinNetworkAddsClient() {
-        master.joinNetworkRequest("TestNetwork", "http://clientUrl");
+        master.joinNetworkRequest("http://clientUrl");
         List<String> participants = state.getList(".participants");
         assertTrue(participants.contains("http://clientUrl"));
     }
@@ -53,7 +53,7 @@ public class MasterServiceImplTest {
                 new State("ClientNetwork"), connections);
         client.setUrl("http://client/");
         connections.clientMap.put("http://client/ClientService.json", client);
-        master.joinNetworkRequest("TestNetwork", "http://client/ClientService.json");
+        master.joinNetworkRequest("http://client/ClientService.json");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
@@ -71,8 +71,8 @@ public class MasterServiceImplTest {
         client1.setUrl("http://client2/");
         connections.clientMap.put("http://client2/ClientService.json", client2);
         
-        master.joinNetworkRequest("TestNetwork", "http://client/ClientService.json");
-        master.joinNetworkRequest("TestNetwork", "http://client2/ClientService.json");
+        master.joinNetworkRequest("http://client/ClientService.json");
+        master.joinNetworkRequest("http://client2/ClientService.json");
         
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));

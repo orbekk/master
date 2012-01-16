@@ -24,6 +24,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     
     @Override
     public void joinNetworkRequest(String clientUrl) {
+        logger.info("JoinNetworkRequest({})", clientUrl);
         List<String> participants = participants();
         if (!participants.contains(clientUrl)) {
             participants.add(clientUrl);
@@ -53,17 +54,20 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         return worked;
     }
     
-    public boolean _sendFullState() {
-        boolean worked = _fullStateReceivers.size() != 0;
-        final List<State.Component> components = state.getComponents();
-        broadcaster.broadcast(participants(), new ServiceOperation() {
-            @Override public void run(ClientService client) {
-                for (Component c : components) {
-                    client.setState(c.getName(), c.getData(), c.getRevision());
+    public synchronized boolean _sendFullState() {
+        boolean hasWork = _fullStateReceivers.size() != 0;
+        if (hasWork) {
+            final List<State.Component> components = state.getComponents();
+            broadcaster.broadcast(participants(), new ServiceOperation() {
+                @Override public void run(ClientService client) {
+                    for (Component c : components) {
+                        client.setState(c.getName(), c.getData(), c.getRevision());
+                    }
                 }
-            }
-        });
-        return worked;
+            });
+            _fullStateReceivers.clear();
+        }
+        return hasWork;
     }
     
     private List<String> participants() {

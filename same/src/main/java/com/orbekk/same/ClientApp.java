@@ -42,6 +42,8 @@ public class ClientApp {
             }
         }
         
+        client.joinNetwork(masterUrl + "MasterService.json");
+        
         try {
             server.join();
         } catch (InterruptedException e) {

@@ -22,6 +22,9 @@ public class MasterApp {
         RpcHandler rpcHandler = new RpcHandler(jsonServer, master);
         server.setHandler(rpcHandler);
         
+        Thread masterThread = new Thread(master);
+        masterThread.start();
+        
         try {
             server.start();
         } catch (Exception e) {
@@ -30,6 +33,7 @@ public class MasterApp {
         
         try {
             server.join();
+            masterThread.join();
         } catch (InterruptedException e) {
             logger.info("Received exception. Exiting. {}", e);
         }
