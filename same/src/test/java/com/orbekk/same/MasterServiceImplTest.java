@@ -45,4 +45,15 @@ public class MasterServiceImplTest {
         assertTrue(master._performWork());
         assertTrue(state.getAndClearUpdatedComponents().isEmpty());
     }
+
+    @Test
+    public void clientJoin() {
+        master.setUrl("http://master");
+        ClientServiceImpl client = new ClientServiceImpl(
+                new State("ClientNetwork"), connections);
+        client.setUrl("http://client");
+        connections.clientMap.put("http://client", client);
+        master.joinNetworkRequest("TestNetwork", "http://client");
+        assertTrue(master._performWork());
+    }
 }
