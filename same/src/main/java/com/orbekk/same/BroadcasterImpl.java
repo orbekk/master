@@ -4,16 +4,17 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class BroadcasterImpl {
+public class BroadcasterImpl implements Broadcaster {
     private ConnectionManager connections;
     private Executor executor;
 
     /**
      * Get a BroadcastRunner for ClientService using a thread pool of size 20.
      */
-    public static BroadcasterImpl getDefaultBroadcastRunner() {
+    public static BroadcasterImpl getDefaultBroadcastRunner(
+            ConnectionManager connections) {
         return new BroadcasterImpl(Executors.newFixedThreadPool(20),
-                new ConnectionManagerImpl());
+                connections);
     }
     
     public BroadcasterImpl(Executor executor,
