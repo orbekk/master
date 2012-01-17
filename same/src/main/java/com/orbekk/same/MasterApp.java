@@ -9,9 +9,11 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 public class MasterApp {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Server server;
+    private static final int timeout = 1000;    
     
     public void run(int port) {
-        ConnectionManagerImpl connections = new ConnectionManagerImpl();
+        ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
+                timeout);
         State state = new State("MasterNetwork");
         Broadcaster broadcaster =
                 BroadcasterImpl.getDefaultBroadcastRunner(connections);

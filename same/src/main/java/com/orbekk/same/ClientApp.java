@@ -10,11 +10,13 @@ import com.orbekk.net.HttpUtil;
 public class ClientApp {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Server server;
+    private static final int timeout = 1000;
     
     public void run(int port, String networkName, String masterUrl) {
         logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
                 new Object[]{port, networkName, masterUrl});
-        ConnectionManagerImpl connections = new ConnectionManagerImpl();
+        ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
+                timeout);
         State state = new State(networkName);
         Broadcaster broadcaster =
                 BroadcasterImpl.getDefaultBroadcastRunner(connections);
