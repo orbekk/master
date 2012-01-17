@@ -1,9 +1,10 @@
 package com.orbekk.same;
 
 import java.util.List;
-import org.junit.Ignore;
 
-@Ignore
+/**
+ * This class is used in tests.
+ */
 public class TestBroadcaster implements Broadcaster {
     public ConnectionManager connections;
 

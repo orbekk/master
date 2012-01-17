@@ -2,9 +2,10 @@ package com.orbekk.same;
 
 import java.util.Map;
 import java.util.HashMap;
-import org.junit.Ignore;
 
-@Ignore
+/**
+ * This class is used in test.
+ */
 public class TestConnectionManager implements ConnectionManager {
     public Map<String, ClientService> clientMap =
         new HashMap<String, ClientService>();
