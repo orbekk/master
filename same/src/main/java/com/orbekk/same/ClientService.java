@@ -1,7 +1,7 @@
 package com.orbekk.same;
 
 public interface ClientService {
-    void notifyNetwork(String networkName, String masterUrl);
+    void notifyNetwork(String networkName, String masterUrl) throws Exception;
     
-    void setState(String component, String data, long revision);
+    void setState(String component, String data, long revision) throws Exception;
 }

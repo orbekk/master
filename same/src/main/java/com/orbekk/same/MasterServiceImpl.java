@@ -45,9 +45,13 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         for (final String component : state.getAndClearUpdatedComponents()) {
             logger.info("Broadcasting new component {}", state.show(component));
             broadcaster.broadcast(participants(), new ServiceOperation() {
-               @Override public void run(ClientService client) {
-                   client.setState(component, state.getDataOf(component),
-                           state.getRevision(component));
+                @Override public void run(ClientService client) {
+                    try {
+                        client.setState(component, state.getDataOf(component),
+                                state.getRevision(component));
+                    } catch (Exception e) {
+                        logger.warn("Exception when connecting to client.", e);
+                    }
                }
             });
             worked = true;
@@ -62,7 +66,11 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
             broadcaster.broadcast(_fullStateReceivers, new ServiceOperation() {
                 @Override public void run(ClientService client) {
                     for (Component c : components) {
-                        client.setState(c.getName(), c.getData(), c.getRevision());
+                        try {
+                            client.setState(c.getName(), c.getData(), c.getRevision());
+                        } catch (Exception e) {
+                            logger.warn("Exception when connecting to client.", e);
+                        }
                     }
                 }
             });
