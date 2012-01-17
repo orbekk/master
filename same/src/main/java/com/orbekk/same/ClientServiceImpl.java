@@ -21,7 +21,11 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
 
     @Override
     public void setState(String component, String data, long revision) {
-        state.forceUpdate(component, data, revision);
+        boolean status = state.update(component, data, revision);
+        if (!status) {
+            logger.warn("Ignoring update: {}",
+                    new State.Component(component, revision, data));
+        }
     }
 
     @Override
@@ -37,6 +41,7 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     public void joinNetwork(String masterUrl) {
         if (myUrl != null) {
             MasterService master = connections.getMaster(masterUrl);
+            state.clear();
             master.joinNetworkRequest(myUrl);          
         } else {
             logger.error("Tried to join network at {}, but my url is unknown. " +

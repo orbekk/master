@@ -30,6 +30,12 @@ public class State {
         updateFromObject(".participants", new ArrayList<String>(), 0);
     }
     
+    public synchronized void clear() {
+        logger.info("Clearing state.");
+        updatedComponents.clear();
+        state.clear();
+    }
+    
     public synchronized void forceUpdate(String componentName,
             String data, long revision) {
         Component oldComponent = state.get(componentName);
@@ -48,12 +54,14 @@ public class State {
             component = state.get(componentName);       
         }
         
-        if (revision == component.getRevision()) {
+        if (revision >= component.getRevision()) {
+            Component oldComponent = new Component(component);
             component.setName(componentName);
             component.setRevision(revision + 1);
             component.setData(data);
             state.put(componentName, component);
             updatedComponents.add(componentName);
+            logger.info("Updated state: {} => {}", oldComponent, component);
             return true;
         } else {
             return false;
