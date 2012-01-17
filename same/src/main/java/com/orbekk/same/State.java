@@ -26,8 +26,8 @@ public class State {
     private Set<String> updatedComponents = new TreeSet<String>();
     
     public State(String networkName) {
-        update(".networkName", networkName, 0);
-        updateFromObject(".participants", new ArrayList<String>(), 0);
+        update(".networkName", networkName, 1);
+        updateFromObject(".participants", new ArrayList<String>(), 1);
     }
     
     public synchronized void clear() {
@@ -54,10 +54,10 @@ public class State {
             component = state.get(componentName);       
         }
         
-        if (revision >= component.getRevision()) {
+        if (revision > component.getRevision()) {
             Component oldComponent = new Component(component);
             component.setName(componentName);
-            component.setRevision(revision + 1);
+            component.setRevision(revision);
             component.setData(data);
             state.put(componentName, component);
             updatedComponents.add(componentName);

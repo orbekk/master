@@ -31,7 +31,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
             _fullStateReceivers.add(clientUrl);
             synchronized(this) {
                 state.updateFromObject(".participants", participants,
-                        state.getRevision(".participants"));
+                        state.getRevision(".participants") + 1);
                 notifyAll();
             }
         } else {                
@@ -79,7 +79,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     @Override
     public synchronized boolean updateStateRequest(String component,
             String newData, long revision) {
-        boolean updated = state.update(component, newData, revision);
+        boolean updated = state.update(component, newData, revision + 1);
         if (updated) {
             notifyAll();
         }
@@ -90,7 +90,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     public void setUrl(String url) {
         String myUrl = url + "MasterService.json";
         logger.info("Master URL is " + myUrl);
-        state.update(".masterUrl", myUrl, 0);
+        state.update(".masterUrl", myUrl, 1);
     }
 
     boolean _performWork() {

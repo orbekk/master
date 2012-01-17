@@ -15,6 +15,11 @@ public class MasterServiceImplTest {
     private MasterServiceImpl master = new MasterServiceImpl(state,
             connections, broadcaster);
         
+    @Before
+    public void setUp() {
+        connections.masterMap.put("http://master", master);
+    }
+    
     @Test
     public void setsMasterUrl() {
         master.setUrl("http://10.0.0.54:10050/");
@@ -53,7 +58,7 @@ public class MasterServiceImplTest {
                 new State("ClientNetwork"), connections);
         client.setUrl("http://client/");
         connections.clientMap.put("http://client/ClientService.json", client);
-        master.joinNetworkRequest("http://client/ClientService.json");
+        client.joinNetwork("http://master");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
@@ -68,11 +73,11 @@ public class MasterServiceImplTest {
         connections.clientMap.put("http://client/ClientService.json", client1);
         ClientServiceImpl client2 = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
-        client1.setUrl("http://client2/");
+        client2.setUrl("http://client2/");
         connections.clientMap.put("http://client2/ClientService.json", client2);
         
-        master.joinNetworkRequest("http://client/ClientService.json");
-        master.joinNetworkRequest("http://client2/ClientService.json");
+        client1.joinNetwork("http://master");
+        client2.joinNetwork("http://master");
         
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
