@@ -62,7 +62,7 @@
         
         <dependency>
             <groupId>com.orbekk</groupId>
-            <artifactId>jsonrpc</artifactId>
+            <artifactId>same</artifactId>
             <version>0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
