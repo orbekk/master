@@ -10,7 +10,7 @@ import com.orbekk.same.State.Component;
 
 public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private ConnectionManager connections;
+    private final ConnectionManager connections;
     private State state;
     private boolean stopped = false;
     private Broadcaster broadcaster;
@@ -19,6 +19,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     public MasterServiceImpl(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
         state = initialState;
+        this.connections = connections;
         this.broadcaster = broadcaster;
     }
     
@@ -45,7 +46,8 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         for (final String component : state.getAndClearUpdatedComponents()) {
             logger.info("Broadcasting new component {}", state.show(component));
             broadcaster.broadcast(participants(), new ServiceOperation() {
-                @Override public void run(ClientService client) {
+                @Override public void run(String url) {
+                    ClientService client = connections.getClient(url);
                     try {
                         client.setState(component, state.getDataOf(component),
                                 state.getRevision(component));
@@ -64,7 +66,8 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         if (hasWork) {
             final List<State.Component> components = state.getComponents();
             broadcaster.broadcast(_fullStateReceivers, new ServiceOperation() {
-                @Override public void run(ClientService client) {
+                @Override public void run(String url) {
+                    ClientService client = connections.getClient(url);
                     for (Component c : components) {
                         try {
                             client.setState(c.getName(), c.getData(), c.getRevision());

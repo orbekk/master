@@ -19,7 +19,7 @@ public class ClientApp {
                 timeout);
         State state = new State(networkName);
         Broadcaster broadcaster =
-                BroadcasterImpl.getDefaultBroadcastRunner(connections);
+                BroadcasterImpl.getDefaultBroadcastRunner();
         MasterServiceImpl master = new MasterServiceImpl(state, connections,
                 broadcaster);
         ClientServiceImpl client = new ClientServiceImpl(state, connections);

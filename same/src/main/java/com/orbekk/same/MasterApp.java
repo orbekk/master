@@ -16,7 +16,7 @@ public class MasterApp {
                 timeout);
         State state = new State("MasterNetwork");
         Broadcaster broadcaster =
-                BroadcasterImpl.getDefaultBroadcastRunner(connections);
+                BroadcasterImpl.getDefaultBroadcastRunner();
         MasterServiceImpl master = new MasterServiceImpl(state, connections,
                 broadcaster);
         JsonRpcServer jsonServer = new JsonRpcServer(master, MasterService.class);

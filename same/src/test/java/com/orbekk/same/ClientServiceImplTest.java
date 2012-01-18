@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ClientServiceImplTest {
     private State state = new State("ClientNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
-    private TestBroadcaster broadcaster = new TestBroadcaster(connections);
+    private TestBroadcaster broadcaster = new TestBroadcaster();
     private ClientServiceImpl client = new ClientServiceImpl(state, connections);
     
     @Test public void testSetState() {

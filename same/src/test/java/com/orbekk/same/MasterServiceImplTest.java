@@ -11,7 +11,7 @@ import org.junit.Before;
 public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
-    private TestBroadcaster broadcaster = new TestBroadcaster(connections);
+    private TestBroadcaster broadcaster = new TestBroadcaster();
     private MasterServiceImpl master = new MasterServiceImpl(state,
             connections, broadcaster);
         
