@@ -12,7 +12,7 @@ public class ClientApp {
     private Server server;
     private static final int timeout = 1000;
     
-    public ClientService getClient(int port, String networkName,
+    public ClientServiceImpl getClient(int port, String networkName,
             String masterUrl) {
         logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
                 new Object[]{port, networkName, masterUrl});

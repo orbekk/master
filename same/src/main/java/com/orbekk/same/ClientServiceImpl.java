@@ -53,6 +53,22 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
         }
     }
     
+    public boolean sendStateUpdate(String componentName, String data,
+            long revision) {
+        String masterUrl = state.getDataOf(".masterUrl");
+        MasterService master = connections.getMaster(masterUrl);
+        try {
+            return master.updateStateRequest(componentName, data, revision);
+        } catch (Exception e) {
+            logger.error("Unable to contact master. Update fails.");
+            return false;
+        }
+    }
+    
+    public State.Component getState(String name) {
+        return state.getComponent(name);
+    }
+    
     State testGetState() {
         return state;
     }

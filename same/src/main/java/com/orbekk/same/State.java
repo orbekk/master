@@ -67,6 +67,18 @@ public class State {
             return false;
         }
     }
+    
+    /**
+     * Get a copy of a component.
+     */
+    public Component getComponent(String name) {
+        Component component = state.get(name);
+        if (component != null) {
+            return new Component(component);
+        } else {
+            return null;
+        }
+    }
       
     public String getDataOf(String componentName) {
         Component component = state.get(componentName);

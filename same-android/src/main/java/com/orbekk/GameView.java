@@ -3,6 +3,10 @@ package com.orbekk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.State.Component;
+import com.orbekk.same.ClientService;
+import com.orbekk.same.ClientServiceImpl;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -15,6 +19,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread thread;
     
     static class GameThread extends Thread {
+        private Logger logger = LoggerFactory.getLogger(getClass());
         private int height = 0;
         private int width = 0;
         private float posX;
@@ -23,10 +28,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private Context context;
         private Paint background;
         private Paint paint;
+        private ClientServiceImpl client;
         
-        public GameThread(SurfaceHolder holder, Context context) {
+        public GameThread(SurfaceHolder holder, Context context,
+                ClientServiceImpl client) {
             this.holder = holder;
             this.context = context;
+            this.client = client;
             posX = 100;
             posY = 100;
             paint = new Paint();
@@ -60,17 +68,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         
-        private void setPosition(float x, float y) {
+        private synchronized void setPosition(float x, float y) {
             posX = x;
             posY = y;
             run();
+            long rev = 0;
+            Component c = client.getState("position");
+            if (c != null) {
+                rev = c.getRevision();
+            }
+                
+            if (client.sendStateUpdate("position", this.posX + "," + this.posY,
+                    rev + 1)) {
+                logger.warn("Unable to set state.");
+            }
         }
     }
     
-    public GameView(Context context) {
+    public GameView(Context context, ClientServiceImpl client) {
         super(context);
         getHolder().addCallback(this);
-        thread = new GameThread(getHolder(), context);
+        thread = new GameThread(getHolder(), context, client);
     }
 
     @Override
