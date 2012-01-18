@@ -156,10 +156,13 @@ public class State {
         return list;
     }
     
-    public synchronized Set<String> getAndClearUpdatedComponents() {
-        Set<String> copy = new TreeSet<String>(updatedComponents);
+    public synchronized List<Component> getAndClearUpdatedComponents() {
+        List<Component> components = new ArrayList<Component>();
+        for (String name : updatedComponents) {
+            components.add(state.get(name));
+        }
         updatedComponents.clear();
-        return copy;
+        return components;
     }
 
     public static class Component {

@@ -43,43 +43,50 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     
     public boolean _sendUpdatedComponents() {
         boolean worked = false;
-        for (final String component : state.getAndClearUpdatedComponents()) {
-            logger.info("Broadcasting new component {}", state.show(component));
-            broadcaster.broadcast(participants(), new ServiceOperation() {
-                @Override public void run(String url) {
-                    ClientService client = connections.getClient(url);
-                    try {
-                        client.setState(component, state.getDataOf(component),
-                                state.getRevision(component));
-                    } catch (Exception e) {
-                        logger.warn("Exception when connecting to client.", e);
-                    }
-               }
-            });
+        for (final Component component : state.getAndClearUpdatedComponents()) {
+            logger.info("Broadcasting new component {}", component);
+            broadcastNewComponents(participants(), listWrap(component));
             worked = true;
         }
         return worked;
+    }
+    
+    private <T>List<T> listWrap(T o) {
+        List<T> list = new ArrayList<T>();
+        list.add(o);
+        return list;
     }
     
     public synchronized boolean _sendFullState() {
         boolean hasWork = _fullStateReceivers.size() != 0;
         if (hasWork) {
             final List<State.Component> components = state.getComponents();
-            broadcaster.broadcast(_fullStateReceivers, new ServiceOperation() {
-                @Override public void run(String url) {
-                    ClientService client = connections.getClient(url);
-                    for (Component c : components) {
-                        try {
-                            client.setState(c.getName(), c.getData(), c.getRevision());
-                        } catch (Exception e) {
-                            logger.warn("Exception when connecting to client.", e);
-                        }
-                    }
-                }
-            });
+            broadcastNewComponents(participants(), components);
             _fullStateReceivers.clear();
         }
         return hasWork;
+    }
+    
+    private synchronized void removeParticipant(String url) {
+        logger.error("Remove participant {}: Operation not supported", url);
+    }
+    
+    private void broadcastNewComponents(List<String> destinations,
+            final List<State.Component> components) {
+        broadcaster.broadcast(destinations, new ServiceOperation() {
+            @Override public void run(String url) {
+                 ClientService client = connections.getClient(url);
+                 try {
+                     for (Component c : components) {
+                         client.setState(c.getName(), c.getData(),
+                                 c.getRevision());
+                     }
+                 } catch (Exception e) {
+                     logger.warn("Client {} failed to receive state update.");
+                     removeParticipant(url);
+                 }
+            }
+        });
     }
     
     private List<String> participants() {
