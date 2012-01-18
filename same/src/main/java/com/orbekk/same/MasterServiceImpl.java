@@ -24,24 +24,22 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     }
     
     @Override
-    public void joinNetworkRequest(String clientUrl) {
+    public synchronized void joinNetworkRequest(String clientUrl) {
         logger.info("JoinNetworkRequest({})", clientUrl);
         List<String> participants = participants();
         if (!participants.contains(clientUrl)) {
             participants.add(clientUrl);
             _fullStateReceivers.add(clientUrl);
-            synchronized(this) {
-                state.updateFromObject(".participants", participants,
-                        state.getRevision(".participants") + 1);
-                notifyAll();
-            }
+            state.updateFromObject(".participants", participants,
+                    state.getRevision(".participants") + 1);
+            notifyAll();
         } else {                
             logger.warn("Client {} already part of network. " +
                     "Ignoring participation request", clientUrl);
         }
     }
     
-    public boolean _sendUpdatedComponents() {
+    boolean _sendUpdatedComponents() {
         boolean worked = false;
         for (final Component component : state.getAndClearUpdatedComponents()) {
             logger.info("Broadcasting new component {}", component);
@@ -57,11 +55,12 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
         return list;
     }
     
-    public synchronized boolean _sendFullState() {
+    synchronized boolean _sendFullState() {
         boolean hasWork = _fullStateReceivers.size() != 0;
         if (hasWork) {
+            logger.info("Sending full state to new participants.");
             final List<State.Component> components = state.getComponents();
-            broadcastNewComponents(participants(), components);
+            broadcastNewComponents(_fullStateReceivers, components);
             _fullStateReceivers.clear();
         }
         return hasWork;

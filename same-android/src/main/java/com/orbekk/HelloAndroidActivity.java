@@ -25,16 +25,16 @@ public class HelloAndroidActivity extends Activity {
         System.setProperty("java.net.preferIPv6Addresses", "false");
         
 		Log.i(TAG, "onCreate");
-        setContentView(R.layout.main);
-
+        // setContentView(R.layout.main);
+		setContentView(new GameView(this));
         
 //        Broadcast broadcast = new Broadcast(this);
 //        broadcast.sendBroadcast("Broadcast test".getBytes(), 10010);
-        Broadcaster broadcaster = new Broadcaster();
-        Log.i(TAG, "Broadcast success: " + broadcaster.sendBroadcast(10010, "Broadcast test from Android".getBytes()));
-        
-        ClientApp client = new ClientApp();
-        client.run(10015, "ClientNetwork", "http://10.0.0.6:10010/");
+//        Broadcaster broadcaster = new Broadcaster();
+//        Log.i(TAG, "Broadcast success: " + broadcaster.sendBroadcast(10010, "Broadcast test from Android".getBytes()));
+//        
+//        ClientApp client = new ClientApp();
+//        client.run(10015, "ClientNetwork", "http://10.0.0.6:10010/");
     }
     
     @Override
