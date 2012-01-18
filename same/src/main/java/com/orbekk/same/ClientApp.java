@@ -12,7 +12,8 @@ public class ClientApp {
     private Server server;
     private static final int timeout = 1000;
     
-    public void run(int port, String networkName, String masterUrl) {
+    public ClientService getClient(int port, String networkName,
+            String masterUrl) {
         logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
                 new Object[]{port, networkName, masterUrl});
         ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
@@ -45,11 +46,16 @@ public class ClientApp {
         }
         
         client.joinNetwork(masterUrl + "MasterService.json");
-        
+        return client;
+    }
+    
+    public void run(int port, String networkName,
+            String masterUrl) {
+        getClient(port, networkName, masterUrl);
         try {
             server.join();
         } catch (InterruptedException e) {
-            logger.info("Received exception. Exiting. {}", e);
+            logger.warn("Interrupted.", e);
         }
     }
     
@@ -62,5 +68,6 @@ public class ClientApp {
         String networkName = args[1];
         String masterUrl = args[2];
         (new ClientApp()).run(port, networkName, masterUrl);
+        
     }
 }
