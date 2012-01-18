@@ -14,7 +14,22 @@ public class MasterServiceImplTest {
     private TestBroadcaster broadcaster = new TestBroadcaster();
     private MasterServiceImpl master = new MasterServiceImpl(state,
             connections, broadcaster);
-        
+    
+    public static class UnreachableClient implements ClientService {
+        @Override
+        public void notifyNetwork(String networkName, String masterUrl)
+                throws Exception {
+            throw new Exception("Unreachable client");
+        }
+
+        @Override
+        public void setState(String component, String data, long revision)
+                throws Exception {
+            throw new Exception("Unreachable client");   
+        }
+    }
+    
+    
     @Before
     public void setUp() {
         connections.masterMap.put("http://master", master);
@@ -96,5 +111,24 @@ public class MasterServiceImplTest {
         
         assertEquals(state, client1.testGetState());
         assertEquals(state, client2.testGetState());
+    }
+    
+    @Test
+    public void masterRemovesParticipant() {
+        master.setUrl("http://master/");
+        ClientServiceImpl client = new ClientServiceImpl(
+                new State("ClientNetwork"), connections);
+        client.setUrl("http://client/");
+        connections.clientMap.put("http://client/ClientService.json", client);
+        client.joinNetwork("http://master");
+        assertTrue(master._performWork());
+        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
+        
+        connections.clientMap.put("http://client/ClientService.json",
+                new UnreachableClient());
+        master.updateStateRequest("NewState", "NewStateData", 0);
+        master._performWork();
+        
+        assertEquals("[]", state.getDataOf(".participants"));
     }
 }

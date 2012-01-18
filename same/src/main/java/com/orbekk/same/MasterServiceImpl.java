@@ -68,7 +68,14 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     }
     
     private synchronized void removeParticipant(String url) {
-        logger.error("Remove participant {}: Operation not supported", url);
+        List<String> participants = participants();
+        if (participants.contains(url)) {
+            logger.warn("RemoveParticipant({})", url);
+            participants.remove(url);
+            state.updateFromObject(".participants", participants,
+                    state.getRevision(".participants") + 1);
+            notifyAll();
+        }
     }
     
     private void broadcastNewComponents(List<String> destinations,
@@ -82,7 +89,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
                                  c.getRevision());
                      }
                  } catch (Exception e) {
-                     logger.warn("Client {} failed to receive state update.");
+                     logger.info("Client {} failed to receive state update.", url);
                      removeParticipant(url);
                  }
             }
