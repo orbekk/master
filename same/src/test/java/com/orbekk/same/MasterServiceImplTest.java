@@ -29,7 +29,6 @@ public class MasterServiceImplTest {
         }
     }
     
-    
     @Before
     public void setUp() {
         connections.masterMap.put("http://master", master);
