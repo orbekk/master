@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -16,18 +17,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     static class GameThread extends Thread {
         private int height = 0;
         private int width = 0;
-        private int posX;
-        private int posY;
+        private float posX;
+        private float posY;
         private SurfaceHolder holder;
         private Context context;
+        private Paint background;
         private Paint paint;
         
         public GameThread(SurfaceHolder holder, Context context) {
             this.holder = holder;
             this.context = context;
+            posX = 100;
+            posY = 100;
             paint = new Paint();
             paint.setAntiAlias(true);
             paint.setARGB(255, 255, 0, 0);
+            background = new Paint();
+            background.setARGB(255, 0, 0, 0);
         }
         
         public void setSize(int width, int height) {
@@ -38,7 +44,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         private void doDraw(Canvas c) {
-            c.drawCircle(100.0f, 50.0f, 20.0f, paint);
+            c.drawRect(0.0f, 0.0f, width+1.0f, height+1.0f, background);
+            c.drawCircle(posX, posY, 20.0f, paint);
         }
         
         @Override public void run() {
@@ -51,6 +58,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             } finally {
                 holder.unlockCanvasAndPost(c);
             }
+        }
+        
+        private void setPosition(float x, float y) {
+            posX = x;
+            posY = y;
+            run();
         }
     }
     
@@ -84,6 +97,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         logger.info("SurfaceDestroyed()");
         // TODO: Stop thread.
+    }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        thread.setPosition(e.getX(), e.getY());
+        return true;
     }
 
 }
