@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.ClientService;
 import com.orbekk.same.ClientServiceImpl;
+import com.orbekk.same.SameInterface;
+import com.orbekk.same.UpdateConflict;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -28,13 +30,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private Context context;
         private Paint background;
         private Paint paint;
-        private ClientServiceImpl client;
+        private SameInterface same;
         
         public GameThread(SurfaceHolder holder, Context context,
-                ClientServiceImpl client) {
+                SameInterface client) {
             this.holder = holder;
             this.context = context;
-            this.client = client;
+            this.same = client;
             posX = 100;
             posY = 100;
             paint = new Paint();
@@ -72,20 +74,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             posX = x;
             posY = y;
             run();
-            long rev = 0;
-            Component c = client.getState("position");
-            if (c != null) {
-                rev = c.getRevision();
+            try {
+                same.set("position", this.posX + "," + this.posY);
+            } catch (UpdateConflict e) {
+                logger.warn("Update conflict.", e);
             }
-                
-            if (client.sendStateUpdate("position", this.posX + "," + this.posY,
-                    rev + 1)) {
-                logger.warn("Unable to set state.");
-            }
+            
         }
     }
     
-    public GameView(Context context, ClientServiceImpl client) {
+    public GameView(Context context, SameInterface client) {
         super(context);
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(), context, client);

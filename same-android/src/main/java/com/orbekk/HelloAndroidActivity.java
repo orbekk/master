@@ -3,6 +3,7 @@ package com.orbekk;
 import com.orbekk.net.Broadcaster;
 import com.orbekk.same.ClientApp;
 import com.orbekk.same.ClientServiceImpl;
+import com.orbekk.same.SameInterface;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class HelloAndroidActivity extends Activity {
 		Log.i(TAG, "onCreate");
         // setContentView(R.layout.main);
         ClientApp client = new ClientApp();
-        ClientServiceImpl client_ = client.getClient(10015, "ClientNetwork",
+        SameInterface client_ = client.getClient(10015, "ClientNetwork",
                 "http://10.0.0.6:10010/");
 		setContentView(new GameView(this, client_));
         
