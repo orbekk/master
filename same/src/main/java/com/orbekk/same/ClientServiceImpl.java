@@ -1,5 +1,6 @@
 package com.orbekk.same;
 
+import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,16 +53,29 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
                     "Run discovery service.", masterUrl);
         }
     }
+   
+    String lib_get(String name) {
+        return state.getDataOf(name);
+    }
     
-    public boolean sendStateUpdate(String componentName, String data,
-            long revision) {
+    <T> T lib_get(String name, TypeReference<T> type) {
+        return state.getParsedData(name, type);
+    }
+    
+    void lib_set(String name, String data) throws UpdateConflict {
         String masterUrl = state.getDataOf(".masterUrl");
+        long revision = state.getRevision(name) + 1;
         MasterService master = connections.getMaster(masterUrl);
         try {
-            return master.updateStateRequest(componentName, data, revision);
+            boolean success = master.updateStateRequest(name, data,
+                    revision);
+            if (!success) {
+                throw new UpdateConflict("State update conflict when " +
+                        "updating " + name);
+            }
         } catch (Exception e) {
             logger.error("Unable to contact master. Update fails.");
-            return false;
+            throw new UpdateConflict("Unable to contact master. Update fails.");
         }
     }
     

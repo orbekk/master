@@ -29,13 +29,6 @@ public interface SameInterface {
     void set(String id, String data) throws UpdateConflict;
 
     /**
-     * Set the state.
-     * 
-     * Retry until there is no conflict.
-     */
-    void forceSet(String id, String data);
-    
-    /**
      * Set from an object: Pass it, e.g., a List<String>.
      */
     void setObject(String id, Object data);

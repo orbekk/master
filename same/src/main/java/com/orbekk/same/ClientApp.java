@@ -12,7 +12,7 @@ public class ClientApp {
     private Server server;
     private static final int timeout = 1000;
     
-    public ClientServiceImpl getClient(int port, String networkName,
+    public SameInterface getClient(int port, String networkName,
             String masterUrl) {
         logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
                 new Object[]{port, networkName, masterUrl});
@@ -46,7 +46,7 @@ public class ClientApp {
         }
         
         client.joinNetwork(masterUrl + "MasterService.json");
-        return client;
+        return new Same(client);
     }
     
     public void run(int port, String networkName,
