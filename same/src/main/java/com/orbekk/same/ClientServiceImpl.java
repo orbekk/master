@@ -79,7 +79,7 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
                         "updating " + name);
             }
         } catch (Exception e) {
-            logger.error("Unable to contact master. Update fails.");
+            logger.error("Unable to contact master. Update fails.", e);
             throw new UpdateConflict("Unable to contact master. Update fails.");
         }
     }
