@@ -46,7 +46,7 @@ public class ClientApp {
         }
         
         client.joinNetwork(masterUrl + "MasterService.json");
-        return new Same(client);
+        return Same.createSame(client);
     }
     
     public void run(int port, String networkName,
