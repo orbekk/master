@@ -6,17 +6,37 @@ import java.util.List;
 import android.graphics.Paint;
 
 public class GameController {
-    private List<Player> players = new ArrayList<Player>();
+    private List<Player> remotePlayers = new ArrayList<Player>();
     private Player localPlayer;
+    private ChangeListener changeListener = null;
     
     public static class Player {
         public Paint color;
-        public int posX;
-        public int posY;
+        public float posX;
+        public float posY;
+    }
+    
+    public interface ChangeListener {
+        void playerStatesChanged();
+    }
+    
+    public static Player newPlayer() {
+        Player player = new Player();
+        player.color = new Paint();
+        player.color.setARGB(255, 255, 0, 0);
+        player.posX = 0.5f;
+        player.posY = 0.5f;
+        return player;
     }
     
     public GameController(Player localPlayer) {
         this.localPlayer = localPlayer;
+    }
+    
+    public void setMyPosition(float x, float y) {
+        this.localPlayer.posX = x;
+        this.localPlayer.posY = y;
+        changeListener.playerStatesChanged();
     }
     
     public Player getLocalPlayer() {
@@ -24,9 +44,10 @@ public class GameController {
     }
     
     public List<Player> getRemotePlayers() {
-        return players;
+        return remotePlayers;
     }
     
-    
-    
+    public void setChangeListener(ChangeListener listener) {
+        this.changeListener = listener;
+    }
 }

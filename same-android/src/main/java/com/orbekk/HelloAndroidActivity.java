@@ -31,7 +31,9 @@ public class HelloAndroidActivity extends Activity {
         ClientApp client = new ClientApp();
         SameInterface client_ = client.getClient(10015, "ClientNetwork",
                 "http://10.0.0.6:10010/");
-		setContentView(new GameView(this, client_));
+        GameController controller = new GameController(
+                GameController.newPlayer());
+		setContentView(new GameView(this, controller));
         
 //        Broadcast broadcast = new Broadcast(this);
 //        broadcast.sendBroadcast("Broadcast test".getBytes(), 10010);

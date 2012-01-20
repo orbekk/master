@@ -20,28 +20,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private GameThread thread;
     
-    static class GameThread extends Thread {
+    static class GameThread extends Thread
+            implements GameController.ChangeListener {
         private Logger logger = LoggerFactory.getLogger(getClass());
         private int height = 0;
         private int width = 0;
-        private float posX;
-        private float posY;
         private SurfaceHolder holder;
         private Context context;
         private Paint background;
-        private Paint paint;
-        private SameInterface same;
+        private GameController controller;
         
         public GameThread(SurfaceHolder holder, Context context,
-                SameInterface client) {
+                GameController controller) {
             this.holder = holder;
             this.context = context;
-            this.same = client;
-            posX = 100;
-            posY = 100;
-            paint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setARGB(255, 255, 0, 0);
+            this.controller = controller;
+            this.controller.setChangeListener(this);
             background = new Paint();
             background.setARGB(255, 0, 0, 0);
         }
@@ -55,7 +49,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         
         private void doDraw(Canvas c) {
             c.drawRect(0.0f, 0.0f, width+1.0f, height+1.0f, background);
-            c.drawCircle(posX, posY, 20.0f, paint);
+            for (GameController.Player p : controller.getRemotePlayers()) {
+                c.drawCircle(p.posX * width, p.posY * height, 20.0f, p.color);
+            }
+            GameController.Player localPlayer = controller.getLocalPlayer();
+            c.drawCircle(localPlayer.posX * width, localPlayer.posY * height,
+                    20.0f, localPlayer.color);
         }
         
         @Override public void run() {
@@ -71,22 +70,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         private synchronized void setPosition(float x, float y) {
-            posX = x;
-            posY = y;
+            controller.setMyPosition(x / this.width, y / this.height);
+        }
+
+        @Override
+        public void playerStatesChanged() {
             run();
-            try {
-                same.set("position", this.posX + "," + this.posY);
-            } catch (UpdateConflict e) {
-                logger.warn("Update conflict.", e);
-            }
-            
         }
     }
     
-    public GameView(Context context, SameInterface client) {
+    public GameView(Context context, GameController controller) {
         super(context);
         getHolder().addCallback(this);
-        thread = new GameThread(getHolder(), context, client);
+        thread = new GameThread(getHolder(), context, controller);
     }
 
     @Override
