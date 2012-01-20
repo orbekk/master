@@ -1,5 +1,6 @@
 package com.orbekk.same;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;
@@ -9,8 +10,27 @@ import org.slf4j.LoggerFactory;
 public class Same implements SameInterface {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ClientServiceImpl client;
+    private StateChangedProxy stateChangedProxy = new StateChangedProxy();
     
-    public Same(ClientServiceImpl client) {
+    private class StateChangedProxy implements StateChangedListener {
+        public List<StateChangedListener> listeners =
+                new ArrayList<StateChangedListener>();
+
+        @Override
+        public void stateChanged(String id, String data) {
+            for (StateChangedListener listener : listeners) {
+                listener.stateChanged(id, data);
+            }
+        }
+    }
+    
+    public static Same createSame(ClientServiceImpl client) {
+        Same same = new Same(client);
+        client.setStateChangedListener(same.stateChangedProxy);
+        return same;
+    }
+    
+    Same(ClientServiceImpl client) {
         this.client = client;
     }
     
@@ -37,6 +57,16 @@ public class Same implements SameInterface {
     @Override
     public void setObject(String id, Object data) {
         throw new RuntimeException("Not implemented.");   
+    }
+
+    @Override
+    public void addStateChangedListener(StateChangedListener listener) {
+        stateChangedProxy.listeners.add(listener);
+    }
+
+    @Override
+    public void removeStateChangedListener(StateChangedListener listener) {
+        stateChangedProxy.listeners.remove(listener);
     }
 
 }

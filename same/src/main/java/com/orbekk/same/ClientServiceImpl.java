@@ -9,7 +9,8 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     private ConnectionManager connections;
     private State state;
     private String myUrl = null;
-
+    private StateChangedListener listener;
+    
     public ClientServiceImpl(State state, ConnectionManager connections) {
         this.state = state;
         this.connections = connections;
@@ -23,7 +24,11 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     @Override
     public void setState(String component, String data, long revision) {
         boolean status = state.update(component, data, revision);
-        if (!status) {
+        if (status) {
+            if (listener != null) {
+                listener.stateChanged(component, data);
+            }
+        } else {
             logger.warn("Ignoring update: {}",
                     new State.Component(component, revision, data));
         }
@@ -85,5 +90,9 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     
     State testGetState() {
         return state;
+    }
+
+    public void setStateChangedListener(StateChangedListener listener) {
+        this.listener = listener;
     }
 }

@@ -32,4 +32,7 @@ public interface SameInterface {
      * Set from an object: Pass it, e.g., a List<String>.
      */
     void setObject(String id, Object data);
+    
+    void addStateChangedListener(StateChangedListener listener);
+    void removeStateChangedListener(StateChangedListener listener);
 }
