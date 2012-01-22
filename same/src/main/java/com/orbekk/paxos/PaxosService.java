@@ -1,4 +1,4 @@
-pakage com.orbekk.paxos;
+package com.orbekk.paxos;
 
 public interface PaxosService {
     boolean propose(String clientUrl, int roundId, int proposalNumber);

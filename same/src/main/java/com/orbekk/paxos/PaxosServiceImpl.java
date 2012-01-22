@@ -9,8 +9,13 @@ public class PaxosServiceImpl implements PaxosService {
     private int highestPromise = 0;
     private String tag = "";
 
+    public PaxosServiceImpl(String tag) {
+        this.tag = tag;
+    }
+
     @Override
-    public boolean propose(String clientUrl, int roundId, int proposalNumber) {
+    public synchronized boolean propose(String clientUrl, int roundId,
+            int proposalNumber) {
         if (roundId > this.roundId) {
             newRound(roundId);
         }
@@ -25,7 +30,7 @@ public class PaxosServiceImpl implements PaxosService {
         if (proposalNumber > highestPromise) {
             highestPromise = proposalNumber;
             logger.info(tag + "propose({}, {}, {}) = accepted",
-                    new Object[]{clientUrl, roundId, proposalNumber);
+                    new Object[]{clientUrl, roundId, proposalNumber});
             return true;
         } else {
             logger.info(tag + "propose({}, {}, {}) = rejected " +
@@ -37,11 +42,12 @@ public class PaxosServiceImpl implements PaxosService {
     }
 
     @Override
-    public boolean acceptRequest(String clientUrl, int roundId,
+    public synchronized boolean acceptRequest(String clientUrl, int roundId,
             int proposalNumber) {
         if (roundId == this.roundId && proposalNumber == highestPromise) {
             logger.info(tag + "acceptRequest({}, {}, {}) = accepted",
                     new Object[]{clientUrl, roundId, proposalNumber});
+            finishRound();
             return true;
         } else {
             logger.info(tag + "acceptRequest({}, {}, {}) = rejected " +
@@ -52,7 +58,11 @@ public class PaxosServiceImpl implements PaxosService {
         }
     }
 
-    private void newRound(int roundId) {
+    private synchronized void finishRound() {
+        newRound(roundId + 1);
+    }
+
+    private synchronized void newRound(int roundId) {
         logger.info(tag + "new round: {}", roundId);
         this.roundId = roundId;
         highestPromise = 0;
