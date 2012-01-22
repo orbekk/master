@@ -3,6 +3,9 @@ package com.orbekk.paxos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class better be thread-safe.
+ */
 public class PaxosServiceImpl implements PaxosService {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private int roundId = 0;
