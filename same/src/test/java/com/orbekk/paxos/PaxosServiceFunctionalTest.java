@@ -1,10 +1,13 @@
 package com.orbekk.paxos;
 
+import static org.junit.Assert.*;
+
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.same.ConnectionManagerImpl;
 import com.orbekk.same.RpcHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.junit.Before;
@@ -20,21 +23,52 @@ public class PaxosServiceFunctionalTest {
     @Before
     public void setUp() throws Exception {
         server = TestServer.create(handler);
-        myUrl = "http://localhost:" + server.port + "/";
+        myUrl = "http://localhost:" + server.port;
         setupPaxos(5);
     }
     
     public void setupPaxos(int instances) {
         for (int i = 1; i <= instances; i++) {
             JsonRpcServer jsonServer = new JsonRpcServer(
-                    new PaxosServiceImpl("" + i), PaxosService.class);
+                    new PaxosServiceImpl("P" + i + ": "), PaxosService.class);
             String serviceId = "/PaxosService" + i + ".json";
             handler.addRpcServer(serviceId, jsonServer);
+            paxosUrls.add(myUrl + serviceId);
         }
     }
 
     @Test
-    public void nullTest() {
+    public void testMasterElection() {
+        MasterProposer m1 = new MasterProposer("http://client1", paxosUrls,
+                connections);
+        assertTrue(m1.propose(1, 1));
+    }
+
+    @Test
+    public void testWithCompetition() {
+        int proposers = 5;
+        List<Thread> masterProposers = new ArrayList<Thread>(); 
+        for (int i = 1; i <= proposers; i++) {
+            final int j = i;
+            masterProposers.add(new Thread() {
+                @Override public void run() {
+                    MasterProposer client =
+                            new MasterProposer("http:/client" + j, paxosUrls,
+                                    connections);
+                    client.propose(1, 1);
+                }
+            });
+        }
+        for (Thread t : masterProposers) {
+            t.start();
+        }
+        for (Thread t : masterProposers) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                // Ignore.
+            }
+        }
     }
 
     public static class TestServer {
