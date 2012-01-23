@@ -3,6 +3,8 @@ package com.orbekk.same;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,13 +15,23 @@ import org.slf4j.LoggerFactory;
 
 public class RpcHandler extends AbstractHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private JsonRpcServer rpcServer;
+    private JsonRpcServer rpcServer = null;
     private UrlReceiver urlReceiver;
+    private Map<String, JsonRpcServer> rpcServers =
+            new HashMap<String, JsonRpcServer>();
     
-    public RpcHandler(JsonRpcServer rpcServer,
-            UrlReceiver urlReceiver) {
-        this.rpcServer = rpcServer;
+    public RpcHandler(UrlReceiver urlReceiver) {
         this.urlReceiver = urlReceiver;
+    }
+
+    /**
+     * Add an RpcServer to this Handler.
+     *
+     * @param url the base url of the service, e.g.
+     *          /MyService.json
+     */
+    public void addRpcServer(String url, JsonRpcServer rpcServer) {
+        rpcServers.put(url, rpcServer);
     }
     
     @Override
@@ -41,11 +53,16 @@ public class RpcHandler extends AbstractHandler {
                 remotePort + "/pong";
             logger.info("Got ping. Sending pong to {}", pongUrl);
             HttpUtil.sendHttpRequest(pongUrl);
+            baseRequest.setHandled(true);
         } else if (target.equals("/pong")) {
             logger.info("Received pong from {}", request.getRemoteAddr());
+            baseRequest.setHandled(true);
         } else {
-            rpcServer.handle(request, response);
+            JsonRpcServer server = rpcServers.get(target);
+            if (server != null) {
+                server.handle(request, response);
+                baseRequest.setHandled(true);
+            }
         }
-        baseRequest.setHandled(true);
     }
 }

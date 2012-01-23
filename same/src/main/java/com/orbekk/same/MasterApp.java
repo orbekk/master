@@ -21,7 +21,8 @@ public class MasterApp {
                 broadcaster);
         JsonRpcServer jsonServer = new JsonRpcServer(master, MasterService.class);
         server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(jsonServer, master);
+        RpcHandler rpcHandler = new RpcHandler(master);
+        rpcHandler.addRpcServer("/MasterService.json", jsonServer);
         server.setHandler(rpcHandler);
         
         Thread masterThread = new Thread(master);

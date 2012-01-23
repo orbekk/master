@@ -27,7 +27,8 @@ public class ClientApp {
         
         JsonRpcServer jsonServer = new JsonRpcServer(client, ClientService.class);
         server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(jsonServer, client);
+        RpcHandler rpcHandler = new RpcHandler(client);
+        rpcHandler.addRpcServer("/ClientService.json", jsonServer);
         server.setHandler(rpcHandler);
         
         try {
