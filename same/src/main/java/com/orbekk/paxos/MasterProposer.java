@@ -10,7 +10,7 @@ public class MasterProposer {
     private List<String> paxosUrls = new ArrayList<String>();
     private ConnectionManager connections;
     
-    MasterProposer(String clientUrl, List<String> paxosUrls,
+    public MasterProposer(String clientUrl, List<String> paxosUrls,
             ConnectionManager connections) {
         this.myUrl = clientUrl;
         this.paxosUrls = paxosUrls;

@@ -2,6 +2,8 @@ package com.orbekk.paxos;
 
 import static org.junit.Assert.*;
 
+import com.orbekk.same.TestConnectionManager;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PaxosServiceTest {
+    TestConnectionManager connections = new TestConnectionManager();
     private PaxosServiceImpl p1 = new PaxosServiceImpl("P1: "); 
     private PaxosServiceImpl p2 = new PaxosServiceImpl("P2: "); 
     private PaxosServiceImpl p3 = new PaxosServiceImpl("P3: "); 
@@ -25,6 +28,11 @@ public class PaxosServiceTest {
     @Before
     public void setUp() {
         Collections.addAll(servers, p1, p2, p3, p4, p5);    
+        connections.paxosMap.put("p1", p1);
+        connections.paxosMap.put("p2", p2);
+        connections.paxosMap.put("p3", p3);
+        connections.paxosMap.put("p4", p4);
+        connections.paxosMap.put("p5", p5);
     }
 
     @Test
@@ -58,5 +66,16 @@ public class PaxosServiceTest {
         assertFalse(p1.propose(client2, 4, 5));
         assertFalse(p1.acceptRequest(client2, 4, 5));
         assertTrue(p1.propose(client1, 5, 1));
+    }
+
+    public List<String> paxosUrls() {
+        return new ArrayList<String>(connections.paxosMap.keySet());
+    }
+
+    @Test
+    public void integrationTest() {
+        MasterProposer proposer = new MasterProposer("client1", paxosUrls(),
+                connections);
+        assertTrue(proposer.propose(1, 1));
     }
 }
