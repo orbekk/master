@@ -2,6 +2,8 @@ package com.orbekk.same;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.orbekk.paxos.PaxosService;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.slf4j.Logger;
@@ -46,5 +48,10 @@ public class ConnectionManagerImpl implements ConnectionManager {
     @Override
     public MasterService getMaster(String url) {
         return getClassProxy(url, MasterService.class);
+    }
+    
+    @Override
+    public PaxosService getPaxos(String url) {
+        return getClassProxy(url, PaxosService.class);
     }
 }

@@ -1,5 +1,7 @@
 package com.orbekk.same;
 
+import com.orbekk.paxos.PaxosService;
+
 /**
  * An interface that returns a connection for a participant.
  *
@@ -8,4 +10,5 @@ package com.orbekk.same;
 public interface ConnectionManager {
     ClientService getClient(String url);
     MasterService getMaster(String url);
+    PaxosService getPaxos(String url);
 }
