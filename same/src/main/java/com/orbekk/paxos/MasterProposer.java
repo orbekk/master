@@ -5,39 +5,19 @@ import java.util.List;
 
 import com.orbekk.same.ConnectionManager;
 
-public class MasterProposer implements Runnable {
+public class MasterProposer {
     private String myUrl;
-    private int roundId = 0;
-    private int proposalNumber = 0;
     private List<String> paxosUrls = new ArrayList<String>();
-    private Runnable roundFailedAction;
-    private Runnable masterAction;
     private ConnectionManager connections;
     
-    public static Runnable getTimeoutAction(final long milliseconds) {
-        return new Runnable() {
-            @Override public void run() {
-                try {
-                    Thread.sleep(milliseconds);
-                } catch (InterruptedException e) {
-                    // Ignore interrupts.
-                }
-            }
-        };
-    }
-    
-    MasterProposer(String clientUrl, List<String> paxosUrls, int roundId,
-            ConnectionManager connections, Runnable roundFailedAction,
-            Runnable masterAction) {
+    MasterProposer(String clientUrl, List<String> paxosUrls,
+            ConnectionManager connections) {
         this.myUrl = clientUrl;
         this.paxosUrls = paxosUrls;
-        this.roundId = roundId;
         this.connections = connections;
-        this.roundFailedAction = roundFailedAction;
-        this.masterAction = masterAction;
     }
     
-    private boolean propose(int roundId, int proposalNumber) {
+    private boolean internalPropose(int roundId, int proposalNumber) {
         int promises = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
@@ -49,7 +29,7 @@ public class MasterProposer implements Runnable {
         return promises > paxosUrls.size() / 2;
     }
     
-    private boolean acceptRequest(int roundId, int proposalNumber) {
+    private boolean internalAcceptRequest(int roundId, int proposalNumber) {
         int accepts = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
@@ -60,18 +40,17 @@ public class MasterProposer implements Runnable {
         }
         return accepts > paxosUrls.size() / 2;        
     }
-    
-    @Override public void run() {
+
+    public boolean propose(int roundId, int proposalNumber) {
         boolean success = false;
-        success = propose(roundId + 1, proposalNumber + 1);
+        success = internalPropose(roundId, proposalNumber);
         if (success) {
-            success = acceptRequest(roundId + 1, proposalNumber + 1);
+            success = internalAcceptRequest(roundId, proposalNumber);
         }
         if (success) {
-            masterAction.run();
+            return true;
         } else {
-            roundFailedAction.run();
-            // TODO: Next round?
+            return false;
         }
     }
 }
