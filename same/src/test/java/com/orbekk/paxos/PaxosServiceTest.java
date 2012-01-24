@@ -37,23 +37,23 @@ public class PaxosServiceTest {
 
     @Test
     public void simpleCase() {
-        assertTrue(p1.propose(client, 1));
-        assertTrue(p1.acceptRequest(client, 1));
+        assertEquals(1, p1.propose(client, 1));
+        assertEquals(1, p1.acceptRequest(client, 1));
     }
 
     @Test
     public void lowerProposalFails() {
-        assertTrue(p1.propose(client1, 10));
-        assertFalse(p1.propose(client2, 9));
-        assertTrue(p1.propose(client2, 100));
+        assertEquals(10, p1.propose(client1, 10));
+        assertEquals(-10, p1.propose(client2, 9));
+        assertEquals(100, p1.propose(client2, 100));
     }
 
     @Test
     public void testAccept() {
-        assertTrue(p1.propose(client1, 3));
-        assertTrue(p1.propose(client2, 4));
-        assertFalse(p1.acceptRequest(client1, 3));
-        assertTrue(p1.acceptRequest(client2, 4));
+        assertEquals(3, p1.propose(client1, 3));
+        assertEquals(4, p1.propose(client2, 4));
+        assertEquals(-4, p1.acceptRequest(client1, 3));
+        assertEquals(4, p1.acceptRequest(client2, 4));
     }
 
     public List<String> paxosUrls() {

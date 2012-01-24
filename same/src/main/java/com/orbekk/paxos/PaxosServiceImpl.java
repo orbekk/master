@@ -17,36 +17,36 @@ public class PaxosServiceImpl implements PaxosService {
     }
 
     @Override
-    public synchronized boolean propose(String clientUrl,
+    public synchronized int propose(String clientUrl,
             int proposalNumber) {
         if (proposalNumber > highestPromise) {
-            highestPromise = proposalNumber;
             logger.info(tag + "propose({}, {}) = accepted",
                     new Object[]{clientUrl, proposalNumber});
-            return true;
+            highestPromise = proposalNumber;
+            return highestPromise;
         } else {
             logger.info(tag + "propose({}, {}) = rejected " +
                     "(promised: {})",
                     new Object[]{clientUrl, proposalNumber,
                             highestPromise});
-            return false;
+            return -highestPromise;
         }
     }
 
     @Override
-    public synchronized boolean acceptRequest(String clientUrl,
+    public synchronized int acceptRequest(String clientUrl,
             int proposalNumber) {
         if (proposalNumber == highestPromise) {
             logger.info(tag + "acceptRequest({}, {}) = accepted",
                     new Object[]{clientUrl, proposalNumber});
             highestAcceptedValue = proposalNumber;
-            return true;
+            return highestAcceptedValue;
         } else {
             logger.info(tag + "acceptRequest({}, {}) = rejected " +
                     "(promise={})",
                     new Object[]{clientUrl, proposalNumber,
                             highestPromise});
-            return false;
+            return -highestPromise;
         }
     }
 }

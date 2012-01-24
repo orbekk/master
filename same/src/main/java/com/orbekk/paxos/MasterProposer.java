@@ -17,37 +17,48 @@ public class MasterProposer {
         this.connections = connections;
     }
     
-    private boolean internalPropose(int proposalNumber) {
+    private int internalPropose(int proposalNumber) {
+        int bestPromise = proposalNumber;
         int promises = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
-            boolean success = paxos.propose(myUrl, proposalNumber);
-            if (success) {
+            int result = paxos.propose(myUrl, proposalNumber);
+            if (result == proposalNumber) {
                 promises += 1;
             }
+            bestPromise = Math.min(bestPromise, result);
         }
-        return promises > paxosUrls.size() / 2;
+        if (promises > paxosUrls.size() / 2) {
+            return proposalNumber;
+        } else {
+            return bestPromise;
+        }
     }
     
-    private boolean internalAcceptRequest(int proposalNumber) {
+    private int internalAcceptRequest(int proposalNumber) {
+        int bestAccepted = proposalNumber;
         int accepts = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
-            boolean success = paxos.acceptRequest(myUrl, proposalNumber);
-            if (success) {
+            int result = paxos.acceptRequest(myUrl, proposalNumber);
+            if (result == proposalNumber) {
                 accepts += 1;
             }
+            bestAccepted = Math.min(bestAccepted, result);
         }
-        return accepts > paxosUrls.size() / 2;        
+        if (accepts > paxosUrls.size() / 2) {
+            return proposalNumber;
+        } else {
+            return bestAccepted;
+        }
     }
 
     public boolean propose(int proposalNumber) {
-        boolean success = false;
-        success = internalPropose(proposalNumber);
-        if (success) {
-            success = internalAcceptRequest(proposalNumber);
+        int result = internalPropose(proposalNumber);
+        if (result == proposalNumber) {
+            result = internalAcceptRequest(proposalNumber);
         }
-        if (success) {
+        if (result == proposalNumber) {
             return true;
         } else {
             return false;
