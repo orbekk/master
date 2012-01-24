@@ -37,35 +37,23 @@ public class PaxosServiceTest {
 
     @Test
     public void simpleCase() {
-        assertTrue(p1.propose(client, 1, 1));
-        assertTrue(p1.acceptRequest(client, 1, 1));
+        assertTrue(p1.propose(client, 1));
+        assertTrue(p1.acceptRequest(client, 1));
     }
 
     @Test
     public void lowerProposalFails() {
-        assertTrue(p1.propose(client1, 5, 10));
-        assertFalse(p1.propose(client2, 3, 9));
-        assertFalse(p1.propose(client2, 4, 100));
-        assertFalse(p1.propose(client2, 5, 9));
-        assertFalse(p1.propose(client2, 5, 10));
-        assertTrue(p1.propose(client2, 5, 11));
+        assertTrue(p1.propose(client1, 10));
+        assertFalse(p1.propose(client2, 9));
+        assertTrue(p1.propose(client2, 100));
     }
 
     @Test
     public void testAccept() {
-        assertTrue(p1.propose(client1, 2, 3));
-        assertTrue(p1.propose(client2, 2, 4));
-        assertFalse(p1.acceptRequest(client1, 2, 3));
-        assertTrue(p1.acceptRequest(client2, 2, 4));
-    }
-
-    @Test
-    public void testRoundFinished() {
-        assertTrue(p1.propose(client1, 4, 5));
-        assertTrue(p1.acceptRequest(client1, 4, 5));
-        assertFalse(p1.propose(client2, 4, 5));
-        assertFalse(p1.acceptRequest(client2, 4, 5));
-        assertTrue(p1.propose(client1, 5, 1));
+        assertTrue(p1.propose(client1, 3));
+        assertTrue(p1.propose(client2, 4));
+        assertFalse(p1.acceptRequest(client1, 3));
+        assertTrue(p1.acceptRequest(client2, 4));
     }
 
     public List<String> paxosUrls() {
@@ -76,6 +64,6 @@ public class PaxosServiceTest {
     public void integrationTest() {
         MasterProposer proposer = new MasterProposer("client1", paxosUrls(),
                 connections);
-        assertTrue(proposer.propose(1, 1));
+        assertTrue(proposer.propose(1));
     }
 }

@@ -30,25 +30,25 @@ public class MasterProposerTest {
 
     @Test public void successfulProposal() {
         connections.paxosMap.put("p1", p1);
-        when(p1.propose("client1", 1, 1)).thenReturn(true);
-        when(p1.acceptRequest("client1", 1, 1)).thenReturn(true);
+        when(p1.propose("client1", 1)).thenReturn(true);
+        when(p1.acceptRequest("client1", 1)).thenReturn(true);
         
         MasterProposer c1 = new MasterProposer(
                 "client1",
                 paxosUrls(),
                 connections);
-        assertTrue(c1.propose(1, 1));
+        assertTrue(c1.propose(1));
     }
 
     @Test public void unsucessfulProposal() {
         connections.paxosMap.put("p1", p1);
-        when(p1.propose("client1", 1, 1)).thenReturn(true);
-        when(p1.acceptRequest("client1", 1, 1)).thenReturn(false);
+        when(p1.propose("client1", 1)).thenReturn(true);
+        when(p1.acceptRequest("client1", 1)).thenReturn(false);
         
         MasterProposer c1 = new MasterProposer(
                 "client1",
                 paxosUrls(),
                 connections);
-        assertFalse(c1.propose(1, 1));
+        assertFalse(c1.propose(1));
     }
 }

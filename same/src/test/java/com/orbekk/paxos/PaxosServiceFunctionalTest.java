@@ -42,7 +42,7 @@ public class PaxosServiceFunctionalTest {
     public void testMasterElection() {
         MasterProposer m1 = new MasterProposer("http://client1", paxosUrls,
                 connections);
-        assertTrue(m1.propose(1, 1));
+        assertTrue(m1.propose(1));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class PaxosServiceFunctionalTest {
                     MasterProposer client =
                             new MasterProposer("http:/client" + j, paxosUrls,
                                     connections);
-                    if (client.propose(1, 1)) {
+                    if (client.propose(1)) {
                         incrementSuccessfulProposals(); 
                     }
                 }
