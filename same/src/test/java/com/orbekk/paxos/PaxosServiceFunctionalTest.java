@@ -25,7 +25,7 @@ public class PaxosServiceFunctionalTest {
     public void setUp() throws Exception {
         server = TestServer.create(handler);
         myUrl = "http://localhost:" + server.port;
-        setupPaxos(5);
+        setupPaxos(10);
     }
     
     public void setupPaxos(int instances) {
@@ -56,7 +56,7 @@ public class PaxosServiceFunctionalTest {
                     MasterProposer client =
                             new MasterProposer("http:/client" + j, paxosUrls,
                                     connections);
-                    if (client.propose(1)) {
+                    if (client.proposeRetry(1)) {
                         incrementSuccessfulProposals(); 
                     }
                 }
@@ -72,7 +72,7 @@ public class PaxosServiceFunctionalTest {
                 // Ignore.
             }
         }
-        assertEquals(1, successfulProposals);
+        assertEquals(5, successfulProposals);
     }
 
     public synchronized void incrementSuccessfulProposals() {

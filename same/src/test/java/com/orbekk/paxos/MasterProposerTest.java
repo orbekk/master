@@ -42,8 +42,8 @@ public class MasterProposerTest {
 
     @Test public void unsucessfulProposal() {
         connections.paxosMap.put("p1", p1);
-        when(p1.propose("client1", 1)).thenReturn(1);
-        when(p1.acceptRequest("client1", 1)).thenReturn(1);
+        when(p1.propose("client1", 1)).thenReturn(-1);
+        when(p1.acceptRequest("client1", 1)).thenReturn(-1);
         
         MasterProposer c1 = new MasterProposer(
                 "client1",

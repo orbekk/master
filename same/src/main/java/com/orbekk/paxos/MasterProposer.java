@@ -1,11 +1,13 @@
 package com.orbekk.paxos;
 
+import com.orbekk.same.ConnectionManager;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.orbekk.same.ConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MasterProposer {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private String myUrl;
     private List<String> paxosUrls = new ArrayList<String>();
     private ConnectionManager connections;
@@ -63,5 +65,23 @@ public class MasterProposer {
         } else {
             return false;
         }
+    }
+    
+    public boolean proposeRetry(int proposalNumber) {
+        int nextProposal = proposalNumber;
+        int result = 0;
+        
+        while (result != nextProposal) {
+            result = internalPropose(nextProposal);
+            if (result == nextProposal) {
+                result = internalAcceptRequest(nextProposal);
+            }
+            logger.info("Proposed value {}, result {}", nextProposal, result);
+            if (result < 0) {
+                nextProposal = -result + 1;
+            }
+        }
+        
+        return true;
     }
 }
