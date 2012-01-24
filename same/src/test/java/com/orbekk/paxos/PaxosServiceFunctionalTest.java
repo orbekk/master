@@ -19,7 +19,8 @@ public class PaxosServiceFunctionalTest {
     RpcHandler handler = new RpcHandler(null);
     TestServer server;
     String myUrl;
-
+    int successfulProposals = 0;
+    
     @Before
     public void setUp() throws Exception {
         server = TestServer.create(handler);
@@ -55,7 +56,9 @@ public class PaxosServiceFunctionalTest {
                     MasterProposer client =
                             new MasterProposer("http:/client" + j, paxosUrls,
                                     connections);
-                    client.propose(1, 1);
+                    if (client.propose(1, 1)) {
+                        incrementSuccessfulProposals(); 
+                    }
                 }
             });
         }
@@ -69,8 +72,13 @@ public class PaxosServiceFunctionalTest {
                 // Ignore.
             }
         }
+        assertEquals(1, successfulProposals);
     }
 
+    public synchronized void incrementSuccessfulProposals() {
+        successfulProposals += 1;
+    }
+    
     public static class TestServer {
         public Server server;
         public int port;
