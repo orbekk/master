@@ -5,11 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 
 public class SameController implements UrlReceiver {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private int port;
     private Server server;
     private MasterServiceImpl master;
     private ClientServiceImpl client;
@@ -35,7 +37,7 @@ public class SameController implements UrlReceiver {
         JsonRpcServer jsonPaxos = new JsonRpcServer(paxos, PaxosService.class);
         
         Server server = new Server(port);
-        SameController controller = new SameController(server, master, client,
+        SameController controller = new SameController(port, server, master, client,
                 paxos);
         RpcHandler rpcHandler = new RpcHandler(controller);
         
@@ -48,12 +50,15 @@ public class SameController implements UrlReceiver {
     }
     
     public SameController(
+            int port,
             Server server,
             MasterServiceImpl master,
             ClientServiceImpl client,
             PaxosServiceImpl paxos) {
+        this.port = port;
         this.server = server;
         this.master = master;
+        this.client = client;
         this.paxos = paxos;
     }
 
@@ -85,8 +90,26 @@ public class SameController implements UrlReceiver {
         }
     }
     
+    public boolean tryGetUrl(String serverUrl) {
+        int retries = 100;
+        while (client.getUrl() == null && retries > 0) {
+            HttpUtil.sendHttpRequest(serverUrl + "ping?port=" +
+                    port);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            retries -= 1;
+        }
+        return client.getUrl() != null;
+    }
+    
     public void joinNetwork(String url) {
-        client.joinNetwork(url + "MasterService.json");
+            boolean hasUrl = tryGetUrl(url);
+            if (hasUrl) {
+                client.joinNetwork(url + "MasterService.json");
+            }
     }
     
     @Override
