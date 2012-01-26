@@ -12,6 +12,7 @@ public class ClientApp {
     private Server server;
     private static final int timeout = 1000;
     
+    @Deprecated
     public SameInterface getClient(int port, String networkName,
             String masterUrl) {
         logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
