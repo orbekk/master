@@ -12,6 +12,7 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.ClientApp;
 import com.orbekk.same.MasterApp;
 
 public class SameService extends Service {
@@ -52,9 +53,28 @@ public class SameService extends Service {
         }
     };
     
+    private void createNetwork() {
+        if (discoveryThread == null) {
+            synchronized (this) {
+                discoveryThread = new DiscoveryThread();
+                discoveryThread.start();
+            }
+        }
+        new Thread() {
+            @Override public void run() {
+                new MasterApp().run(PORT+1);
+            }
+        }.start();
+    }
+    
     private void sendBroadcastDiscovery() {
         byte[] data = "Discover".getBytes();
         new Broadcast(this).sendBroadcast(data, PORT);        
+    }
+    
+    private void joinNetwork() {
+        sendBroadcastDiscovery();
+        new ClientApp().run(PORT+2, "ClientNetwork", null);
     }
     
     @Override
@@ -66,14 +86,10 @@ public class SameService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "service start: " + intent.getAction(),
                 Toast.LENGTH_SHORT).show();
-        if (discoveryThread == null) {
-            synchronized (this) {
-                discoveryThread = new DiscoveryThread();
-                discoveryThread.start();
-            }
-        }
-        if (intent.getAction().equals("join")) {
-            sendBroadcastDiscovery();
+        if (intent.getAction().equals("create")) {
+            createNetwork();
+        } else if (intent.getAction().equals("join")) {
+            joinNetwork();
         }
         return START_STICKY;
     }

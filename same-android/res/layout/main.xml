@@ -7,16 +7,16 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create"
-        android:onClick="createNetwork" />
+        android:onClick="createNetwork"
+        android:text="Create" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Join"
-        android:onClick="joinNetwork" />
+        android:onClick="joinNetwork"
+        android:text="Join" />
 
 </LinearLayout>
