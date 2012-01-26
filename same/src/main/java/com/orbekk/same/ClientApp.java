@@ -53,12 +53,14 @@ public class ClientApp {
     
     public void run(int port, String networkName,
             String masterUrl) {
-        getClient(port, networkName, masterUrl);
+        SameController controller = SameController.create(port);
         try {
-            server.join();
-        } catch (InterruptedException e) {
-            logger.warn("Interrupted.", e);
+            controller.start();
+        } catch (Exception e) {
+            logger.error("Failed to start Same", e);
         }
+        controller.joinNetwork(masterUrl);
+        controller.join();
     }
     
     public static void main(String[] args) {
