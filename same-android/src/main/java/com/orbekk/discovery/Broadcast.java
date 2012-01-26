@@ -1,4 +1,4 @@
-package com.orbekk;
+package com.orbekk.discovery;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -17,12 +17,13 @@ import android.net.wifi.WifiManager;
 public class Broadcast {
     private Context context;
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private DatagramSocket socket = null;
     
     public Broadcast(Context context) {
         this.context = context;
     }
     
-    public InetAddress getBroadcastAddress() {
+    public synchronized InetAddress getBroadcastAddress() {
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         DhcpInfo dhcp = wifi.getDhcpInfo();
 
@@ -38,9 +39,9 @@ public class Broadcast {
         }
     }
     
-    public boolean sendBroadcast(byte[] data, int port) {
+    public synchronized boolean sendBroadcast(byte[] data, int port) {
         try {
-            DatagramSocket socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port);
             socket.setBroadcast(true);
             DatagramPacket packet = new DatagramPacket(data, data.length, getBroadcastAddress(), port);
             socket.send(packet);
@@ -51,6 +52,31 @@ public class Broadcast {
         } catch (IOException e) {
             logger.warn("Error when sending broadcast.", e.fillInStackTrace());
             return false;
+        } finally {
+            socket.close();
+            socket = null;
+        }
+    }
+    
+    public synchronized DatagramPacket receiveBroadcast(int port) {
+        try {
+            socket = new DatagramSocket(port);
+            byte[] data = new byte[1024];
+            DatagramPacket packet = new DatagramPacket(data, data.length);
+            socket.receive(packet);
+            return packet;
+        } catch (IOException e) {
+            logger.warn("Failed to receive broadcast.", e);
+            return null;
+        } finally {
+            socket.close();
+            socket = null;
+        }
+    }
+    
+    public void interrupt() {
+        if (socket != null) {
+            socket.close();
         }
     }
 }
