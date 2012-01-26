@@ -41,7 +41,7 @@ public class Broadcast {
     
     public synchronized boolean sendBroadcast(byte[] data, int port) {
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket(0);
             socket.setBroadcast(true);
             DatagramPacket packet = new DatagramPacket(data, data.length, getBroadcastAddress(), port);
             socket.send(packet);

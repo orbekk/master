@@ -12,7 +12,10 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.MasterApp;
+
 public class SameService extends Service {
+    final static int PORT = 15066;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Thread discoveryThread = null;
     
@@ -26,7 +29,7 @@ public class SameService extends Service {
         @Override public void run() {
             while (!Thread.interrupted()) {
                 byte[] data = new byte[1024];
-                DatagramPacket packet = broadcast.receiveBroadcast(15066);
+                DatagramPacket packet = broadcast.receiveBroadcast(PORT);
                 String content = new String(packet.getData(), 0, packet.getLength());
                 Message message = Message.obtain();
                 message.obj = content;
@@ -49,6 +52,11 @@ public class SameService extends Service {
         }
     };
     
+    private void sendBroadcastDiscovery() {
+        byte[] data = "Discover".getBytes();
+        new Broadcast(this).sendBroadcast(data, PORT);        
+    }
+    
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -63,6 +71,9 @@ public class SameService extends Service {
                 discoveryThread = new DiscoveryThread();
                 discoveryThread.start();
             }
+        }
+        if (intent.getAction().equals("join")) {
+            sendBroadcastDiscovery();
         }
         return START_STICKY;
     }
