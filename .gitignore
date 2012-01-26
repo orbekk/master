@@ -3,7 +3,6 @@
 *.settings/
 bin/
 hs_err*.log
-res/
 gen/
 target/
 R.java
