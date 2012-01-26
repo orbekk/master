@@ -12,15 +12,15 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DiscoveryService extends Service {
+public class SameService extends Service {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Thread thread = null;
+    private Thread discoveryThread = null;
     
     public final class DiscoveryThread extends Thread {
         Broadcast broadcast;
         
         public DiscoveryThread() {
-            broadcast = new Broadcast(DiscoveryService.this);
+            broadcast = new Broadcast(SameService.this);
         }
         
         @Override public void run() {
@@ -42,7 +42,7 @@ public class DiscoveryService extends Service {
     
     private Handler toastHandler = new Handler() {
         @Override public void handleMessage(Message message) {
-            Toast.makeText(DiscoveryService.this,
+            Toast.makeText(SameService.this,
                     (String)message.obj, Toast.LENGTH_SHORT)
                             .show();
             logger.info("Display toast: {}", (String)message.obj);
@@ -58,10 +58,10 @@ public class DiscoveryService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "service start: " + intent.getAction(),
                 Toast.LENGTH_SHORT).show();
-        if (thread == null) {
+        if (discoveryThread == null) {
             synchronized (this) {
-                thread = new DiscoveryThread();
-                thread.start();
+                discoveryThread = new DiscoveryThread();
+                discoveryThread.start();
             }
         }
         return START_STICKY;
@@ -70,7 +70,7 @@ public class DiscoveryService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, "service stopped", Toast.LENGTH_SHORT).show();
-        thread.interrupt();
+        discoveryThread.interrupt();
     }
 
 }
