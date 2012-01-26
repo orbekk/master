@@ -15,6 +15,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     private boolean stopped = false;
     private Broadcaster broadcaster;
     private List<String> _fullStateReceivers = new ArrayList<String>();
+    private Thread workerThread = null;
     
     public MasterServiceImpl(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
@@ -132,10 +133,28 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
                     try {
                         wait(500);
                     } catch (InterruptedException e) {
-                        // Ignore interrupt in wait loop.
+                        stopped = true;
                     }
                 }
             }
+            if (Thread.interrupted()) {
+                stopped = true;
+            }
         }
+    }
+    
+    public void start() {
+        if (workerThread == null) {
+            workerThread = new Thread(this);
+            workerThread.start();
+        }
+    }
+    
+    public void join() throws InterruptedException {
+        workerThread.join();
+    }
+    
+    public void interrupt() {
+        workerThread.interrupt();
     }
 }

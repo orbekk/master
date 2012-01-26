@@ -12,34 +12,41 @@ public class MasterApp {
     private static final int timeout = 1000;    
     
     public void run(int port) {
-        ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
-                timeout);
-        State state = new State("MasterNetwork");
-        Broadcaster broadcaster =
-                BroadcasterImpl.getDefaultBroadcastRunner();
-        MasterServiceImpl master = new MasterServiceImpl(state, connections,
-                broadcaster);
-        JsonRpcServer jsonServer = new JsonRpcServer(master, MasterService.class);
-        server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(master);
-        rpcHandler.addRpcServer("/MasterService.json", jsonServer);
-        server.setHandler(rpcHandler);
-        
-        Thread masterThread = new Thread(master);
-        masterThread.start();
-        
+//        ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
+//                timeout);
+//        State state = new State("MasterNetwork");
+//        Broadcaster broadcaster =
+//                BroadcasterImpl.getDefaultBroadcastRunner();
+//        MasterServiceImpl master = new MasterServiceImpl(state, connections,
+//                broadcaster);
+//        JsonRpcServer jsonServer = new JsonRpcServer(master, MasterService.class);
+//        server = new Server(port);
+//        RpcHandler rpcHandler = new RpcHandler(master);
+//        rpcHandler.addRpcServer("/MasterService.json", jsonServer);
+//        server.setHandler(rpcHandler);
+//        
+//        Thread masterThread = new Thread(master);
+//        masterThread.start();
+//        
+//        try {
+//            server.start();
+//        } catch (Exception e) {
+//            logger.error("Could not start jetty server: {}", e);
+//        }
+//        
+//        try {
+//            server.join();
+//            masterThread.join();
+//        } catch (InterruptedException e) {
+//            logger.info("Received exception. Exiting. {}", e);
+//        }
+        SameController controller = SameController.create(port);
         try {
-            server.start();
+            controller.start();
         } catch (Exception e) {
-            logger.error("Could not start jetty server: {}", e);
+            logger.error("Failed to start Same", e);
         }
-        
-        try {
-            server.join();
-            masterThread.join();
-        } catch (InterruptedException e) {
-            logger.info("Received exception. Exiting. {}", e);
-        }
+        controller.join();
     }
     
     public static void main(String[] args) {
