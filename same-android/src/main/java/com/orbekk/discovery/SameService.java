@@ -13,27 +13,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.ClientApp;
+import com.orbekk.same.DiscoveryListener;
 import com.orbekk.same.MasterApp;
+import com.orbekk.same.NetworkNotificationListener;
+import com.orbekk.same.SameController;
 
 public class SameService extends Service {
     final static int PORT = 15066;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Thread discoveryThread = null;
+    private SameController sameController = null;
     
     public final class DiscoveryThread extends Thread {
         Broadcaster broadcast;
+        DiscoveryListener listener;
         
-        public DiscoveryThread() {
+        public DiscoveryThread(DiscoveryListener listener) {
             broadcast = new Broadcaster(SameService.this);
+            this.listener = listener;
         }
         
         @Override public void run() {
             while (!Thread.interrupted()) {
-                byte[] data = new byte[1024];
                 DatagramPacket packet = broadcast.receiveBroadcast(PORT);
                 String content = new String(packet.getData(), 0, packet.getLength());
+                String[] words = content.split(" ");
+                
+                if (!content.startsWith("Discover") || content.length() < 2) {
+                    logger.warn("Invalid discovery message: {}", content);
+                    continue;
+                }
+                
+                String port = words[1];
+                String url = "http://" + packet.getAddress().getHostAddress() +
+                        ":" + port + "/";
+                listener.discover(url);
+                
                 Message message = Message.obtain();
-                message.obj = content;
+                message.obj = "New client: " + url;
                 toastHandler.sendMessage(message);
             }
         }
@@ -56,7 +73,7 @@ public class SameService extends Service {
     private void createNetwork() {
         if (discoveryThread == null) {
             synchronized (this) {
-                discoveryThread = new DiscoveryThread();
+                discoveryThread = new DiscoveryThread(sameController.getClient());
                 discoveryThread.start();
             }
         }
@@ -69,8 +86,17 @@ public class SameService extends Service {
     }
     
     private void joinNetwork() {
+        sameController.getClient().setNetworkListener(
+                new NetworkNotificationListener() {
+                    @Override
+                    public void notifyNetwork(String networkName, String masterUrl) {
+                        Message message = Message.obtain();
+                        message.obj = "notifyNetwork(" + networkName + ", " +
+                                    masterUrl;
+                        toastHandler.sendMessage(message);
+                    }
+                });
         sendBroadcastDiscovery();
-        // new ClientApp().run(PORT+2, "ClientNetwork", null);
     }
     
     @Override
@@ -80,8 +106,22 @@ public class SameService extends Service {
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        System.setProperty("http.keepAlive", "false");
         Toast.makeText(this, "service start: " + intent.getAction(),
                 Toast.LENGTH_SHORT).show();
+        if (sameController == null) {
+            sameController = SameController.create(PORT + 2);
+            try {
+                sameController.start();
+                String myIp = new Broadcaster(this).getWlanAddress()
+                        .getHostAddress();
+                String myUrl = "http://" + myIp + ":" + (PORT + 2) + "/";
+                sameController.setUrl(myUrl);
+            } catch (Exception e) {
+                logger.error("Failed to start server", e);
+                return START_STICKY;
+            }
+        }
         if (intent.getAction().equals("create")) {
             createNetwork();
         } else if (intent.getAction().equals("join")) {
@@ -93,7 +133,12 @@ public class SameService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, "service stopped", Toast.LENGTH_SHORT).show();
-        discoveryThread.interrupt();
+        if (discoveryThread != null) {
+            discoveryThread.interrupt();
+        }
+        if (sameController != null) {
+            sameController.stop();
+        }
     }
 
 }

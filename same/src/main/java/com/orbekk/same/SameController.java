@@ -20,7 +20,7 @@ public class SameController implements UrlReceiver {
     /**
      * Timeout for remote operations in milliseconds.
      */
-    private static final int timeout = 2000;
+    private static final int timeout = 10000;
     
     public static SameController create(int port) {
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
@@ -39,7 +39,7 @@ public class SameController implements UrlReceiver {
         Server server = new Server(port);
         SameController controller = new SameController(port, server, master, client,
                 paxos);
-        RpcHandler rpcHandler = new RpcHandler(controller);
+        RpcHandler rpcHandler = new RpcHandler(null);
         
         rpcHandler.addRpcServer("/MasterService.json", jsonMaster);
         rpcHandler.addRpcServer("/ClientService.json", jsonClient);
