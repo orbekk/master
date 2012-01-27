@@ -60,21 +60,17 @@ public class SameService extends Service {
                 discoveryThread.start();
             }
         }
-        new Thread() {
-            @Override public void run() {
-                new MasterApp().run(PORT+1);
-            }
-        }.start();
     }
     
     private void sendBroadcastDiscovery() {
-        byte[] data = "Discover".getBytes();
+        String message = "Discover " + (PORT + 2);
+        byte[] data = message.getBytes();
         new Broadcaster(this).sendBroadcast(data, PORT);        
     }
     
     private void joinNetwork() {
         sendBroadcastDiscovery();
-        new ClientApp().run(PORT+2, "ClientNetwork", null);
+        // new ClientApp().run(PORT+2, "ClientNetwork", null);
     }
     
     @Override
