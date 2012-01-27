@@ -5,6 +5,13 @@
     android:layout_height="fill_parent"
     >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Commands"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
@@ -18,5 +25,12 @@
         android:layout_height="wrap_content"
         android:onClick="joinNetwork"
         android:text="Join" />
+
+    <TextView
+        android:id="@+id/ipAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

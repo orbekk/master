@@ -3,8 +3,8 @@ package com.orbekk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.discovery.Broadcaster;
 import com.orbekk.discovery.SameService;
-import com.orbekk.net.Broadcaster;
 import com.orbekk.same.ClientApp;
 import com.orbekk.same.ClientServiceImpl;
 import com.orbekk.same.SameInterface;
@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 public class HelloAndroidActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -32,6 +33,12 @@ public class HelloAndroidActivity extends Activity {
         startService(intent);
     }
     
+    private void showIpAddress() {
+        TextView t = (TextView)findViewById(R.id.ipAddress);
+        t.setText("My IP: ");
+        t.append(new Broadcaster(this).getWlanAddress().getHostAddress());
+    }
+    
     /**
      * Called when the activity is first created.
      * @param savedInstanceState If the activity is being re-initialized after 
@@ -46,6 +53,7 @@ public class HelloAndroidActivity extends Activity {
         System.setProperty("java.net.preferIPv6Addresses", "false");
 
         setContentView(R.layout.main);        
+        showIpAddress();
         
 //		ClientApp client = new ClientApp();
 //		SameInterface client_ = client.getClient(10015, "ClientNetwork",
