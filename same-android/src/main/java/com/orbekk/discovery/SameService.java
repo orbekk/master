@@ -21,10 +21,10 @@ public class SameService extends Service {
     private Thread discoveryThread = null;
     
     public final class DiscoveryThread extends Thread {
-        Broadcast broadcast;
+        Broadcaster broadcast;
         
         public DiscoveryThread() {
-            broadcast = new Broadcast(SameService.this);
+            broadcast = new Broadcaster(SameService.this);
         }
         
         @Override public void run() {
@@ -69,7 +69,7 @@ public class SameService extends Service {
     
     private void sendBroadcastDiscovery() {
         byte[] data = "Discover".getBytes();
-        new Broadcast(this).sendBroadcast(data, PORT);        
+        new Broadcaster(this).sendBroadcast(data, PORT);        
     }
     
     private void joinNetwork() {

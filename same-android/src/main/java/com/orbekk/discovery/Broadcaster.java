@@ -14,29 +14,41 @@ import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 
-public class Broadcast {
+public class Broadcaster {
     private Context context;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private DatagramSocket socket = null;
     
-    public Broadcast(Context context) {
+    public Broadcaster(Context context) {
         this.context = context;
     }
     
-    public synchronized InetAddress getBroadcastAddress() {
-        WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        DhcpInfo dhcp = wifi.getDhcpInfo();
-
-        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+    public InetAddress fromInt(int ip) {
         byte[] quads = new byte[4];
         for (int k = 0; k < 4; k++)
-          quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+          quads[k] = (byte) ((ip >> k * 8) & 0xFF);
         try {
             return InetAddress.getByAddress(quads);
         } catch (UnknownHostException e) {
             logger.warn("Failed to find broadcast address.");
             return null;
         }
+    }
+    
+    public DhcpInfo getDhcpInfo() {
+        WifiManager wifi =
+                (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        return wifi.getDhcpInfo();
+    }
+    
+    public synchronized InetAddress getWlanAddress() {
+        return fromInt(getDhcpInfo().ipAddress);
+    }
+    
+    public synchronized InetAddress getBroadcastAddress() {
+        DhcpInfo dhcp = getDhcpInfo();
+        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+        return fromInt(broadcast);
     }
     
     public synchronized boolean sendBroadcast(byte[] data, int port) {
