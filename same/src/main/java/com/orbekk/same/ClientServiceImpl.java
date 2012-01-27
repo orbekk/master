@@ -9,7 +9,8 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     private ConnectionManager connections;
     private State state;
     private String myUrl = null;
-    private StateChangedListener listener;
+    private StateChangedListener stateListener;
+    private NetworkNotificationListener networkListener;
     
     public ClientServiceImpl(State state, ConnectionManager connections) {
         this.state = state;
@@ -18,15 +19,19 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
 
     @Override
     public void notifyNetwork(String networkName, String masterUrl) {
-        logger.error("NotifyNetwork not yet implemented.");
+        logger.info("NotifyNetwork(networkName={}, masterUrl={})", 
+                networkName, masterUrl);
+        if (networkListener != null) {
+            networkListener.notifyNetwork(networkName, masterUrl);
+        }
     }
 
     @Override
     public void setState(String component, String data, long revision) {
         boolean status = state.update(component, data, revision);
         if (status) {
-            if (listener != null) {
-                listener.stateChanged(component, data);
+            if (stateListener != null) {
+                stateListener.stateChanged(component, data);
             }
         } else {
             logger.warn("Ignoring update: {}",
@@ -93,6 +98,10 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     }
 
     public void setStateChangedListener(StateChangedListener listener) {
-        this.listener = listener;
+        this.stateListener = listener;
+    }
+    
+    public void setNetworkListener(NetworkNotificationListener listener) {
+        this.networkListener = listener;
     }
 }
