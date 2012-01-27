@@ -24,4 +24,13 @@ public class ClientServiceImplTest {
         client.notifyNetwork("MyNetwork", "MasterUrl");
         verify(listener).notifyNetwork("MyNetwork", "MasterUrl");
     }
+    
+    @Test public void discover() {
+        client.setState(".masterUrl", "master", 1);
+        ClientServiceImpl mockClient = mock(ClientServiceImpl.class);
+        connections.clientMap.put("mockClient/ClientService.json",
+                mockClient);
+        client.discover("mockClient");
+        verify(mockClient).notifyNetwork("ClientNetwork", "master");
+    }
 }

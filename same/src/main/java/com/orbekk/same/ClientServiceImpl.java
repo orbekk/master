@@ -4,7 +4,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClientServiceImpl implements ClientService, UrlReceiver {
+public class ClientServiceImpl implements ClientService, UrlReceiver,
+            DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private State state;
@@ -103,5 +104,18 @@ public class ClientServiceImpl implements ClientService, UrlReceiver {
     
     public void setNetworkListener(NetworkNotificationListener listener) {
         this.networkListener = listener;
+    }
+    
+    @Override
+    public void discover(String url) {
+        if (!url.equals(myUrl)) {
+            try {
+                connections.getClient(url + "/ClientService.json")
+                        .notifyNetwork(state.getDataOf(".networkName"),
+                                state.getDataOf(".masterUrl"));
+            } catch (Exception e) {
+                logger.warn("Failed to contact new client {}", url, e);
+            }
+        }
     }
 }
