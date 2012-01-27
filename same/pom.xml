@@ -83,8 +83,15 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>8.0.0.M3</version>
+    <version>8.0.0.M3</version>
     </dependency>
+
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.1.2</version>
+    </dependency>
+            
   </dependencies>
 
   <build>

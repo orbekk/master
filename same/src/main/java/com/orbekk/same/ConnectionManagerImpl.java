@@ -2,6 +2,7 @@ package com.orbekk.same;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.orbekk.net.MyJsonRpcHttpClient;
 import com.orbekk.paxos.PaxosService;
 
 import java.net.MalformedURLException;
@@ -32,9 +33,8 @@ public class ConnectionManagerImpl implements ConnectionManager {
     private <T>T getClassProxy(String url, Class<T> clazz) {
         T service = null;
         try {
-            JsonRpcHttpClient client = new JsonRpcHttpClient(new URL(url));
-            client.setConnectionTimeoutMillis(connectionTimeout);
-            client.setReadTimeoutMillis(readTimeout);
+            MyJsonRpcHttpClient client = new MyJsonRpcHttpClient(new URL(url),
+                    connectionTimeout, readTimeout);
             service = ProxyUtil.createProxy(
                     this.getClass().getClassLoader(),
                     clazz,
