@@ -1,5 +1,7 @@
 package com.orbekk.same;
 
+import static com.orbekk.same.StackTraceUtil.throwableToString;
+
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,13 +110,15 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
     
     @Override
     public void discover(String url) {
+        String clientUrl = url + "ClientService.json";
         if (!url.equals(myUrl)) {
             try {
-                connections.getClient(url + "/ClientService.json")
+                connections.getClient(clientUrl)
                         .notifyNetwork(state.getDataOf(".networkName"),
                                 state.getDataOf(".masterUrl"));
             } catch (Exception e) {
-                logger.warn("Failed to contact new client {}", url, e);
+                logger.warn("Failed to contact new client {}: {}", clientUrl,
+                        throwableToString(e));
             }
         }
     }

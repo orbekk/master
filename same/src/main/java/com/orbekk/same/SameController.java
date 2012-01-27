@@ -69,10 +69,10 @@ public class SameController implements UrlReceiver {
     
     public void stop() {
         try {
+            master.interrupt();
             server.stop();
         } catch (Exception e) {
             logger.error("Failed to stop webserver", e);
-            master.interrupt();
         }
     }
     
@@ -122,4 +122,11 @@ public class SameController implements UrlReceiver {
         }
     }
     
+    public ClientServiceImpl getClient() {
+        return client;
+    }
+    
+    public MasterServiceImpl getMaster() {
+        return master;
+    }
 }
