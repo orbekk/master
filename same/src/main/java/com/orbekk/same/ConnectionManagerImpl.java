@@ -7,6 +7,9 @@ import com.orbekk.paxos.PaxosService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +21,8 @@ import org.slf4j.LoggerFactory;
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;
     private int readTimeout;
+    private Map<String, MyJsonRpcHttpClient> connectionCache =
+            new HashMap<String, MyJsonRpcHttpClient>();
     
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -30,11 +35,19 @@ public class ConnectionManagerImpl implements ConnectionManager {
         this.readTimeout = readTimeout;
     }
 
+    private MyJsonRpcHttpClient getConnection(String url)
+            throws MalformedURLException {
+        if (!connectionCache.containsKey(url)) {
+            connectionCache.put(url, new MyJsonRpcHttpClient(new URL(url),
+                connectionTimeout, readTimeout));
+        }
+        return connectionCache.get(url);
+    }
+    
     private <T>T getClassProxy(String url, Class<T> clazz) {
         T service = null;
         try {
-            MyJsonRpcHttpClient client = new MyJsonRpcHttpClient(new URL(url),
-                    connectionTimeout, readTimeout);
+            MyJsonRpcHttpClient client = getConnection(url);
             service = ProxyUtil.createProxy(
                     this.getClass().getClassLoader(),
                     clazz,
