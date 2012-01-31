@@ -128,7 +128,7 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
     @Override
     public void run() {
         while (!stopped) {
-            if (_performWork()) {
+            if (!_performWork()) {
                 synchronized (this) {
                     try {
                         wait(500);
