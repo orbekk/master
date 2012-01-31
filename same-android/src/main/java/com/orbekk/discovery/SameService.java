@@ -1,6 +1,8 @@
 package com.orbekk.discovery;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import android.app.Service;
 import android.content.Intent;
@@ -46,7 +48,7 @@ public class SameService extends Service {
                 
                 String port = words[1];
                 String url = "http://" + packet.getAddress().getHostAddress() +
-                        ":" + port + "/";
+                        ":" + port + "/ClientService.json";
                 listener.discover(url);
                 
                 Message message = Message.obtain();
@@ -79,13 +81,22 @@ public class SameService extends Service {
         }
     }
     
-    private void sendBroadcastDiscovery() {
+    private void sendBroadcastDiscovery(InetAddress ip) {
+        Broadcaster broadcaster = new Broadcaster(this);
         String message = "Discover " + (PORT + 2);
         byte[] data = message.getBytes();
-        new Broadcaster(this).sendBroadcast(data, PORT);        
+        if (ip.equals(broadcaster.getBroadcastAddress())) {
+            broadcaster.sendUdpData(data, ip, PORT);
+        } else {
+            String remoteAddress =
+                    String.format("http://%s:%s/ClientService.json",
+                    		ip.getHostAddress(), PORT + 2);
+            sameController.getClient().sendDiscoveryRequest(
+                    remoteAddress);
+        }
     }
     
-    private void joinNetwork() {
+    private void joinNetwork(InetAddress ip) {
         sameController.getClient().setNetworkListener(
                 new NetworkNotificationListener() {
                     @Override
@@ -96,7 +107,7 @@ public class SameService extends Service {
                         toastHandler.sendMessage(message);
                     }
                 });
-        sendBroadcastDiscovery();
+        sendBroadcastDiscovery(ip);
     }
     
     @Override
@@ -125,7 +136,12 @@ public class SameService extends Service {
         if (intent.getAction().equals("create")) {
             createNetwork();
         } else if (intent.getAction().equals("join")) {
-            joinNetwork();
+        	try {
+				InetAddress ip = InetAddress.getByName(intent.getExtras().getString("ip"));
+				joinNetwork(ip);
+			} catch (UnknownHostException e) {
+				logger.error("Unknown host.", e);
+			}
         }
         return START_STICKY;
     }

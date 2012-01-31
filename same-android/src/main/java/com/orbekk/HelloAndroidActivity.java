@@ -1,5 +1,7 @@
 package com.orbekk;
 
+import java.net.InetAddress;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class HelloAndroidActivity extends Activity { 
@@ -30,6 +33,9 @@ public class HelloAndroidActivity extends Activity {
         logger.info("Joining network");
         Intent intent = new Intent(this, SameService.class);
         intent.setAction("join");
+        // InetAddress address = new Broadcaster(this).getBroadcastAddress();
+        EditText t = (EditText)findViewById(R.id.editText1);
+        intent.putExtra("ip", t.getText().toString());
         startService(intent);
     }
     
@@ -37,6 +43,11 @@ public class HelloAndroidActivity extends Activity {
         TextView t = (TextView)findViewById(R.id.ipAddress);
         t.setText("My IP: ");
         t.append(new Broadcaster(this).getWlanAddress().getHostAddress());
+    }
+    
+    private void showBroadcastAddress() {
+    	EditText t = (EditText)findViewById(R.id.editText1);
+    	t.setText(new Broadcaster(this).getBroadcastAddress().getHostAddress());
     }
     
     /**
@@ -54,6 +65,7 @@ public class HelloAndroidActivity extends Activity {
 
         setContentView(R.layout.main);        
         showIpAddress();
+        showBroadcastAddress();
         
 //		ClientApp client = new ClientApp();
 //		SameInterface client_ = client.getClient(10015, "ClientNetwork",

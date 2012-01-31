@@ -51,11 +51,11 @@ public class Broadcaster {
         return fromInt(broadcast);
     }
     
-    public synchronized boolean sendBroadcast(byte[] data, int port) {
+    public synchronized boolean sendUdpData(byte[] data, InetAddress ip, int port) {
         try {
             socket = new DatagramSocket(0);
             socket.setBroadcast(true);
-            DatagramPacket packet = new DatagramPacket(data, data.length, getBroadcastAddress(), port);
+            DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
             socket.send(packet);
             return true;
         } catch (SocketException e) {
