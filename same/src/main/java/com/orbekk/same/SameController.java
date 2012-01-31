@@ -32,7 +32,8 @@ public class SameController implements UrlReceiver {
                 broadcaster);
         JsonRpcServer jsonMaster = new JsonRpcServer(master, MasterService.class);
         ClientServiceImpl client = new ClientServiceImpl(state, connections);
-        JsonRpcServer jsonClient = new JsonRpcServer(client, ClientService.class);
+        JsonRpcServer jsonClient = new JsonRpcServer(client.getService(),
+                ClientService.class);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         JsonRpcServer jsonPaxos = new JsonRpcServer(paxos, PaxosService.class);
         
