@@ -2,9 +2,14 @@ package com.orbekk.same;
 
 import static com.orbekk.same.StackTraceUtil.throwableToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.orbekk.util.WorkQueue;
 
 public class ClientServiceImpl implements ClientService, UrlReceiver,
             DiscoveryListener {
@@ -15,11 +20,28 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
     private StateChangedListener stateListener;
     private NetworkNotificationListener networkListener;
     
+    private WorkQueue<String> discoveryThread = new WorkQueue<String>() {
+        @Override protected void onChange() {
+            List<String> pending = getAndClear();
+            for (String url : pending) {
+                discover(url);
+            }
+        }
+    };
+    
     public ClientServiceImpl(State state, ConnectionManager connections) {
         this.state = state;
         this.connections = connections;
     }
 
+    public void start() {
+        discoveryThread.start();
+    }
+    
+    public void interrupt() {
+        discoveryThread.interrupt();
+    }
+    
     @Override
     public void notifyNetwork(String networkName, String masterUrl) {
         logger.info("NotifyNetwork(networkName={}, masterUrl={})", 
@@ -121,5 +143,10 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
                         throwableToString(e));
             }
         }
+    }
+
+    @Override
+    public void discoveryRequest(String remoteUrl) {
+        discoveryThread.add(remoteUrl);
     }
 }

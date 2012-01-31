@@ -65,10 +65,12 @@ public class SameController implements UrlReceiver {
     public void start() throws Exception {
         server.start();
         master.start();
+        client.start();
     }
     
     public void stop() {
         try {
+            client.interrupt();
             master.interrupt();
             server.stop();
         } catch (Exception e) {
