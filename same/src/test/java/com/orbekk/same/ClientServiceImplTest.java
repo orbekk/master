@@ -31,7 +31,7 @@ public class ClientServiceImplTest {
         ClientService mockClient = mock(ClientService.class);
         connections.clientMap.put("mockClient/ClientService.json",
                 mockClient);
-        client.discover("mockClient/");
+        client.discover("mockClient/ClientService.json");
         verify(mockClient).notifyNetwork("ClientNetwork", "master");
     }
 }

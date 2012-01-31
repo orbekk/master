@@ -149,14 +149,13 @@ public class ClientServiceImpl implements UrlReceiver,
     
     @Override
     public void discover(String url) {
-        String clientUrl = url + "ClientService.json";
         if (!url.equals(myUrl)) {
             try {
-                connections.getClient(clientUrl)
+                connections.getClient(url)
                         .notifyNetwork(state.getDataOf(".networkName"),
                                 state.getDataOf(".masterUrl"));
             } catch (Exception e) {
-                logger.warn("Failed to contact new client {}: {}", clientUrl,
+                logger.warn("Failed to contact new client {}: {}", url,
                         throwableToString(e));
             }
         }
