@@ -75,8 +75,9 @@ public class MasterServiceImplTest {
         master.setUrl("http://master/");
         ClientServiceImpl client = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
+        ClientService clientS = client.getService();
         client.setUrl("http://client/");
-        connections.clientMap.put("http://client/ClientService.json", client);
+        connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
@@ -88,12 +89,14 @@ public class MasterServiceImplTest {
         master.setUrl("http://master/");
         ClientServiceImpl client1 = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
+        ClientService client1S = client1.getService();
         client1.setUrl("http://client/");
-        connections.clientMap.put("http://client/ClientService.json", client1);
+        connections.clientMap.put("http://client/ClientService.json", client1S);
         ClientServiceImpl client2 = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
+        ClientService client2S = client2.getService();
         client2.setUrl("http://client2/");
-        connections.clientMap.put("http://client2/ClientService.json", client2);
+        connections.clientMap.put("http://client2/ClientService.json", client2S);
         
         client1.joinNetwork("http://master");
         client2.joinNetwork("http://master");
@@ -122,8 +125,9 @@ public class MasterServiceImplTest {
         master.setUrl("http://master/");
         ClientServiceImpl client = new ClientServiceImpl(
                 new State("ClientNetwork"), connections);
+        ClientService clientS = client.getService();
         client.setUrl("http://client/");
-        connections.clientMap.put("http://client/ClientService.json", client);
+        connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));

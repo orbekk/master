@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.util.WorkQueue;
 
-public class ClientServiceImpl implements ClientService, UrlReceiver,
+public class ClientServiceImpl implements UrlReceiver,
             DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
@@ -19,6 +19,35 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
     private String myUrl = null;
     private StateChangedListener stateListener;
     private NetworkNotificationListener networkListener;
+    
+    private ClientService serviceImpl = new ClientService() {
+        @Override
+        public void setState(String component, String data, long revision) throws Exception {
+            boolean status = state.update(component, data, revision);
+            if (status) {
+                if (stateListener != null) {
+                    stateListener.stateChanged(component, data);
+                }
+            } else {
+                logger.warn("Ignoring update: {}",
+                        new State.Component(component, revision, data));
+            }            
+        }
+        
+        @Override
+        public void notifyNetwork(String networkName, String masterUrl) throws Exception {
+            logger.info("NotifyNetwork(networkName={}, masterUrl={})", 
+                    networkName, masterUrl);
+            if (networkListener != null) {
+                networkListener.notifyNetwork(networkName, masterUrl);
+            }            
+        }
+        
+        @Override
+        public void discoveryRequest(String remoteUrl) {
+            discoveryThread.add(remoteUrl);
+        }
+    };
     
     private WorkQueue<String> discoveryThread = new WorkQueue<String>() {
         @Override protected void onChange() {
@@ -40,28 +69,6 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
     
     public void interrupt() {
         discoveryThread.interrupt();
-    }
-    
-    @Override
-    public void notifyNetwork(String networkName, String masterUrl) {
-        logger.info("NotifyNetwork(networkName={}, masterUrl={})", 
-                networkName, masterUrl);
-        if (networkListener != null) {
-            networkListener.notifyNetwork(networkName, masterUrl);
-        }
-    }
-
-    @Override
-    public void setState(String component, String data, long revision) {
-        boolean status = state.update(component, data, revision);
-        if (status) {
-            if (stateListener != null) {
-                stateListener.stateChanged(component, data);
-            }
-        } else {
-            logger.warn("Ignoring update: {}",
-                    new State.Component(component, revision, data));
-        }
     }
 
     @Override
@@ -130,6 +137,16 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
         this.networkListener = listener;
     }
     
+    public void sendDiscoveryRequest(String url) {
+        try {
+            connections.getClient(url)
+                    .discoveryRequest(myUrl);
+        } catch (Exception e) {
+            logger.warn("Failed to send discovery request: {}",
+                    throwableToString(e));
+        }
+    }
+    
     @Override
     public void discover(String url) {
         String clientUrl = url + "ClientService.json";
@@ -144,9 +161,8 @@ public class ClientServiceImpl implements ClientService, UrlReceiver,
             }
         }
     }
-
-    @Override
-    public void discoveryRequest(String remoteUrl) {
-        discoveryThread.add(remoteUrl);
+    
+    public ClientService getService() {
+        return serviceImpl;
     }
 }

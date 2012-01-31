@@ -10,24 +10,25 @@ public class ClientServiceImplTest {
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
     private ClientServiceImpl client = new ClientServiceImpl(state, connections);
+    private ClientService clientS = client.getService();
     
-    @Test public void testSetState() {
-        client.setState("TestState", "Test data", 100);
+    @Test public void testSetState() throws Exception {
+        clientS.setState("TestState", "Test data", 100);
         assertEquals(100, state.getRevision("TestState"));
         assertEquals("Test data", state.getDataOf("TestState"));
     }
     
-    @Test public void testNetworkListener() {
+    @Test public void testNetworkListener() throws Exception {
         NetworkNotificationListener listener =
                 mock(NetworkNotificationListener.class);
         client.setNetworkListener(listener);
-        client.notifyNetwork("MyNetwork", "MasterUrl");
+        clientS.notifyNetwork("MyNetwork", "MasterUrl");
         verify(listener).notifyNetwork("MyNetwork", "MasterUrl");
     }
     
-    @Test public void discover() {
-        client.setState(".masterUrl", "master", 1);
-        ClientServiceImpl mockClient = mock(ClientServiceImpl.class);
+    @Test public void discover() throws Exception {
+        clientS.setState(".masterUrl", "master", 1);
+        ClientService mockClient = mock(ClientService.class);
         connections.clientMap.put("mockClient/ClientService.json",
                 mockClient);
         client.discover("mockClient/");
