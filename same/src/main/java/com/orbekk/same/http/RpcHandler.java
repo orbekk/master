@@ -1,7 +1,9 @@
-package com.orbekk.same;
+package com.orbekk.same.http;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
+import com.orbekk.same.UrlReceiver;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 public class RpcHandler extends AbstractHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private JsonRpcServer rpcServer = null;
     private UrlReceiver urlReceiver;
     private Map<String, JsonRpcServer> rpcServers =
             new HashMap<String, JsonRpcServer>();
