@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.same.ConnectionManagerImpl;
-import com.orbekk.same.RpcHandler;
+import com.orbekk.same.http.RpcHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

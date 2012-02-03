@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
+import com.orbekk.same.http.RpcHandler;
 
 public class ClientApp {
     private Logger logger = LoggerFactory.getLogger(getClass());

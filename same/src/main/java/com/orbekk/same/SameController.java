@@ -1,6 +1,10 @@
 package com.orbekk.same;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +12,10 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
+import com.orbekk.same.http.HandlerFactory;
+import com.orbekk.same.http.RpcHandler;
+import com.orbekk.same.http.ServerBuilder;
+import com.orbekk.same.http.StateServlet;
 
 public class SameController implements UrlReceiver {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -30,23 +38,18 @@ public class SameController implements UrlReceiver {
         
         MasterServiceImpl master = new MasterServiceImpl(state, connections,
                 broadcaster);
-        JsonRpcServer jsonMaster = new JsonRpcServer(master, MasterService.class);
         ClientServiceImpl client = new ClientServiceImpl(state, connections);
-        JsonRpcServer jsonClient = new JsonRpcServer(client.getService(),
-                ClientService.class);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
-        JsonRpcServer jsonPaxos = new JsonRpcServer(paxos, PaxosService.class);
         
-        Server server = new Server(port);
+        Server server = new ServerBuilder(port)
+                .withServlet(new StateServlet(), "/_/state")
+                .withService(client.getService(), ClientService.class)
+                .withService(master, MasterService.class)
+                .withService(paxos, PaxosService.class)
+                .build();
+        
         SameController controller = new SameController(port, server, master, client,
                 paxos);
-        RpcHandler rpcHandler = new RpcHandler(null);
-        
-        rpcHandler.addRpcServer("/MasterService.json", jsonMaster);
-        rpcHandler.addRpcServer("/ClientService.json", jsonClient);
-        rpcHandler.addRpcServer("/PaxosService.json", jsonPaxos);
-        
-        server.setHandler(rpcHandler);
         return controller;
     }
     
