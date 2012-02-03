@@ -59,7 +59,11 @@ public class Configuration {
     }
     
     public String get(String name) {
-        return configuration.getProperty(name);
+        String value = configuration.getProperty(name);
+        if (value == null) {
+            logger.error("Property {} = null", name);
+        }
+        return value;
     }
     
     public int getInt(String name) {

@@ -6,16 +6,16 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
+import com.orbekk.same.config.Configuration;
 import com.orbekk.same.http.RpcHandler;
 
 public class ClientApp {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Server server;
-    private static final int timeout = 1000;
     
-    public void run(int port, String networkName,
-            String masterUrl) {
-        SameController controller = SameController.create(null);
+    public void run(Configuration configuration) {
+        String networkName = configuration.get("networkName");
+        String masterUrl = configuration.get("masterUrl");
+        SameController controller = SameController.create(configuration);
         try {
             controller.start();
         } catch (Exception e) {
@@ -26,14 +26,7 @@ public class ClientApp {
     }
     
     public static void main(String[] args) {
-        if (args.length < 3) {
-            System.err.println("Usage: port networkName masterUrl");
-            System.exit(1);
-        }
-        int port = Integer.parseInt(args[0]);
-        String networkName = args[1];
-        String masterUrl = args[2];
-        (new ClientApp()).run(port, networkName, masterUrl);
-        
+        Configuration configuration = Configuration.loadOrDie();
+        (new ClientApp()).run(configuration);
     }
 }
