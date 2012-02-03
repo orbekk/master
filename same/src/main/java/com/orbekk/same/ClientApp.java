@@ -13,45 +13,6 @@ public class ClientApp {
     private Server server;
     private static final int timeout = 1000;
     
-    @Deprecated
-    public SameInterface getClient(int port, String networkName,
-            String masterUrl) {
-        logger.info("Starting client with port:{}, networkName:{}, masterUrl:{}",
-                new Object[]{port, networkName, masterUrl});
-        ConnectionManagerImpl connections = new ConnectionManagerImpl(timeout,
-                timeout);
-        State state = new State(networkName);
-        Broadcaster broadcaster =
-                BroadcasterImpl.getDefaultBroadcastRunner();
-        MasterServiceImpl master = new MasterServiceImpl(state, connections,
-                broadcaster);
-        ClientServiceImpl client = new ClientServiceImpl(state, connections);
-        
-        JsonRpcServer jsonServer = new JsonRpcServer(client, ClientService.class);
-        server = new Server(port);
-        RpcHandler rpcHandler = new RpcHandler(client);
-        rpcHandler.addRpcServer("/ClientService.json", jsonServer);
-        server.setHandler(rpcHandler);
-        
-        try {
-            server.start();
-        } catch (Exception e) {
-            logger.error("Could not start jetty server: {}", e);
-        }
-        
-        while (client.getUrl() == null) {
-            HttpUtil.sendHttpRequest(masterUrl + "ping?port=" + port);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                // Ignore interrupt in wait loop.
-            }
-        }
-        
-        client.joinNetwork(masterUrl + "MasterService.json");
-        return Same.createSame(client);
-    }
-    
     public void run(int port, String networkName,
             String masterUrl) {
         SameController controller = SameController.create(null);
