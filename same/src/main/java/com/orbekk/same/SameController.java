@@ -12,6 +12,7 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
+import com.orbekk.same.config.Configuration;
 import com.orbekk.same.http.RpcHandler;
 import com.orbekk.same.http.ServerBuilder;
 import com.orbekk.same.http.StateServlet;
@@ -29,7 +30,8 @@ public class SameController implements UrlReceiver {
      */
     private static final int timeout = 10000;
     
-    public static SameController create(int port) {
+    public static SameController create(Configuration configuration) {
+        int port = configuration.getInt("port");
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
         State state = new State("Default");

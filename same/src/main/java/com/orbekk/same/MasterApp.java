@@ -5,14 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.same.config.Configuration;
 
 public class MasterApp {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Server server;
-    private static final int timeout = 1000;    
     
-    public void run(int port) {
-        SameController controller = SameController.create(port);
+    public void run(Configuration configuration) {
+        SameController controller = SameController.create(configuration);
         try {
             controller.start();
         } catch (Exception e) {
@@ -22,11 +21,7 @@ public class MasterApp {
     }
     
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.err.println("Usage: port");
-            System.exit(1);
-        }
-        int port = Integer.parseInt(args[0]);
-        (new MasterApp()).run(port);
+        Configuration configuration = Configuration.loadOrDie();
+        (new MasterApp()).run(configuration);
     }
 }

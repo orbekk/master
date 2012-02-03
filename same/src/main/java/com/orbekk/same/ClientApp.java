@@ -54,7 +54,7 @@ public class ClientApp {
     
     public void run(int port, String networkName,
             String masterUrl) {
-        SameController controller = SameController.create(port);
+        SameController controller = SameController.create(null);
         try {
             controller.start();
         } catch (Exception e) {
