@@ -12,7 +12,6 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
-import com.orbekk.same.http.HandlerFactory;
 import com.orbekk.same.http.RpcHandler;
 import com.orbekk.same.http.ServerBuilder;
 import com.orbekk.same.http.StateServlet;
