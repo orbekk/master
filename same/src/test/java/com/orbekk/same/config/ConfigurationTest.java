@@ -11,7 +11,7 @@ public class ConfigurationTest {
                 resources + "com/orbekk/same/config/test.properties");
         Configuration configuration = Configuration.load();
         assertEquals("Test Value",
-                configuration.getProperty("testProperty"));
+                configuration.get("testProperty"));
                 
     }
 }

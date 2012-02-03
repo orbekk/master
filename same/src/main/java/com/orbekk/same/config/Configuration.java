@@ -13,11 +13,21 @@ public class Configuration {
     public final static String configurationProperty =
             "com.orbekk.same.config.file";
             
-    Logger logger = LoggerFactory.getLogger(getClass());
+    static final Logger logger = LoggerFactory.getLogger(Configuration.class);
     Properties configuration = new Properties();
     
     private Configuration() {
         // Use factory methods.
+    }
+    
+    public static Configuration loadOrDie() {
+        Configuration configuration = new Configuration();
+        boolean status = configuration.loadDefault();
+        if (!status) {
+            logger.error("Could not load configurotion.");
+            System.exit(1);
+        }
+        return configuration;
     }
     
     public static Configuration load() {
@@ -26,11 +36,12 @@ public class Configuration {
         return configuration;
     }
     
-    public void loadDefault() {
+    public boolean loadDefault() {
         String filename = System.getProperty(configurationProperty);
         if (filename != null) {
             try {
                 configuration.load(new FileReader(filename));
+                return true;
             } catch (FileNotFoundException e) {
                 logger.error("Failed to load configuration. {}", e);
                 logger.error("Failed to load configuration. {}={}",
@@ -44,9 +55,14 @@ public class Configuration {
             logger.error("Failed to load configuration. {}={}",
                     configurationProperty, filename);
         }
+        return false;
     }
     
-    public String getProperty(String name) {
+    public String get(String name) {
         return configuration.getProperty(name);
+    }
+    
+    public int getInt(String name) {
+        return Integer.valueOf(get(name));
     }
 }
