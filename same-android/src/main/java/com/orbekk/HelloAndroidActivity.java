@@ -7,14 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.discovery.Broadcaster;
 import com.orbekk.discovery.SameService;
-import com.orbekk.same.ClientApp;
-import com.orbekk.same.ClientServiceImpl;
-import com.orbekk.same.SameInterface;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
