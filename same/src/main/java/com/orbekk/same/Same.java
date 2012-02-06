@@ -7,6 +7,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class Same implements SameInterface {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ClientServiceImpl client;

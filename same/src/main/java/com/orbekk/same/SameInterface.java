@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;
 
+@Deprecated
 public interface SameInterface {
     /**
      * Get the state with identifier 'id'.
