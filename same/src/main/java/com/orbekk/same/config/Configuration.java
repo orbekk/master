@@ -16,7 +16,11 @@ public class Configuration {
     static final Logger logger = LoggerFactory.getLogger(Configuration.class);
     Properties configuration = new Properties();
     
-    private Configuration() {
+    public Configuration(Properties properties) {
+        this.configuration = properties;
+    }
+    
+    Configuration() {
         // Use factory methods.
     }
     
