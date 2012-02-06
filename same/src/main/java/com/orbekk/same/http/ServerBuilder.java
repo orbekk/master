@@ -32,9 +32,9 @@ public class ServerBuilder {
         return withServlet(new RpcServlet(server), pathSpec);
     }
     
-    public Server build() {
-        Server server = new Server(port);
-        server.setHandler(getServletContextHandler());
+    public ServerContainer build() {
+        ServerContainer server = ServerContainer.create(port); 
+        server.setContext(getServletContextHandler());
         return server;
     }
 

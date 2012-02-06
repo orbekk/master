@@ -1,25 +1,20 @@
 package com.orbekk.same;
 
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
 import com.orbekk.same.http.ServerBuilder;
+import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
 
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private int port;
-    private Server server;
+    private ServerContainer server;
     private MasterServiceImpl master;
     private ClientServiceImpl client;
     private PaxosServiceImpl paxos;
@@ -41,7 +36,7 @@ public class SameController {
         ClientServiceImpl client = new ClientServiceImpl(state, connections);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
-        Server server = new ServerBuilder(port)
+        ServerContainer server = new ServerBuilder(port)
                 .withServlet(new StateServlet(), "/_/state")
                 .withService(client.getService(), ClientService.class)
                 .withService(master, MasterService.class)
@@ -55,7 +50,7 @@ public class SameController {
     
     public SameController(
             int port,
-            Server server,
+            ServerContainer server,
             MasterServiceImpl master,
             ClientServiceImpl client,
             PaxosServiceImpl paxos) {
