@@ -28,6 +28,23 @@ public class Client implements DiscoveryListener {
         public State getState() {
             return new State(state);
         }
+        
+        public void set(String name, String data) throws UpdateConflict {
+            String masterUrl = state.getDataOf(".masterUrl");
+            long revision = state.getRevision(name) + 1;
+            MasterService master = connections.getMaster(masterUrl);
+            try {
+                boolean success = master.updateStateRequest(name, data,
+                        revision);
+                if (!success) {
+                    throw new UpdateConflict("State update conflict when " +
+                            "updating " + name);
+                }
+            } catch (Exception e) {
+                logger.error("Unable to contact master. Update fails.", e);
+                throw new UpdateConflict("Unable to contact master. Update fails.");
+            }
+        }
     }
     
     private ClientInterface clientInterface = new ClientInterface();
