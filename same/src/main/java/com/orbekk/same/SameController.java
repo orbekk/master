@@ -31,9 +31,17 @@ public class SameController {
         State state = new State("Default");
         Broadcaster broadcaster = BroadcasterImpl.getDefaultBroadcastRunner();
         
-        MasterServiceImpl master = new MasterServiceImpl(state, connections,
-                broadcaster);
-        ClientServiceImpl client = new ClientServiceImpl(state, connections);
+        String baseUrl = String.format("http://%s:%s/",
+                configuration.get("localIp"), configuration.getInt("port"));
+        
+        String masterUrl = baseUrl + "MasterService.json";
+        String clientUrl = baseUrl + "ClientService.json";
+        
+        MasterServiceImpl master = MasterServiceImpl.create(
+                connections, broadcaster, masterUrl);
+        
+        ClientServiceImpl client = new ClientServiceImpl(state, connections,
+                clientUrl);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
         ServerContainer server = new ServerBuilder(port)

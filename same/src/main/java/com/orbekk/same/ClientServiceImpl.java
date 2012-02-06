@@ -15,7 +15,7 @@ public class ClientServiceImpl implements DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private State state;
-    private String myUrl = null;
+    private String myUrl;
     private StateChangedListener stateListener;
     private NetworkNotificationListener networkListener;
     
@@ -57,9 +57,11 @@ public class ClientServiceImpl implements DiscoveryListener {
         }
     };
     
-    public ClientServiceImpl(State state, ConnectionManager connections) {
+    public ClientServiceImpl(State state, ConnectionManager connections,
+            String myUrl) {
         this.state = state;
         this.connections = connections;
+        this.myUrl = myUrl;
     }
 
     public void start() {
@@ -75,18 +77,13 @@ public class ClientServiceImpl implements DiscoveryListener {
     }
     
     public void joinNetwork(String masterUrl) {
-        if (myUrl != null) {
-            MasterService master = connections.getMaster(masterUrl);
-            state.clear();
-            try {
-                master.joinNetworkRequest(myUrl);
-            } catch (Exception e) {
-                logger.error("Unable to connect to master.", e);
-            }          
-        } else {
-            logger.error("Tried to join network at {}, but my url is unknown. " +
-                    "Run discovery service.", masterUrl);
-        }
+        MasterService master = connections.getMaster(masterUrl);
+        state.clear();
+        try {
+            master.joinNetworkRequest(myUrl);
+        } catch (Exception e) {
+            logger.error("Unable to connect to master.", e);
+        }          
     }
    
     String lib_get(String name) {

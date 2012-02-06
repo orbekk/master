@@ -17,9 +17,17 @@ public class MasterServiceImpl implements MasterService, Runnable {
     private List<String> _fullStateReceivers = new ArrayList<String>();
     private Thread workerThread = null;
     
-    public MasterServiceImpl(State initialState, ConnectionManager connections,
+    public static MasterServiceImpl create(ConnectionManager connections,
+            Broadcaster broadcaster, String myUrl) {
+        State state = new State("DefaultMaster");
+        state.update(".masterUrl", myUrl, 1);
+        return new MasterServiceImpl(state, connections, broadcaster);
+    }
+        
+    /** Constructor for internal use.
+     */
+    private MasterServiceImpl(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
-        state = initialState;
         this.connections = connections;
         this.broadcaster = broadcaster;
     }
@@ -140,6 +148,7 @@ public class MasterServiceImpl implements MasterService, Runnable {
         if (workerThread == null) {
             workerThread = new Thread(this);
             workerThread.start();
+            logger.info("Master thread started. {}", state);
         }
     }
     

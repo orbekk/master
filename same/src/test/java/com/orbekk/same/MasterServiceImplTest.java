@@ -12,9 +12,9 @@ public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
-    private MasterServiceImpl master = new MasterServiceImpl(state,
-            connections, broadcaster);
-    
+    private MasterServiceImpl master = MasterServiceImpl.create(
+            connections, broadcaster, "http://master/MasterService.json");
+
     public static class UnreachableClient implements ClientService {
         @Override
         public void notifyNetwork(String networkName, String masterUrl)
@@ -36,14 +36,7 @@ public class MasterServiceImplTest {
     
     @Before
     public void setUp() {
-        connections.masterMap.put("http://master", master);
-    }
-    
-    @Test
-    public void setsMasterUrl() {
-        master.setUrl("http://10.0.0.54:10050/");
-        assertEquals("http://10.0.0.54:10050/MasterService.json",
-                state.getDataOf(".masterUrl"));
+        connections.masterMap.put("http://master/MasterService.json", master);
     }
     
     @Test
@@ -72,11 +65,10 @@ public class MasterServiceImplTest {
 
     @Test
     public void clientJoin() {
-        master.setUrl("http://master/");
         ClientServiceImpl client = new ClientServiceImpl(
-                new State("ClientNetwork"), connections);
+                new State("ClientNetwork"), connections,
+                "http://client/ClientService.json");
         ClientService clientS = client.getService();
-        client.setUrl("http://client/");
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master");
         assertTrue(master._performWork());
@@ -86,20 +78,19 @@ public class MasterServiceImplTest {
     
     @Test
     public void validStateRequest() {
-        master.setUrl("http://master/");
         ClientServiceImpl client1 = new ClientServiceImpl(
-                new State("ClientNetwork"), connections);
+                new State("ClientNetwork"), connections,
+                "http://client/ClientService.json");
         ClientService client1S = client1.getService();
-        client1.setUrl("http://client/");
         connections.clientMap.put("http://client/ClientService.json", client1S);
         ClientServiceImpl client2 = new ClientServiceImpl(
-                new State("ClientNetwork"), connections);
+                new State("ClientNetwork"), connections,
+                "http://client2/ClientService.json");
         ClientService client2S = client2.getService();
-        client2.setUrl("http://client2/");
         connections.clientMap.put("http://client2/ClientService.json", client2S);
         
-        client1.joinNetwork("http://master");
-        client2.joinNetwork("http://master");
+        client1.joinNetwork("http://master/MasterService.json");
+        client2.joinNetwork("http://master/MasterService.json");
         
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
@@ -122,11 +113,10 @@ public class MasterServiceImplTest {
     
     @Test
     public void masterRemovesParticipant() {
-        master.setUrl("http://master/");
         ClientServiceImpl client = new ClientServiceImpl(
-                new State("ClientNetwork"), connections);
+                new State("ClientNetwork"), connections,
+                "http://client/ClientService.json");
         ClientService clientS = client.getService();
-        client.setUrl("http://client/");
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master");
         assertTrue(master._performWork());

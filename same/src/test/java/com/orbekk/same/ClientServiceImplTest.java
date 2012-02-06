@@ -8,8 +8,8 @@ import static org.mockito.Mockito.*;
 public class ClientServiceImplTest {
     private State state = new State("ClientNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
-    private TestBroadcaster broadcaster = new TestBroadcaster();
-    private ClientServiceImpl client = new ClientServiceImpl(state, connections);
+    private ClientServiceImpl client = new ClientServiceImpl(state, connections,
+            "http://client/ClientService.json");
     private ClientService clientS = client.getService();
     
     @Test public void testSetState() throws Exception {
