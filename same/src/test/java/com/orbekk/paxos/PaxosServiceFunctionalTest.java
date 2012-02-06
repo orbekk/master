@@ -20,7 +20,6 @@ import org.junit.Test;
 public class PaxosServiceFunctionalTest {
     ConnectionManagerImpl connections = new ConnectionManagerImpl(500, 500);
     List<String> paxosUrls = new ArrayList<String>();
-    // RpcHandler handler = new RpcHandler(null);
     ServerContainer server;
     String myUrl;
     int successfulProposals = 0;
@@ -28,9 +27,12 @@ public class PaxosServiceFunctionalTest {
     @Before
     public void setUp() throws Exception {
         ServerBuilder builder = new ServerBuilder(0);
-        setupPaxos(builder, 10);
+        List<String> tempUrls = setupPaxos(builder, 10);
         server = builder.build();
+        server.start();
         myUrl = "http://localhost:" + server.getPort();
+        addUrls(tempUrls);
+        System.out.println(paxosUrls);
     }
     
     @After
@@ -38,13 +40,21 @@ public class PaxosServiceFunctionalTest {
         server.stop();
     }
     
-    public void setupPaxos(ServerBuilder builder, int instances) {
+    public List<String> setupPaxos(ServerBuilder builder, int instances) {
+        List<String> tempUrls = new ArrayList<String>();
         for (int i = 1; i <= instances; i++) {
             JsonRpcServer jsonServer = new JsonRpcServer(
                     new PaxosServiceImpl("P" + i + ": "), PaxosService.class);
             String serviceId = "/PaxosService" + i + ".json";
             builder.withServlet(new RpcServlet(jsonServer), serviceId);
-            paxosUrls.add(myUrl + serviceId);
+            tempUrls.add(serviceId);
+        }
+        return tempUrls;
+    }
+    
+    public void addUrls(List<String> services) {
+        for (String url : services) {
+            paxosUrls.add(myUrl + url);
         }
     }
 

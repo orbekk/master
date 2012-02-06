@@ -28,7 +28,7 @@ public class MasterProposerTest {
         return urls;
     }
 
-    @Test public void successfulProposal() {
+    @Test public void successfulProposal() throws Exception {
         connections.paxosMap.put("p1", p1);
         when(p1.propose("client1", 1)).thenReturn(1);
         when(p1.acceptRequest("client1", 1)).thenReturn(1);
@@ -40,7 +40,7 @@ public class MasterProposerTest {
         assertTrue(c1.propose(1));
     }
 
-    @Test public void unsucessfulProposal() {
+    @Test public void unsucessfulProposal() throws Exception {
         connections.paxosMap.put("p1", p1);
         when(p1.propose("client1", 1)).thenReturn(-1);
         when(p1.acceptRequest("client1", 1)).thenReturn(-1);

@@ -17,7 +17,7 @@ public class RpcServlet extends HttpServlet {
     }
     
     @Override
-    protected void doGet(HttpServletRequest request,
+    protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         rpcServer.handle(request, response);
     }

@@ -17,6 +17,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
@@ -26,7 +28,8 @@ import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
  * 
  * We extend JsonRpcHttpClient but try to override everything it does.
  */
-public class MyJsonRpcHttpClient extends JsonRpcHttpClient {  
+public class MyJsonRpcHttpClient extends JsonRpcHttpClient {
+    Logger logger = LoggerFactory.getLogger(getClass());
     private URL serviceUrl;
     private JsonRpcClient rpcClient;
     private HttpClient httpClient;

@@ -1,6 +1,7 @@
 package com.orbekk.paxos;
 
 import com.orbekk.same.ConnectionManager;
+import static com.orbekk.same.StackTraceUtil.throwableToString;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -20,11 +21,17 @@ public class MasterProposer {
     }
     
     private int internalPropose(int proposalNumber) {
-        int bestPromise = proposalNumber;
+        int bestPromise = -proposalNumber;
         int promises = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
-            int result = paxos.propose(myUrl, proposalNumber);
+            int result = 0;
+            try {
+                result = paxos.propose(myUrl, proposalNumber);
+            } catch (Exception e) {
+                logger.warn("Exception from {}: {}", url,
+                        throwableToString(e));
+            }
             if (result == proposalNumber) {
                 promises += 1;
             }
@@ -38,11 +45,17 @@ public class MasterProposer {
     }
     
     private int internalAcceptRequest(int proposalNumber) {
-        int bestAccepted = proposalNumber;
+        int bestAccepted = -proposalNumber;
         int accepts = 0;
         for (String url : paxosUrls) {
             PaxosService paxos = connections.getPaxos(url);
-            int result = paxos.acceptRequest(myUrl, proposalNumber);
+            int result = 0;
+            try {
+                result = paxos.acceptRequest(myUrl, proposalNumber);
+            } catch (Exception e) {
+                logger.warn("Exception from {}: {}", url,
+                        throwableToString(e));
+            }
             if (result == proposalNumber) {
                 accepts += 1;
             }
