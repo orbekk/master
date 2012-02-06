@@ -13,11 +13,10 @@ import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.http.RpcHandler;
 import com.orbekk.same.http.ServerBuilder;
 import com.orbekk.same.http.StateServlet;
 
-public class SameController implements UrlReceiver {
+public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private int port;
     private Server server;
@@ -117,16 +116,6 @@ public class SameController implements UrlReceiver {
             if (hasUrl) {
                 client.joinNetwork(url + "MasterService.json");
             }
-    }
-    
-    @Override
-    public void setUrl(String url) {
-        if (master != null) {
-            master.setUrl(url);
-        }
-        if (client != null) {
-            client.setUrl(url);
-        }
     }
     
     public ClientServiceImpl getClient() {

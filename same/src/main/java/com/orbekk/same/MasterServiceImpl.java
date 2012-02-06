@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
 
-public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
+public class MasterServiceImpl implements MasterService, Runnable {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
     private State state;
@@ -109,13 +109,6 @@ public class MasterServiceImpl implements MasterService, UrlReceiver, Runnable {
             notifyAll();
         }
         return updated;
-    }
-
-    @Override
-    public void setUrl(String url) {
-        String myUrl = url + "MasterService.json";
-        logger.info("Master URL is " + myUrl);
-        state.update(".masterUrl", myUrl, 1);
     }
 
     boolean _performWork() {

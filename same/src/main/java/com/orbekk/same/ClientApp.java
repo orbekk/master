@@ -1,13 +1,9 @@
 package com.orbekk.same;
 
-import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.jsonrpc4j.JsonRpcServer;
-import com.orbekk.net.HttpUtil;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.http.RpcHandler;
 
 public class ClientApp {
     private Logger logger = LoggerFactory.getLogger(getClass());

@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.util.WorkQueue;
 
-public class ClientServiceImpl implements UrlReceiver,
-            DiscoveryListener {
+public class ClientServiceImpl implements DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private State state;
@@ -71,12 +70,6 @@ public class ClientServiceImpl implements UrlReceiver,
         discoveryThread.interrupt();
     }
 
-    @Override
-    public void setUrl(String myUrl) {
-        this.myUrl = myUrl + "ClientService.json";
-        logger.info("My URL is {}.", this.myUrl);
-    }
-    
     public String getUrl() {
         return myUrl;
     }
