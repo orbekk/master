@@ -3,6 +3,7 @@ package com.orbekk.discovery;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
 import android.app.Service;
 import android.content.Intent;
@@ -14,17 +15,18 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.same.ClientApp;
 import com.orbekk.same.DiscoveryListener;
-import com.orbekk.same.MasterApp;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
+import com.orbekk.same.config.Configuration;
 
 public class SameService extends Service {
     final static int PORT = 15066;
+    final static int SERVICE_PORT = 15068;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Thread discoveryThread = null;
     private SameController sameController = null;
+    private Configuration configuration = null;
     
     public final class DiscoveryThread extends Thread {
         Broadcaster broadcast;
@@ -81,6 +83,15 @@ public class SameService extends Service {
         }
     }
     
+    private void initializeConfiguration() {
+        Properties properties = new Properties();
+        properties.setProperty("port", ""+SERVICE_PORT);
+        properties.setProperty("localIp",
+                new Broadcaster(this).getWlanAddress().getHostAddress());
+        properties.setProperty("masterUrl", "http://10.0.0.6:10010/MasterService.json");
+        configuration = new Configuration(properties);
+    }
+    
     private void sendBroadcastDiscovery(InetAddress ip) {
         Broadcaster broadcaster = new Broadcaster(this);
         String message = "Discover " + (PORT + 2);
@@ -96,7 +107,7 @@ public class SameService extends Service {
         }
     }
     
-    private void joinNetwork(InetAddress ip) {
+    private void searchNetworks(InetAddress ip) {
         sameController.getClient().setNetworkListener(
                 new NetworkNotificationListener() {
                     @Override
@@ -121,27 +132,21 @@ public class SameService extends Service {
         Toast.makeText(this, "service start: " + intent.getAction(),
                 Toast.LENGTH_SHORT).show();
         if (sameController == null) {
-            sameController = SameController.create(PORT + 2);
+            initializeConfiguration();
+            sameController = SameController.create(configuration);
             try {
                 sameController.start();
-                String myIp = new Broadcaster(this).getWlanAddress()
-                        .getHostAddress();
-                String myUrl = "http://" + myIp + ":" + (PORT + 2) + "/";
-                sameController.setUrl(myUrl);
             } catch (Exception e) {
                 logger.error("Failed to start server", e);
                 return START_STICKY;
             }
         }
+        
         if (intent.getAction().equals("create")) {
             createNetwork();
         } else if (intent.getAction().equals("join")) {
-        	try {
-				InetAddress ip = InetAddress.getByName(intent.getExtras().getString("ip"));
-				joinNetwork(ip);
-			} catch (UnknownHostException e) {
-				logger.error("Unknown host.", e);
-			}
+            String masterUrl = intent.getExtras().getString("masterUrl"); 
+            sameController.joinNetwork(masterUrl);
         }
         return START_STICKY;
     }

@@ -31,7 +31,7 @@ public class HelloAndroidActivity extends Activity {
         intent.setAction("join");
         // InetAddress address = new Broadcaster(this).getBroadcastAddress();
         EditText t = (EditText)findViewById(R.id.editText1);
-        intent.putExtra("ip", t.getText().toString());
+        intent.putExtra("masterUrl", t.getText().toString());
         startService(intent);
     }
     
@@ -61,7 +61,7 @@ public class HelloAndroidActivity extends Activity {
 
         setContentView(R.layout.main);        
         showIpAddress();
-        showBroadcastAddress();
+        // showBroadcastAddress();
         
 //		ClientApp client = new ClientApp();
 //		SameInterface client_ = client.getClient(10015, "ClientNetwork",
