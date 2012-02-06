@@ -26,7 +26,7 @@ public class MasterServiceImpl implements MasterService, Runnable {
         
     /** Constructor for internal use.
      */
-    private MasterServiceImpl(State initialState, ConnectionManager connections,
+    MasterServiceImpl(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
         this.state = initialState;
         this.connections = connections;

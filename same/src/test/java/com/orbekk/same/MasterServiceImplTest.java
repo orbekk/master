@@ -12,8 +12,7 @@ public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
-    private MasterServiceImpl master = MasterServiceImpl.create(
-            connections, broadcaster, "http://master/MasterService.json");
+    private MasterServiceImpl master;
 
     public static class UnreachableClient implements ClientService {
         @Override
@@ -36,6 +35,8 @@ public class MasterServiceImplTest {
     
     @Before
     public void setUp() {
+        state.update(".masterUrl", "http://master/MasterService.json", 1);
+        master = new MasterServiceImpl(state, connections, broadcaster);
         connections.masterMap.put("http://master/MasterService.json", master);
     }
     
@@ -70,7 +71,7 @@ public class MasterServiceImplTest {
                 "http://client/ClientService.json");
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
-        client.joinNetwork("http://master");
+        client.joinNetwork("http://master/MasterService.json");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
@@ -118,7 +119,7 @@ public class MasterServiceImplTest {
                 "http://client/ClientService.json");
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
-        client.joinNetwork("http://master");
+        client.joinNetwork("http://master/MasterService.json");
         assertTrue(master._performWork());
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         
