@@ -30,6 +30,10 @@ public class State {
         updateFromObject(".participants", new ArrayList<String>(), 1);
     }
     
+    public State(State other) {
+        state.putAll(other.state);
+    }
+    
     public synchronized void clear() {
         logger.info("Clearing state.");
         updatedComponents.clear();

@@ -9,15 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.Client;
+
 public class StateServlet extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private Client.ClientInterface client;
+    
+    public StateServlet(Client.ClientInterface client) {
+        this.client = client;
+    }
     
     @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
-        logger.error("GOT HERE");
         response.setContentType("text/plain; charset=utf8");
-        response.getWriter().println("HI");
+        response.getWriter().println(client.getState());
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

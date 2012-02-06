@@ -19,6 +19,19 @@ public class Client implements DiscoveryListener {
     private StateChangedListener stateListener;
     private NetworkNotificationListener networkListener;
     
+    public class ClientInterface {
+        private ClientInterface() {
+        }
+        
+        /** Get a copy of all the client state.
+         */
+        public State getState() {
+            return new State(state);
+        }
+    }
+    
+    private ClientInterface clientInterface = new ClientInterface();
+    
     private ClientService serviceImpl = new ClientService() {
         @Override
         public void setState(String component, String data, long revision) throws Exception {
@@ -87,6 +100,10 @@ public class Client implements DiscoveryListener {
         }          
     }
    
+    ClientInterface getInterface() {
+        return clientInterface;
+    }
+    
     String lib_get(String name) {
         return state.getDataOf(name);
     }

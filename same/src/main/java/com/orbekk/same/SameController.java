@@ -45,7 +45,7 @@ public class SameController {
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
         ServerContainer server = new ServerBuilder(port)
-                .withServlet(new StateServlet(), "/_/state")
+                .withServlet(new StateServlet(client.getInterface()), "/_/state")
                 .withService(client.getService(), ClientService.class)
                 .withService(master, MasterService.class)
                 .withService(paxos, PaxosService.class)
