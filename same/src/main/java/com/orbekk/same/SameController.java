@@ -99,26 +99,8 @@ public class SameController {
         }
     }
     
-    public boolean tryGetUrl(String serverUrl) {
-        int retries = 100;
-        while (client.getUrl() == null && retries > 0) {
-            HttpUtil.sendHttpRequest(serverUrl + "ping?port=" +
-                    port);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                return false;
-            }
-            retries -= 1;
-        }
-        return client.getUrl() != null;
-    }
-    
     public void joinNetwork(String url) {
-            boolean hasUrl = tryGetUrl(url);
-            if (hasUrl) {
-                client.joinNetwork(url + "MasterService.json");
-            }
+        client.joinNetwork(url);
     }
     
     public ClientServiceImpl getClient() {

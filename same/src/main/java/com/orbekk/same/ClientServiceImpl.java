@@ -77,6 +77,7 @@ public class ClientServiceImpl implements DiscoveryListener {
     }
     
     public void joinNetwork(String masterUrl) {
+        logger.info("joinNetwork({})", masterUrl);
         MasterService master = connections.getMaster(masterUrl);
         state.clear();
         try {

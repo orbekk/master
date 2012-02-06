@@ -1,3 +1,3 @@
-networkName=ClientNetwork
-masterUrl=http://10.0.0.6:10010/
 port=10011
+localIp=10.0.0.6
+masterUrl=http://10.0.0.6:10010/MasterService.json
