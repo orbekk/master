@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
 
-public class MasterServiceImpl implements MasterService, Runnable {
+public class Master implements MasterService, Runnable {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
     private State state;
@@ -17,16 +17,16 @@ public class MasterServiceImpl implements MasterService, Runnable {
     private List<String> _fullStateReceivers = new ArrayList<String>();
     private Thread workerThread = null;
     
-    public static MasterServiceImpl create(ConnectionManager connections,
+    public static Master create(ConnectionManager connections,
             Broadcaster broadcaster, String myUrl) {
         State state = new State("DefaultMaster");
         state.update(".masterUrl", myUrl, 1);
-        return new MasterServiceImpl(state, connections, broadcaster);
+        return new Master(state, connections, broadcaster);
     }
         
     /** Constructor for internal use.
      */
-    MasterServiceImpl(State initialState, ConnectionManager connections,
+    Master(State initialState, ConnectionManager connections,
             Broadcaster broadcaster) {
         this.state = initialState;
         this.connections = connections;

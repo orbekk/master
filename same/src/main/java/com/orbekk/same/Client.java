@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.util.WorkQueue;
 
-public class ClientServiceImpl implements DiscoveryListener {
+public class Client implements DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ConnectionManager connections;
     private State state;
@@ -57,7 +57,7 @@ public class ClientServiceImpl implements DiscoveryListener {
         }
     };
     
-    public ClientServiceImpl(State state, ConnectionManager connections,
+    public Client(State state, ConnectionManager connections,
             String myUrl) {
         this.state = state;
         this.connections = connections;

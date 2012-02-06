@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
 import com.orbekk.same.ClientService;
-import com.orbekk.same.ClientServiceImpl;
+import com.orbekk.same.Client;
 import com.orbekk.same.SameInterface;
 import com.orbekk.same.UpdateConflict;
 

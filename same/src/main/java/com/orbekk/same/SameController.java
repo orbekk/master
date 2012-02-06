@@ -15,8 +15,8 @@ public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private int port;
     private ServerContainer server;
-    private MasterServiceImpl master;
-    private ClientServiceImpl client;
+    private Master master;
+    private Client client;
     private PaxosServiceImpl paxos;
     
     /**
@@ -37,10 +37,10 @@ public class SameController {
         String masterUrl = baseUrl + "MasterService.json";
         String clientUrl = baseUrl + "ClientService.json";
         
-        MasterServiceImpl master = MasterServiceImpl.create(
+        Master master = Master.create(
                 connections, broadcaster, masterUrl);
         
-        ClientServiceImpl client = new ClientServiceImpl(state, connections,
+        Client client = new Client(state, connections,
                 clientUrl);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
@@ -59,8 +59,8 @@ public class SameController {
     public SameController(
             int port,
             ServerContainer server,
-            MasterServiceImpl master,
-            ClientServiceImpl client,
+            Master master,
+            Client client,
             PaxosServiceImpl paxos) {
         this.port = port;
         this.server = server;
@@ -103,11 +103,11 @@ public class SameController {
         client.joinNetwork(url);
     }
     
-    public ClientServiceImpl getClient() {
+    public Client getClient() {
         return client;
     }
     
-    public MasterServiceImpl getMaster() {
+    public Master getMaster() {
         return master;
     }
 }

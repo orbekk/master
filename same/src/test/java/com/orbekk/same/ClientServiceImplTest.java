@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 public class ClientServiceImplTest {
     private State state = new State("ClientNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
-    private ClientServiceImpl client = new ClientServiceImpl(state, connections,
+    private Client client = new Client(state, connections,
             "http://client/ClientService.json");
     private ClientService clientS = client.getService();
     

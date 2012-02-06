@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 @Deprecated
 public class Same implements SameInterface {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private ClientServiceImpl client;
+    private Client client;
     private StateChangedProxy stateChangedProxy = new StateChangedProxy();
     
     private class StateChangedProxy implements StateChangedListener {
@@ -25,13 +25,13 @@ public class Same implements SameInterface {
         }
     }
     
-    public static Same createSame(ClientServiceImpl client) {
+    public static Same createSame(Client client) {
         Same same = new Same(client);
         client.setStateChangedListener(same.stateChangedProxy);
         return same;
     }
     
-    Same(ClientServiceImpl client) {
+    Same(Client client) {
         this.client = client;
     }
     

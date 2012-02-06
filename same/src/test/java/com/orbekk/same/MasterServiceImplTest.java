@@ -12,7 +12,7 @@ public class MasterServiceImplTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
-    private MasterServiceImpl master;
+    private Master master;
 
     public static class UnreachableClient implements ClientService {
         @Override
@@ -36,7 +36,7 @@ public class MasterServiceImplTest {
     @Before
     public void setUp() {
         state.update(".masterUrl", "http://master/MasterService.json", 1);
-        master = new MasterServiceImpl(state, connections, broadcaster);
+        master = new Master(state, connections, broadcaster);
         connections.masterMap.put("http://master/MasterService.json", master);
     }
     
@@ -66,7 +66,7 @@ public class MasterServiceImplTest {
 
     @Test
     public void clientJoin() {
-        ClientServiceImpl client = new ClientServiceImpl(
+        Client client = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json");
         ClientService clientS = client.getService();
@@ -79,12 +79,12 @@ public class MasterServiceImplTest {
     
     @Test
     public void validStateRequest() {
-        ClientServiceImpl client1 = new ClientServiceImpl(
+        Client client1 = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json");
         ClientService client1S = client1.getService();
         connections.clientMap.put("http://client/ClientService.json", client1S);
-        ClientServiceImpl client2 = new ClientServiceImpl(
+        Client client2 = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client2/ClientService.json");
         ClientService client2S = client2.getService();
@@ -114,7 +114,7 @@ public class MasterServiceImplTest {
     
     @Test
     public void masterRemovesParticipant() {
-        ClientServiceImpl client = new ClientServiceImpl(
+        Client client = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json");
         ClientService clientS = client.getService();
