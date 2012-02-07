@@ -3,6 +3,7 @@ package com.orbekk.same;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.net.BroadcastListener;
 import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
@@ -18,6 +19,7 @@ public class SameController {
     private Master master;
     private Client client;
     private PaxosServiceImpl paxos;
+    private DiscoveryService discoveryService;
     
     /**
      * Timeout for remote operations in milliseconds.
@@ -44,6 +46,13 @@ public class SameController {
                 clientUrl);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
+        DiscoveryService discoveryService = null;
+        if ("true".equals(configuration.get("enableDiscovery"))) {
+            BroadcastListener broadcastListener = new BroadcastListener(
+                    configuration.getInt("discoveryPort"));
+            discoveryService = new DiscoveryService(client, broadcastListener);
+        }
+        
         ServerContainer server = new ServerBuilder(port)
                 .withServlet(new StateServlet(client.getInterface()), "/_/state")
                 .withService(client.getService(), ClientService.class)
@@ -52,7 +61,7 @@ public class SameController {
                 .build();
         
         SameController controller = new SameController(port, server, master, client,
-                paxos);
+                paxos, discoveryService);
         return controller;
     }
     
@@ -61,18 +70,23 @@ public class SameController {
             ServerContainer server,
             Master master,
             Client client,
-            PaxosServiceImpl paxos) {
+            PaxosServiceImpl paxos,
+            DiscoveryService discoveryService) {
         this.port = port;
         this.server = server;
         this.master = master;
         this.client = client;
         this.paxos = paxos;
+        this.discoveryService = discoveryService;
     }
 
     public void start() throws Exception {
         server.start();
         master.start();
         client.start();
+        if (discoveryService != null) {
+            discoveryService.start();
+        }
     }
     
     public void stop() {
@@ -80,6 +94,9 @@ public class SameController {
             client.interrupt();
             master.interrupt();
             server.stop();
+            if (discoveryService != null) {
+                discoveryService.interrupt();
+            }
         } catch (Exception e) {
             logger.error("Failed to stop webserver", e);
         }
@@ -89,6 +106,9 @@ public class SameController {
         try {
             server.join();
             master.join();
+            if (discoveryService != null) {
+                discoveryService.join();
+            }
         } catch (InterruptedException e) {
             master.interrupt();
             try {

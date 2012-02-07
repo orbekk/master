@@ -20,13 +20,16 @@ public class BroadcastListener {
     public synchronized DatagramPacket listen() {
         logger.debug("Waiting for broadcast on port " + port);
         try {
-            socket = new DatagramSocket(port);
+            if (socket == null) {
+                socket = new DatagramSocket(port);
+            }
         } catch (SocketException e) {
             logger.warn("Failed to create socket.", e.fillInStackTrace());
             return null;
         }
         try {
             socket.setBroadcast(true);
+            socket.setReuseAddress(true);
         } catch (SocketException e) {
             logger.warn("Exception: {}", e);
         }

@@ -12,13 +12,14 @@ public class DiscoveryService extends Thread {
     BroadcastListener broadcastListener;
     DiscoveryListener listener;
     
-    public DiscoveryService(int port, DiscoveryListener listener,
+    public DiscoveryService(DiscoveryListener listener,
             BroadcastListener broadcastListener) {
         this.listener = listener;
         this.broadcastListener = broadcastListener;
     }
     
     public void run() {
+        logger.info("DiscoveryService starting.");
         while (!Thread.interrupted()) {
             DatagramPacket packet = broadcastListener.listen();
             String content = new String(packet.getData(), 0, packet.getLength());
@@ -35,9 +36,11 @@ public class DiscoveryService extends Thread {
                 listener.discover(url);
             }
         }
+        logger.info("DiscoveryService stopped.");
     }
     
     @Override public void interrupt() {
+        logger.info("Interrupt()");
         super.interrupt();
         broadcastListener.interrupt();
     }
