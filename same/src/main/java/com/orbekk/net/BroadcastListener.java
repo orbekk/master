@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 public class BroadcastListener {
     private int port;
     private Logger logger = LoggerFactory.getLogger(getClass());
+    DatagramSocket socket;
     
     public BroadcastListener(int port) {
         this.port = port;
     }
     
-    public DatagramPacket listen() {
+    public synchronized DatagramPacket listen() {
         logger.debug("Waiting for broadcast on port " + port);
-        DatagramSocket socket;
         try {
             socket = new DatagramSocket(port);
         } catch (SocketException e) {
@@ -43,6 +43,10 @@ public class BroadcastListener {
         logger.debug("Received broadcast from " + address +
                 ": " + new String(packet.getData()));
         return packet;
+    }
+    
+    public void interrupt() {
+        socket.close();
     }
     
     public static void main(String[] args) {
