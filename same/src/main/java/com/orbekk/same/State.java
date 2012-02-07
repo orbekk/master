@@ -255,37 +255,4 @@ public class State {
         State o = (State)other;
         return state.equals(o.state);
     }
-    
-//    
-//    @Override
-//    public String toString() {
-//        StringBuilder participantsString = new StringBuilder();
-//        participantsString.append("[");
-//        boolean first = true;
-//        for (Map.Entry<String, String> e : participants.entrySet()) {
-//            if (!first) {
-//                participantsString.append(", ");
-//            }
-//            first = false;
-//            participantsString.append(e.getKey())
-//                    .append("(")
-//                    .append(e.getValue())
-//                    .append(")");
-//            String clientId = e.getKey();
-//            String url = e.getValue();
-//        }
-//        participantsString.append("]");
-//
-//        return String.format(
-//            "State( \n" +
-//            "      stateIteration = %d,\n" +
-//            "      networkName    = %s,\n" +
-//            "      masterId       = %s,\n" +
-//            "      data           = %s,\n" +
-//            "      participants   = %s\n" +
-//            ")", stateIteration, networkName, masterId, data,
-//            participantsString);
-//    }
-
-
 }
