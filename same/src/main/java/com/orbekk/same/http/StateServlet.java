@@ -3,6 +3,7 @@ package com.orbekk.same.http;
 import static com.orbekk.same.StackTraceUtil.throwableToString;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import com.orbekk.same.UpdateConflict;
 public class StateServlet extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Client.ClientInterface client;
+    private final static String TITLE = "State viewer";
     
     public StateServlet(Client.ClientInterface client) {
         this.client = client;
@@ -46,10 +48,53 @@ public class StateServlet extends HttpServlet {
             HttpServletResponse response) throws IOException {
         if ("set".equals(request.getParameter("action"))) {
             handleSetState(request, response);
-        }
-        
-        response.setContentType("text/plain; charset=utf8");
-        response.getWriter().println(client.getState());
-        response.setStatus(HttpServletResponse.SC_OK);
+            response.sendRedirect(request.getServletPath() + "?message=OK");
+        } else {
+            response.setContentType("text/html; charset=utf8");
+            writeHeader(response);            
+            if (request.getParameter("message") != null) {
+                response.getWriter().println("<p>");
+                response.getWriter().println(request.getParameter("message"));
+            }
+            writeState(response);
+            writeSetStateForm(response);
+            writeFooter(response);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }        
+    }
+
+    private void writeState(HttpServletResponse response) throws IOException {
+        PrintWriter w = response.getWriter();
+        w.println("<h2>State</h2>");
+        w.println("<pre>");
+        w.println(client.getState());
+        w.println("</pre>");
+    }
+    
+    private void writeSetStateForm(HttpServletResponse response)
+            throws IOException {
+        PrintWriter w = response.getWriter();
+        w.println("<h3>Change state</h3>");
+        w.println("<form name=\"stateInput\" action=\"\">");
+        w.println("<p>Key: <input type=\"text\" name=\"key\" />");
+        w.println("<p>Value: <input type=\"text\" name=\"value\" />");
+        w.println("<input type=\"hidden\" name=\"action\" value=\"set\" />");
+        w.println("<p><input type=\"submit\" value=\"Sumbit\" />");
+        w.println("</form>");
+    }
+    
+    private void writeHeader(HttpServletResponse response) throws IOException {
+        PrintWriter w = response.getWriter();
+        w.println("<html>");
+        w.println("<head>");
+        w.println("<title>" + TITLE + "</title>");
+        w.println("</head>");
+        w.println("<body>");
+    }
+    
+    private void writeFooter(HttpServletResponse response) throws IOException {
+        PrintWriter w = response.getWriter();
+        w.println("</body>");
+        w.println("</html>");
     }
 }
