@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.net.BroadcastListener;
-import com.orbekk.net.HttpUtil;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
@@ -14,7 +13,6 @@ import com.orbekk.same.http.StateServlet;
 
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private int port;
     private ServerContainer server;
     private Master master;
     private Client client;
@@ -72,7 +70,6 @@ public class SameController {
             Client client,
             PaxosServiceImpl paxos,
             DiscoveryService discoveryService) {
-        this.port = port;
         this.server = server;
         this.master = master;
         this.client = client;

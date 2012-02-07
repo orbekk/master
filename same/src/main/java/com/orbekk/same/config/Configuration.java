@@ -3,7 +3,6 @@ package com.orbekk.same.config;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Properties;
 
 import org.slf4j.Logger;

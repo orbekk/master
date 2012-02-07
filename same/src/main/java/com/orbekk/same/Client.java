@@ -2,7 +2,6 @@ package com.orbekk.same;
 
 import static com.orbekk.same.StackTraceUtil.throwableToString;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;

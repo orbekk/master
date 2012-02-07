@@ -1,6 +1,5 @@
 package com.orbekk.same;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.orbekk.net.MyJsonRpcHttpClient;
 import com.orbekk.paxos.PaxosService;
