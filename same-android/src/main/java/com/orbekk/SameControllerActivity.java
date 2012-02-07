@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class HelloAndroidActivity extends Activity { 
+public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
    
     public void createNetwork(View unused) {

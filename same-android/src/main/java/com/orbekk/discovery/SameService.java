@@ -80,6 +80,7 @@ public class SameService extends Service {
                 discoveryThread = new DiscoveryThread(sameController.getClient());
                 discoveryThread.start();
             }
+            
         }
     }
     
