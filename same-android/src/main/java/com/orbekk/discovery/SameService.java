@@ -1,8 +1,10 @@
 package com.orbekk.discovery;
 
+import java.util.List;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import android.app.Service;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
 import android.widget.Toast;
 
 import org.slf4j.Logger;
@@ -21,13 +24,22 @@ import com.orbekk.same.SameController;
 import com.orbekk.same.config.Configuration;
 
 public class SameService extends Service {
+    public final static int DISPLAY_MESSAGE = 1;
+
+    public final static String AVAILABLE_NETWORKS_UPDATE =
+            "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
+    public final static String AVAILABLE_NETWORKS =
+            "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS";
+
     final static int PORT = 15066;
     final static int SERVICE_PORT = 15068;
+    
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Thread discoveryThread = null;
     private SameController sameController = null;
     private Configuration configuration = null;
     
+    /** This class should go away >:-/ */
     public final class DiscoveryThread extends Thread {
         Broadcaster broadcast;
         DiscoveryListener listener;
@@ -73,6 +85,31 @@ public class SameService extends Service {
             logger.info("Display toast: {}", (String)message.obj);
         }
     };
+    
+    
+    class InterfaceHandler extends Handler {
+        @Override public void handleMessage(Message message) {
+            switch (message.what) {
+                case DISPLAY_MESSAGE:
+                    Toast.makeText(SameService.this,
+                        (String)message.obj, Toast.LENGTH_SHORT)
+                            .show();
+                            
+                    Intent intent = new Intent(AVAILABLE_NETWORKS_UPDATE);
+                    ArrayList<String> networkList = new ArrayList<String>();
+                    networkList.add("FirstNetwork");
+                    intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
+                        networkList);
+                    sendBroadcast(intent);
+                        
+                    break;
+                default:
+                    super.handleMessage(message);
+            }
+        }
+    }
+    
+    private final Messenger messenger = new Messenger(new InterfaceHandler());
     
     private void createNetwork() {
         if (discoveryThread == null) {
@@ -124,7 +161,7 @@ public class SameService extends Service {
     
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return messenger.getBinder();
     }
     
     @Override
