@@ -30,7 +30,7 @@ public class SameControllerActivity extends Activity {
         Intent intent = new Intent(this, SameService.class);
         intent.setAction("join");
         // InetAddress address = new Broadcaster(this).getBroadcastAddress();
-        EditText t = (EditText)findViewById(R.id.editText1);
+        EditText t = (EditText)findViewById(R.id.master_service_url);
         intent.putExtra("masterUrl", t.getText().toString());
         startService(intent);
     }
@@ -42,7 +42,7 @@ public class SameControllerActivity extends Activity {
     }
     
     private void showBroadcastAddress() {
-    	EditText t = (EditText)findViewById(R.id.editText1);
+    	EditText t = (EditText)findViewById(R.id.master_service_url);
     	t.setText(new Broadcaster(this).getBroadcastAddress().getHostAddress());
     }
     
