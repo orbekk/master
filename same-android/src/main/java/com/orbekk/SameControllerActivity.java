@@ -46,6 +46,10 @@ public class SameControllerActivity extends Activity {
     	t.setText(new Broadcaster(this).getBroadcastAddress().getHostAddress());
     }
     
+    public void doneClicked(View unused) {
+        finish();
+    }
+    
     /**
      * Called when the activity is first created.
      * @param savedInstanceState If the activity is being re-initialized after 
@@ -59,22 +63,8 @@ public class SameControllerActivity extends Activity {
         System.setProperty("java.net.preferIPv4Stack", "true");
         System.setProperty("java.net.preferIPv6Addresses", "false");
 
-        setContentView(R.layout.main);        
-        showIpAddress();
-        // showBroadcastAddress();
-        
-//		ClientApp client = new ClientApp();
-//		SameInterface client_ = client.getClient(10015, "ClientNetwork",
-//		        "http://10.0.0.6:10010/");
-//		GameController controller = GameController.create(
-//		        GameController.newPlayer(), client_);
-//		setContentView(new GameView(this, controller));
-
-//        Broadcast broadcast = new Broadcast(this);
-//        broadcast.sendBroadcast("Broadcast test".getBytes(), 10010);
-//        Broadcaster broadcaster = new Broadcaster();
-//        Log.i(TAG, "Broadcast success: " + broadcaster.sendBroadcast(10010, "Broadcast test from Android".getBytes()));
-//        
+        setContentView(R.layout.controller);        
+        showIpAddress(); 
     }
     
     @Override
