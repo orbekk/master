@@ -3,6 +3,7 @@ package com.orbekk.net;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 
 import org.slf4j.Logger;
@@ -21,7 +22,9 @@ public class BroadcastListener {
         logger.debug("Waiting for broadcast on port " + port);
         try {
             if (socket == null) {
-                socket = new DatagramSocket(port);
+                socket = new DatagramSocket(null);
+                socket.setReuseAddress(true);
+                socket.bind(new InetSocketAddress(port));
             }
         } catch (SocketException e) {
             logger.warn("Failed to create socket.", e.fillInStackTrace());
@@ -29,7 +32,6 @@ public class BroadcastListener {
         }
         try {
             socket.setBroadcast(true);
-            socket.setReuseAddress(true);
         } catch (SocketException e) {
             logger.warn("Exception: {}", e);
         }

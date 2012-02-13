@@ -13,6 +13,7 @@ public class App {
         SameController controller = SameController.create(configuration);
         try {
             controller.start();
+            controller.searchNetworks();
             controller.joinNetwork(configuration.get("masterUrl"));
             controller.join();
         } catch (Exception e) {

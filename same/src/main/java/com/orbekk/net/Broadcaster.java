@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class Broadcaster {
+public class Broadcaster implements BroadcasterInterface {
     private Logger logger = LoggerFactory.getLogger(getClass());
     
     public List<InetAddress> getBroadcastAddresses() {

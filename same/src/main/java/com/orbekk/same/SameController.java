@@ -3,7 +3,10 @@ package com.orbekk.same;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.net.BroadcasterInterface;
 import com.orbekk.net.BroadcastListener;
+import com.orbekk.net.BroadcasterFactory;
+import com.orbekk.net.DefaultBroadcasterFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
@@ -18,13 +21,16 @@ public class SameController {
     private Client client;
     private PaxosServiceImpl paxos;
     private DiscoveryService discoveryService;
+    private BroadcasterFactory broadcasterFactory;
+    private Configuration configuration;
     
     /**
      * Timeout for remote operations in milliseconds.
      */
     private static final int timeout = 10000;
     
-    public static SameController create(Configuration configuration) {
+    public static SameController create(BroadcasterFactory broadcasterFactory,
+            Configuration configuration) {
         int port = configuration.getInt("port");
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
@@ -52,29 +58,37 @@ public class SameController {
         }
         
         ServerContainer server = new ServerBuilder(port)
-                .withServlet(new StateServlet(client.getInterface()), "/_/state")
-                .withService(client.getService(), ClientService.class)
-                .withService(master, MasterService.class)
-                .withService(paxos, PaxosService.class)
-                .build();
+        .withServlet(new StateServlet(client.getInterface()), "/_/state")
+        .withService(client.getService(), ClientService.class)
+        .withService(master, MasterService.class)
+        .withService(paxos, PaxosService.class)
+        .build();
         
-        SameController controller = new SameController(port, server, master, client,
-                paxos, discoveryService);
+        SameController controller = new SameController(
+                configuration, server, master, client,
+                paxos, discoveryService, broadcasterFactory);
         return controller;
     }
     
+    public static SameController create(Configuration configuration) {
+        return create(new DefaultBroadcasterFactory(), configuration);
+    }
+    
     public SameController(
-            int port,
+            Configuration configuration,
             ServerContainer server,
             Master master,
             Client client,
             PaxosServiceImpl paxos,
-            DiscoveryService discoveryService) {
+            DiscoveryService discoveryService,
+            BroadcasterFactory broadcasterFactory) {
+        this.configuration = configuration;
         this.server = server;
         this.master = master;
         this.client = client;
         this.paxos = paxos;
         this.discoveryService = discoveryService;
+        this.broadcasterFactory = broadcasterFactory;
     }
 
     public void start() throws Exception {
@@ -114,6 +128,13 @@ public class SameController {
                 logger.error("Failed to stop server", e);
             }
         }
+    }
+    
+    public void searchNetworks() {
+        BroadcasterInterface broadcaster = broadcasterFactory.create();
+        String message = "Discover " + client.getUrl();
+        broadcaster.sendBroadcast(configuration.getInt("discoveryPort"),
+                message.getBytes());
     }
     
     public void joinNetwork(String url) {
