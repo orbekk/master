@@ -1,5 +1,7 @@
 package com.orbekk.same.http;
 
+import org.eclipse.jetty.server.AbstractConnector;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
@@ -25,6 +27,14 @@ public class ServerContainer {
     public void setContext(ServletContextHandler context) {
         server.setHandler(context);
         this.context = context;
+    }
+    
+    public void setReuseAddress(boolean on) {
+        Connector connector = server.getConnectors()[0];
+        if (connector instanceof AbstractConnector) {
+            AbstractConnector connector_ = (AbstractConnector)connector;
+            connector_.setReuseAddress(on);
+        }
     }
     
     public int getPort() {

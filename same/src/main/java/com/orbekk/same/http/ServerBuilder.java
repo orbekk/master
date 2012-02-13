@@ -33,6 +33,7 @@ public class ServerBuilder {
     
     public ServerContainer build() {
         ServerContainer server = ServerContainer.create(port); 
+        server.setReuseAddress(true);
         server.setContext(getServletContextHandler());
         return server;
     }
