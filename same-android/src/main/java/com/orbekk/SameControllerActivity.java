@@ -115,13 +115,13 @@ public class SameControllerActivity extends Activity {
 
         setContentView(R.layout.controller);        
         showIpAddress();
-        
-        Intent intent = new Intent(this, SameService.class);
-        bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
     }
     
     @Override public void onStart() {
         super.onResume();
+        
+        Intent intent = new Intent(this, SameService.class);
+        bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
         
         IntentFilter sameServiceUpdates = new IntentFilter(
                 SameService.AVAILABLE_NETWORKS_UPDATE);
@@ -133,6 +133,7 @@ public class SameControllerActivity extends Activity {
         if (sameService != null) {
             unbindService(sameConnection);
         }
+        unregisterReceiver(broadcastReceiver);
     }
     
     @Override

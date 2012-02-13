@@ -100,6 +100,7 @@ public class SameService extends Service {
     
     @Override
     public IBinder onBind(Intent intent) {
+        logger.info("onBind()");
         return messenger.getBinder();
     }
     
@@ -109,17 +110,22 @@ public class SameService extends Service {
 
         
         // TODO: Move this to the bound interface.
-        if (intent.getAction().equals("create")) {
-        } else if (intent.getAction().equals("join")) {
-            String masterUrl = intent.getExtras().getString("masterUrl"); 
-            sameController.joinNetwork(masterUrl);
-        }
+//        if (intent.getAction().equals("create")) {
+//        } else if (intent.getAction().equals("join")) {
+//            String masterUrl = intent.getExtras().getString("masterUrl"); 
+//            sameController.joinNetwork(masterUrl);
+//        }
         return START_STICKY;
     }
     
     @Override
     public void onCreate() {
         logger.info("onCreate()");
+        
+        // Ensure service is started.
+        Intent intent = new Intent(this, getClass());
+        startService(intent);
+        
         if (sameController == null) {
             initializeConfiguration();
             sameController = SameController.create(
