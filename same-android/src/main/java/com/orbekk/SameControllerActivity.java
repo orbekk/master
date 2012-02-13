@@ -49,8 +49,10 @@ public class SameControllerActivity extends Activity {
             if (SameService.AVAILABLE_NETWORKS_UPDATE.equals(intent.getAction())) {
                 ArrayList<String> networkList = intent.getStringArrayListExtra(
                     SameService.AVAILABLE_NETWORKS);
-                Toast.makeText(SameControllerActivity.this, networkList.toString(),
-                        Toast.LENGTH_SHORT).show();
+                ListView list = (ListView)findViewById(R.id.network_list);
+                list.setAdapter(new ArrayAdapter<String>(
+                        SameControllerActivity.this,
+                        R.layout.list_text_item, networkList));
             }
         }
     };
@@ -89,15 +91,6 @@ public class SameControllerActivity extends Activity {
     
     public void searchNetworks(View unused) {
         logger.info("SearchNetworks()");
-//        Toast.makeText(this, "Discovering networks", Toast.LENGTH_SHORT).show();
-//        final String[] listItems = new String[]{"First item", "Second item"};
-//        ListView list = (ListView)findViewById(R.id.network_list);
-//        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_text_item,
-//                listItems));
-        
-//        Message message = Message.obtain(null, SameService.DISPLAY_MESSAGE,
-//                "Message from Activity!");
-        
         Message searchMessage = Message.obtain(null, SameService.SEARCH_NETWORKS);
         try {
             sameService.send(searchMessage);

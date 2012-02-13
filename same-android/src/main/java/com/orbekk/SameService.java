@@ -41,19 +41,19 @@ public class SameService extends Service {
     private SameController sameController = null;
     private Configuration configuration = null;
     
-    // A list with alternating network names and urls.
-    private ArrayList<String> availableNetworks = new ArrayList<String>();
+    private ArrayList<String> networkNames = new ArrayList<String>();
+    private ArrayList<String> networkUrls = new ArrayList<String>();
     
     private NetworkNotificationListener networkListener =
             new NetworkNotificationListener() {
         @Override
         public void notifyNetwork(String networkName, String masterUrl) {
             logger.info("notifyNetwork({})", networkName);
-            availableNetworks.add(networkName);
-            availableNetworks.add(masterUrl);
+            networkNames.add(networkName);
+            networkUrls.add(masterUrl);
             Intent intent = new Intent(AVAILABLE_NETWORKS_UPDATE);
             intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
-                    availableNetworks);
+                    networkNames);
             sendBroadcast(intent);
         }
     };
