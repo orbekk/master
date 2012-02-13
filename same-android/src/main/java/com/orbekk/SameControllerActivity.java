@@ -88,16 +88,19 @@ public class SameControllerActivity extends Activity {
     }
     
     public void searchNetworks(View unused) {
-        Toast.makeText(this, "Discovering networks", Toast.LENGTH_SHORT).show();
-        final String[] listItems = new String[]{"First item", "Second item"};
-        ListView list = (ListView)findViewById(R.id.network_list);
-        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_text_item,
-                listItems));
+        logger.info("SearchNetworks()");
+//        Toast.makeText(this, "Discovering networks", Toast.LENGTH_SHORT).show();
+//        final String[] listItems = new String[]{"First item", "Second item"};
+//        ListView list = (ListView)findViewById(R.id.network_list);
+//        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_text_item,
+//                listItems));
         
-        Message message = Message.obtain(null, SameService.DISPLAY_MESSAGE,
-                "Message from Activity!");
+//        Message message = Message.obtain(null, SameService.DISPLAY_MESSAGE,
+//                "Message from Activity!");
+        
+        Message searchMessage = Message.obtain(null, SameService.SEARCH_NETWORKS);
         try {
-            sameService.send(message);
+            sameService.send(searchMessage);
         } catch (RemoteException e) {
             logger.error("Failed to send message", e);
         }
@@ -117,12 +120,19 @@ public class SameControllerActivity extends Activity {
         bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
     }
     
-    @Override public void onResume() {
+    @Override public void onStart() {
         super.onResume();
         
         IntentFilter sameServiceUpdates = new IntentFilter(
                 SameService.AVAILABLE_NETWORKS_UPDATE);
         registerReceiver(broadcastReceiver, sameServiceUpdates);
+    }
+    
+    @Override public void onStop() {
+        super.onStop();
+        if (sameService != null) {
+            unbindService(sameConnection);
+        }
     }
     
     @Override

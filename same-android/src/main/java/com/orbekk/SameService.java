@@ -34,51 +34,51 @@ public class SameService extends Service {
     public final static String AVAILABLE_NETWORKS =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS";
 
-    final static int PORT = 15066;
     final static int SERVICE_PORT = 15068;
+    final static int DISCOVERY_PORT = 15066;
     
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Thread discoveryThread = null;
     private SameController sameController = null;
     private Configuration configuration = null;
     
-    /** This class should go away >:-/ */
-    public final class DiscoveryThread extends Thread {
-        Broadcaster broadcast;
-        DiscoveryListener listener;
-        
-        public DiscoveryThread(DiscoveryListener listener) {
-            broadcast = new Broadcaster(SameService.this);
-            this.listener = listener;
-        }
-        
-        @Override public void run() {
-            while (!Thread.interrupted()) {
-                DatagramPacket packet = broadcast.receiveBroadcast(PORT);
-                String content = new String(packet.getData(), 0, packet.getLength());
-                String[] words = content.split(" ");
-                
-                if (!content.startsWith("Discover") || content.length() < 2) {
-                    logger.warn("Invalid discovery message: {}", content);
-                    continue;
-                }
-                
-                String port = words[1];
-                String url = "http://" + packet.getAddress().getHostAddress() +
-                        ":" + port + "/ClientService.json";
-                listener.discover(url);
-                
-                Message message = Message.obtain();
-                message.obj = "New client: " + url;
-                toastHandler.sendMessage(message);
-            }
-        }
-        
-        @Override public void interrupt() {
-            super.interrupt();
-            broadcast.interrupt();
-        }
-    }
+//    /** This class should go away >:-/ */
+//    public final class DiscoveryThread extends Thread {
+//        Broadcaster broadcast;
+//        DiscoveryListener listener;
+//        
+//        public DiscoveryThread(DiscoveryListener listener) {
+//            broadcast = new Broadcaster(SameService.this);
+//            this.listener = listener;
+//        }
+//        
+//        @Override public void run() {
+//            while (!Thread.interrupted()) {
+//                DatagramPacket packet = broadcast.receiveBroadcast(PORT);
+//                String content = new String(packet.getData(), 0, packet.getLength());
+//                String[] words = content.split(" ");
+//                
+//                if (!content.startsWith("Discover") || content.length() < 2) {
+//                    logger.warn("Invalid discovery message: {}", content);
+//                    continue;
+//                }
+//                
+//                String port = words[1];
+//                String url = "http://" + packet.getAddress().getHostAddress() +
+//                        ":" + port + "/ClientService.json";
+//                listener.discover(url);
+//                
+//                Message message = Message.obtain();
+//                message.obj = "New client: " + url;
+//                toastHandler.sendMessage(message);
+//            }
+//        }
+//        
+//        @Override public void interrupt() {
+//            super.interrupt();
+//            broadcast.interrupt();
+//        }
+//    }
     
     private NetworkNotificationListener networkListener =
             new NetworkNotificationListener() {
@@ -128,13 +128,13 @@ public class SameService extends Service {
     private final Messenger messenger = new Messenger(new InterfaceHandler());
     
     private void createNetwork() {
-        if (discoveryThread == null) {
-            synchronized (this) {
-                discoveryThread = new DiscoveryThread(sameController.getClient());
-                discoveryThread.start();
-            }
-            
-        }
+//        if (discoveryThread == null) {
+//            synchronized (this) {
+//                discoveryThread = new DiscoveryThread(sameController.getClient());
+//                discoveryThread.start();
+//            }
+//            
+//        }
     }
     
     private void initializeConfiguration() {
@@ -143,23 +143,24 @@ public class SameService extends Service {
         properties.setProperty("localIp",
                 new Broadcaster(this).getWlanAddress().getHostAddress());
         properties.setProperty("masterUrl", "http://10.0.0.6:10010/MasterService.json");
+        properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         configuration = new Configuration(properties);
     }
     
-    private void sendBroadcastDiscovery(InetAddress ip) {
-        Broadcaster broadcaster = new Broadcaster(this);
-        String message = "Discover " + (PORT + 2);
-        byte[] data = message.getBytes();
-        if (ip.equals(broadcaster.getBroadcastAddress())) {
-            broadcaster.sendUdpData(data, ip, PORT);
-        } else {
-            String remoteAddress =
-                    String.format("http://%s:%s/ClientService.json",
-                    		ip.getHostAddress(), PORT + 2);
-            sameController.getClient().sendDiscoveryRequest(
-                    remoteAddress);
-        }
-    }
+//    private void sendBroadcastDiscovery(InetAddress ip) {
+//        Broadcaster broadcaster = new Broadcaster(this);
+//        String message = "Discover " + (PORT + 2);
+//        byte[] data = message.getBytes();
+//        if (ip.equals(broadcaster.getBroadcastAddress())) {
+//            broadcaster.sendUdpData(data, ip, PORT);
+//        } else {
+//            String remoteAddress =
+//                    String.format("http://%s:%s/ClientService.json",
+//                    		ip.getHostAddress(), PORT + 2);
+//            sameController.getClient().sendDiscoveryRequest(
+//                    remoteAddress);
+//        }
+//    }
     
     private void searchNetworks(InetAddress ip) {
         sameController.getClient().setNetworkListener(
@@ -172,7 +173,7 @@ public class SameService extends Service {
                         toastHandler.sendMessage(message);
                     }
                 });
-        sendBroadcastDiscovery(ip);
+//        sendBroadcastDiscovery(ip);
     }
     
     @Override
@@ -183,20 +184,7 @@ public class SameService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         logger.info("onStartCommand()");
-        
-        if (sameController == null) {
-            initializeConfiguration();
-            sameController = SameController.create(
-                    new AndroidBroadcasterFactory(this),
-                    configuration);
-            try {
-                sameController.start();
-                sameController.getClient().setNetworkListener(networkListener);
-            } catch (Exception e) {
-                logger.error("Failed to start server", e);
-                return START_STICKY;
-            }
-        }
+
         
         // TODO: Move this to the bound interface.
         if (intent.getAction().equals("create")) {
@@ -209,8 +197,25 @@ public class SameService extends Service {
     }
     
     @Override
+    public void onCreate() {
+        logger.info("onCreate()");
+        if (sameController == null) {
+            initializeConfiguration();
+            sameController = SameController.create(
+                    new AndroidBroadcasterFactory(this),
+                    configuration);
+            try {
+                sameController.start();
+                sameController.getClient().setNetworkListener(networkListener);
+            } catch (Exception e) {
+                logger.error("Failed to start server", e);
+            }
+        }
+    }
+    
+    @Override
     public void onDestroy() {
-        Toast.makeText(this, "service stopped", Toast.LENGTH_SHORT).show();
+        logger.info("onDestroy()");
         if (discoveryThread != null) {
             discoveryThread.interrupt();
         }
