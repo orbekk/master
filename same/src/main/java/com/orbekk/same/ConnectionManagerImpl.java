@@ -12,11 +12,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * TODO: Implement sequencing of requests. This should be done by
- *   synchronizing on some object on a per-URL basis. For instance,
- *   we could extend JsonRpcHttpClient.
- */
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;
     private int readTimeout;
