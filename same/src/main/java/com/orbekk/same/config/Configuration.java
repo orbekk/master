@@ -69,7 +69,10 @@ public class Configuration {
         return value;
     }
     
-    public int getInt(String name) {
+    public Integer getInt(String name) {
+        if (get(name) == null) {
+            return null;
+        }
         return Integer.valueOf(get(name));
     }
 }
