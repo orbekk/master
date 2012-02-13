@@ -24,6 +24,9 @@ import com.orbekk.same.SameController;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
 
+/**
+ * TODO: Remove junk code and use BroadcastInterface stuff.
+ */
 public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
 
