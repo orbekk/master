@@ -1,6 +1,5 @@
 package com.orbekk;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -80,11 +78,6 @@ public class SameControllerActivity extends Activity {
         t.append(new Broadcaster(this).getWlanAddress().getHostAddress());
     }
     
-    private void showBroadcastAddress() {
-    	EditText t = (EditText)findViewById(R.id.master_service_url);
-    	t.setText(new Broadcaster(this).getBroadcastAddress().getHostAddress());
-    }
-    
     public void doneClicked(View unused) {
         finish();
     }
@@ -113,7 +106,6 @@ public class SameControllerActivity extends Activity {
     @Override public void onResume() {
         super.onResume();
         
-        TextView tv = new TextView(this);
         Intent intent = new Intent(this, SameService.class);
         bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
         
