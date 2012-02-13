@@ -41,13 +41,20 @@ public class SameService extends Service {
     private SameController sameController = null;
     private Configuration configuration = null;
     
+    // A list with alternating network names and urls.
+    private ArrayList<String> availableNetworks = new ArrayList<String>();
+    
     private NetworkNotificationListener networkListener =
             new NetworkNotificationListener() {
         @Override
         public void notifyNetwork(String networkName, String masterUrl) {
-            Message message = Message.obtain();
-            message.obj = "notifyNetwork(" + networkName + ")";
-            toastHandler.sendMessage(message);
+            logger.info("notifyNetwork({})", networkName);
+            availableNetworks.add(networkName);
+            availableNetworks.add(masterUrl);
+            Intent intent = new Intent(AVAILABLE_NETWORKS_UPDATE);
+            intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
+                    availableNetworks);
+            sendBroadcast(intent);
         }
     };
     
@@ -68,13 +75,6 @@ public class SameService extends Service {
                     Toast.makeText(SameService.this,
                         (String)message.obj, Toast.LENGTH_SHORT)
                             .show();
-                            
-                    Intent intent = new Intent(AVAILABLE_NETWORKS_UPDATE);
-                    ArrayList<String> networkList = new ArrayList<String>();
-                    networkList.add("FirstNetwork");
-                    intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
-                        networkList);
-                    sendBroadcast(intent);
                     break;
                 case SEARCH_NETWORKS:
                     logger.info("SEARCH_NETWORKS");
