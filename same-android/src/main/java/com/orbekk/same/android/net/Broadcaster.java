@@ -1,4 +1,4 @@
-package com.orbekk.discovery;
+package com.orbekk.same.android.net;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -10,11 +10,13 @@ import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.net.BroadcasterInterface;
+
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 
-public class Broadcaster {
+public class Broadcaster implements BroadcasterInterface {
     private Context context;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private DatagramSocket socket = null;
@@ -90,5 +92,11 @@ public class Broadcaster {
         if (socket != null) {
             socket.close();
         }
+    }
+
+    @Override
+    public synchronized boolean sendBroadcast(int port, byte[] data) {
+        InetAddress broadcastAddress = getBroadcastAddress();
+        return sendUdpData(data, broadcastAddress, port);
     }
 }
