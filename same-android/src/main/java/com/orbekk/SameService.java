@@ -1,9 +1,5 @@
 package com.orbekk;
 
-import java.util.List;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -18,7 +14,6 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.same.DiscoveryListener;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
@@ -58,16 +53,6 @@ public class SameService extends Service {
         }
     };
     
-    private Handler toastHandler = new Handler() {
-        @Override public void handleMessage(Message message) {
-            Toast.makeText(SameService.this,
-                    (String)message.obj, Toast.LENGTH_SHORT)
-                            .show();
-            logger.info("Display toast: {}", (String)message.obj);
-        }
-    };
-    
-    
     class InterfaceHandler extends Handler {
         @Override public void handleMessage(Message message) {
             switch (message.what) {
@@ -101,30 +86,23 @@ public class SameService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         logger.info("onBind()");
+        
+        // Make sure service continues to run after it is unbound.
+        Intent service = new Intent(this, getClass());
+        startService(service);
+        
         return messenger.getBinder();
     }
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         logger.info("onStartCommand()");
-
-        
-        // TODO: Move this to the bound interface.
-//        if (intent.getAction().equals("create")) {
-//        } else if (intent.getAction().equals("join")) {
-//            String masterUrl = intent.getExtras().getString("masterUrl"); 
-//            sameController.joinNetwork(masterUrl);
-//        }
         return START_STICKY;
     }
     
     @Override
     public void onCreate() {
         logger.info("onCreate()");
-        
-        // Ensure service is started.
-        Intent intent = new Intent(this, getClass());
-        startService(intent);
         
         if (sameController == null) {
             initializeConfiguration();
