@@ -1,4 +1,4 @@
-package com.orbekk.discovery;
+package com.orbekk;
 
 import java.util.List;
 import java.net.DatagramPacket;
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.orbekk.same.DiscoveryListener;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
+import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
 
 public class SameService extends Service {

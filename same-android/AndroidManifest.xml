@@ -20,7 +20,7 @@
         
         <activity android:name=".SameControllerActivity"/>
 
-        <service android:name=".discovery.SameService" />
+        <service android:name=".SameService" />
     </application>
 
 </manifest>
