@@ -38,47 +38,8 @@ public class SameService extends Service {
     final static int DISCOVERY_PORT = 15066;
     
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Thread discoveryThread = null;
     private SameController sameController = null;
     private Configuration configuration = null;
-    
-//    /** This class should go away >:-/ */
-//    public final class DiscoveryThread extends Thread {
-//        Broadcaster broadcast;
-//        DiscoveryListener listener;
-//        
-//        public DiscoveryThread(DiscoveryListener listener) {
-//            broadcast = new Broadcaster(SameService.this);
-//            this.listener = listener;
-//        }
-//        
-//        @Override public void run() {
-//            while (!Thread.interrupted()) {
-//                DatagramPacket packet = broadcast.receiveBroadcast(PORT);
-//                String content = new String(packet.getData(), 0, packet.getLength());
-//                String[] words = content.split(" ");
-//                
-//                if (!content.startsWith("Discover") || content.length() < 2) {
-//                    logger.warn("Invalid discovery message: {}", content);
-//                    continue;
-//                }
-//                
-//                String port = words[1];
-//                String url = "http://" + packet.getAddress().getHostAddress() +
-//                        ":" + port + "/ClientService.json";
-//                listener.discover(url);
-//                
-//                Message message = Message.obtain();
-//                message.obj = "New client: " + url;
-//                toastHandler.sendMessage(message);
-//            }
-//        }
-//        
-//        @Override public void interrupt() {
-//            super.interrupt();
-//            broadcast.interrupt();
-//        }
-//    }
     
     private NetworkNotificationListener networkListener =
             new NetworkNotificationListener() {
@@ -126,17 +87,7 @@ public class SameService extends Service {
     }
     
     private final Messenger messenger = new Messenger(new InterfaceHandler());
-    
-    private void createNetwork() {
-//        if (discoveryThread == null) {
-//            synchronized (this) {
-//                discoveryThread = new DiscoveryThread(sameController.getClient());
-//                discoveryThread.start();
-//            }
-//            
-//        }
-    }
-    
+
     private void initializeConfiguration() {
         Properties properties = new Properties();
         properties.setProperty("port", ""+SERVICE_PORT);
@@ -145,35 +96,6 @@ public class SameService extends Service {
         properties.setProperty("masterUrl", "http://10.0.0.6:10010/MasterService.json");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         configuration = new Configuration(properties);
-    }
-    
-//    private void sendBroadcastDiscovery(InetAddress ip) {
-//        Broadcaster broadcaster = new Broadcaster(this);
-//        String message = "Discover " + (PORT + 2);
-//        byte[] data = message.getBytes();
-//        if (ip.equals(broadcaster.getBroadcastAddress())) {
-//            broadcaster.sendUdpData(data, ip, PORT);
-//        } else {
-//            String remoteAddress =
-//                    String.format("http://%s:%s/ClientService.json",
-//                    		ip.getHostAddress(), PORT + 2);
-//            sameController.getClient().sendDiscoveryRequest(
-//                    remoteAddress);
-//        }
-//    }
-    
-    private void searchNetworks(InetAddress ip) {
-        sameController.getClient().setNetworkListener(
-                new NetworkNotificationListener() {
-                    @Override
-                    public void notifyNetwork(String networkName, String masterUrl) {
-                        Message message = Message.obtain();
-                        message.obj = "notifyNetwork(" + networkName + ", " +
-                                    masterUrl;
-                        toastHandler.sendMessage(message);
-                    }
-                });
-//        sendBroadcastDiscovery(ip);
     }
     
     @Override
@@ -188,7 +110,6 @@ public class SameService extends Service {
         
         // TODO: Move this to the bound interface.
         if (intent.getAction().equals("create")) {
-            createNetwork();
         } else if (intent.getAction().equals("join")) {
             String masterUrl = intent.getExtras().getString("masterUrl"); 
             sameController.joinNetwork(masterUrl);
@@ -216,9 +137,6 @@ public class SameService extends Service {
     @Override
     public void onDestroy() {
         logger.info("onDestroy()");
-        if (discoveryThread != null) {
-            discoveryThread.interrupt();
-        }
         if (sameController != null) {
             sameController.stop();
         }
