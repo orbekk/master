@@ -110,9 +110,10 @@ public class SameControllerActivity extends Activity {
         showIpAddress();
     }
     
-    @Override public void onStart() {
+    @Override public void onResume() {
         super.onResume();
         
+        TextView tv = new TextView(this);
         Intent intent = new Intent(this, SameService.class);
         bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
         
