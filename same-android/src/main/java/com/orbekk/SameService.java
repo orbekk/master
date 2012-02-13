@@ -21,14 +21,13 @@ import org.slf4j.LoggerFactory;
 import com.orbekk.same.DiscoveryListener;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
+import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
 
-/**
- * TODO: Remove junk code and use BroadcastInterface stuff.
- */
 public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
+    public final static int SEARCH_NETWORKS = 2;
 
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
@@ -81,6 +80,16 @@ public class SameService extends Service {
         }
     }
     
+    private NetworkNotificationListener networkListener =
+            new NetworkNotificationListener() {
+        @Override
+        public void notifyNetwork(String networkName, String masterUrl) {
+            Message message = Message.obtain();
+            message.obj = "notifyNetwork(" + networkName + ")";
+            toastHandler.sendMessage(message);
+        }
+    };
+    
     private Handler toastHandler = new Handler() {
         @Override public void handleMessage(Message message) {
             Toast.makeText(SameService.this,
@@ -105,7 +114,10 @@ public class SameService extends Service {
                     intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
                         networkList);
                     sendBroadcast(intent);
-                        
+                    break;
+                case SEARCH_NETWORKS:
+                    logger.info("SEARCH_NETWORKS");
+                    sameController.searchNetworks();
                     break;
                 default:
                     super.handleMessage(message);
@@ -170,20 +182,23 @@ public class SameService extends Service {
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.setProperty("http.keepAlive", "false");
-        Toast.makeText(this, "service start: " + intent.getAction(),
-                Toast.LENGTH_SHORT).show();
+        logger.info("onStartCommand()");
+        
         if (sameController == null) {
             initializeConfiguration();
-            sameController = SameController.create(configuration);
+            sameController = SameController.create(
+                    new AndroidBroadcasterFactory(this),
+                    configuration);
             try {
                 sameController.start();
+                sameController.getClient().setNetworkListener(networkListener);
             } catch (Exception e) {
                 logger.error("Failed to start server", e);
                 return START_STICKY;
             }
         }
         
+        // TODO: Move this to the bound interface.
         if (intent.getAction().equals("create")) {
             createNetwork();
         } else if (intent.getAction().equals("join")) {
