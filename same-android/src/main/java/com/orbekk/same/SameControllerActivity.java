@@ -57,10 +57,13 @@ public class SameControllerActivity extends Activity {
     };
     
     public void createNetwork(View unused) {
-        logger.info("Creating network");
-        Intent intent = new Intent(this, SameService.class);
-        intent.setAction("create");
-        startService(intent);
+        Message message = Message.obtain(null, SameService.CREATE_NETWORK);
+        try {
+            sameService.send(message);
+        } catch (RemoteException e) {
+            logger.error("Failed to create network", e);
+            throw new RuntimeException(e);
+        }
     }
     
     public void joinNetwork(View unused) {

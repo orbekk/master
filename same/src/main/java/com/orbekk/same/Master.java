@@ -18,8 +18,8 @@ public class Master implements MasterService, Runnable {
     private Thread workerThread = null;
     
     public static Master create(ConnectionManager connections,
-            Broadcaster broadcaster, String myUrl) {
-        State state = new State("DefaultMaster");
+            Broadcaster broadcaster, String myUrl, String networkName) {
+        State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
         return new Master(state, connections, broadcaster);
     }

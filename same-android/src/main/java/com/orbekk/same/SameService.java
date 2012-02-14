@@ -23,7 +23,8 @@ import com.orbekk.same.config.Configuration;
 public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
     public final static int SEARCH_NETWORKS = 2;
-
+    public final static int CREATE_NETWORK = 3;
+    
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
     public final static String AVAILABLE_NETWORKS =
@@ -65,6 +66,10 @@ public class SameService extends Service {
                     logger.info("SEARCH_NETWORKS");
                     sameController.searchNetworks();
                     break;
+                case CREATE_NETWORK:
+                    logger.info("CREATE_NETWORK");
+                    create();
+                    break;
                 default:
                     super.handleMessage(message);
             }
@@ -75,13 +80,23 @@ public class SameService extends Service {
 
     private void initializeConfiguration() {
         Properties properties = new Properties();
+        String localIp = new Broadcaster(this)
+                .getWlanAddress().getHostAddress();
+        String localMaster = "http://" + localIp + ":" + SERVICE_PORT +
+                "/MasterService.json";
         properties.setProperty("port", ""+SERVICE_PORT);
-        properties.setProperty("localIp",
-                new Broadcaster(this).getWlanAddress().getHostAddress());
-        properties.setProperty("masterUrl", "http://10.0.0.6:10010/MasterService.json");
+        properties.setProperty("localIp", localIp);
+        properties.setProperty("masterUrl", localMaster);
         properties.setProperty("enableDiscovery", "true");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
+        properties.setProperty("networkName", "AndroidNetwork");
         configuration = new Configuration(properties);
+    }
+    
+    /** Create a public network. */
+    private void create() {
+        sameController.getClient().joinNetwork(
+                configuration.get("masterUrl"));
     }
     
     @Override

@@ -173,6 +173,15 @@ public class Client implements DiscoveryListener {
     
     @Override
     public void discover(String url) {
+        String networkName = state.getDataOf(".networkName");
+        if (networkName.equals(".InvalidClientNetwork")) {
+            logger.warn("Client not joined to a network. Ignoring discovery");
+            return;
+        } else if (networkName.equals(".Private")) {
+            logger.info("Ignoring broadcast to .Private network.");
+            return;
+        }
+        
         if (!url.equals(myUrl)) {
             try {
                 connections.getClient(url)

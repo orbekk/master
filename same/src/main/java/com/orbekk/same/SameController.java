@@ -34,7 +34,7 @@ public class SameController {
         int port = configuration.getInt("port");
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
-        State state = new State("Default");
+        State clientState = new State(".InvalidClientNetwork");
         Broadcaster broadcaster = BroadcasterImpl.getDefaultBroadcastRunner();
         
         String baseUrl = String.format("http://%s:%s/",
@@ -43,10 +43,10 @@ public class SameController {
         String masterUrl = baseUrl + "MasterService.json";
         String clientUrl = baseUrl + "ClientService.json";
         
-        Master master = Master.create(
-                connections, broadcaster, masterUrl);
+        Master master = Master.create(connections, broadcaster,
+                masterUrl, configuration.get("networkName"));
         
-        Client client = new Client(state, connections,
+        Client client = new Client(clientState, connections,
                 clientUrl);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
