@@ -1,4 +1,4 @@
-package com.orbekk;
+package com.orbekk.same;
 
 import java.util.ArrayList;
 import java.util.Properties;

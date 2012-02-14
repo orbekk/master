@@ -18,9 +18,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".SameControllerActivity"/>
+        <activity android:name=".same.SameControllerActivity"/>
 
-        <service android:name=".SameService" />
+        <service android:name=".same.SameService" />
     </application>
 
 </manifest>

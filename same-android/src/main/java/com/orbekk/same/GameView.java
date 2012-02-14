@@ -1,4 +1,4 @@
-package com.orbekk;
+package com.orbekk.same;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

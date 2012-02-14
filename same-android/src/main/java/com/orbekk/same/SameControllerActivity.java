@@ -1,10 +1,11 @@
-package com.orbekk;
+package com.orbekk.same;
 
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.R;
 import com.orbekk.same.android.net.Broadcaster;
 
 import android.app.Activity;
