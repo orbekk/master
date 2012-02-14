@@ -1,6 +1,6 @@
 package com.orbekk.same;
 
-import com.orbekk.R;
+import com.orbekk.same.R;
 
 import android.app.Activity;
 import android.content.Intent;

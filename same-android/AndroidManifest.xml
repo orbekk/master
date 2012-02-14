@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.orbekk"
+    package="com.orbekk.same"
     android:versionCode="1"
     android:versionName="1.0-SNAPSHOT" >
 
@@ -18,9 +18,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".same.SameControllerActivity"/>
+        <activity android:name=".SameControllerActivity"/>
 
-        <service android:name=".same.SameService" />
+        <service android:name=".SameService" />
     </application>
 
 </manifest>
