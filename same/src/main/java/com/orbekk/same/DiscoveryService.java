@@ -22,6 +22,10 @@ public class DiscoveryService extends Thread {
         logger.info("DiscoveryService starting.");
         while (!Thread.interrupted()) {
             DatagramPacket packet = broadcastListener.listen();
+            if (packet == null) {
+                // An error or interrupt occurred.
+                continue;
+            }
             String content = new String(packet.getData(), 0, packet.getLength());
             String[] words = content.split(" ");
             

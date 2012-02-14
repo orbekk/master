@@ -1,5 +1,6 @@
 package com.orbekk.same;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -21,14 +22,18 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Messenger sameService = null;
+    private List<String> networkNames = new ArrayList<String>();
+    private List<String> networkUrls = new ArrayList<String>();
     
     private ServiceConnection sameConnection = new ServiceConnection() {
         @Override
@@ -41,20 +46,37 @@ public class SameControllerActivity extends Activity {
             sameService = null;
         }
     };
-    
+
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public synchronized void onReceive(Context context, Intent intent) {
             if (SameService.AVAILABLE_NETWORKS_UPDATE.equals(intent.getAction())) {
-                ArrayList<String> networkList = intent.getStringArrayListExtra(
-                    SameService.AVAILABLE_NETWORKS);
-                ListView list = (ListView)findViewById(R.id.network_list);
-                list.setAdapter(new ArrayAdapter<String>(
-                        SameControllerActivity.this,
-                        R.layout.list_text_item, networkList));
+                networkNames = intent.getStringArrayListExtra(
+                        SameService.AVAILABLE_NETWORKS);
+                networkUrls = intent.getStringArrayListExtra(
+                        SameService.NETWORK_URLS);
+                updateNetworkList();
             }
         }
     };
+
+    private AdapterView.OnItemClickListener networkListClickListener =
+            new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(SameControllerActivity.this,
+                    "Join network " + networkNames.get(position),
+                    Toast.LENGTH_SHORT).show();      
+        }
+    };
+    
+    private void updateNetworkList() {
+        ListView list = (ListView)findViewById(R.id.network_list);
+        list.setAdapter(new ArrayAdapter<String>(
+                SameControllerActivity.this,
+                R.layout.list_text_item, networkNames));        
+    }
+    
     
     public void createNetwork(View unused) {
         Message message = Message.obtain(null, SameService.CREATE_NETWORK);
@@ -66,14 +88,31 @@ public class SameControllerActivity extends Activity {
         }
     }
     
-    public void joinNetwork(View unused) {
-        logger.info("Joining network");
+    public void joinNetworkUrl(View unused) {
+        String masterUrl = "";
         Intent intent = new Intent(this, SameService.class);
         intent.setAction("join");
-        // InetAddress address = new Broadcaster(this).getBroadcastAddress();
         EditText t = (EditText)findViewById(R.id.master_service_url);
-        intent.putExtra("masterUrl", t.getText().toString());
-        startService(intent);
+        masterUrl = t.getText().toString();
+        if (!masterUrl.startsWith("http://")) {
+            masterUrl = "http://" + masterUrl;
+        }
+        if (!masterUrl.endsWith("/MasterService.json")) {
+            masterUrl += "/MasterService.json";
+        }
+        joinNetwork(masterUrl);
+    }
+    
+    private void joinNetwork(String masterUrl) {
+        logger.info("joinNetwork({})", masterUrl);
+        Message message = Message.obtain(null, SameService.JOIN_NETWORK,
+            masterUrl);
+        try {
+            sameService.send(message);
+        } catch (RemoteException e) {
+            logger.error("Failed to send message", e);
+            throw new RuntimeException(e);
+        }
     }
     
     private void showIpAddress() {
@@ -105,6 +144,9 @@ public class SameControllerActivity extends Activity {
 
         setContentView(R.layout.controller);        
         showIpAddress();
+        
+        ListView networkList = (ListView)findViewById(R.id.network_list);
+        networkList.setOnItemClickListener(networkListClickListener);
     }
     
     @Override public void onResume() {

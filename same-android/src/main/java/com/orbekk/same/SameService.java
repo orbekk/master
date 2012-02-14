@@ -24,11 +24,14 @@ public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
     public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
+    public final static int JOIN_NETWORK = 4;    
     
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
     public final static String AVAILABLE_NETWORKS =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS";
+    public final static String NETWORK_URLS =
+            "com.orbekk.same.SameService.action.NETWORK_URLS";
 
     final static int SERVICE_PORT = 15068;
     final static int DISCOVERY_PORT = 15066;
@@ -50,6 +53,8 @@ public class SameService extends Service {
             Intent intent = new Intent(AVAILABLE_NETWORKS_UPDATE);
             intent.putStringArrayListExtra(AVAILABLE_NETWORKS,
                     networkNames);
+            intent.putStringArrayListExtra(NETWORK_URLS,
+                    networkUrls);
             sendBroadcast(intent);
         }
     };
@@ -70,6 +75,10 @@ public class SameService extends Service {
                     logger.info("CREATE_NETWORK");
                     create();
                     break;
+                case JOIN_NETWORK:
+                    logger.info("JOIN_NETWORK");
+                    String masterUrl = (String)message.obj;
+                    sameController.getClient().joinNetwork(masterUrl);
                 default:
                     super.handleMessage(message);
             }
