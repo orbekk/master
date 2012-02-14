@@ -79,6 +79,7 @@ public class SameService extends Service {
         properties.setProperty("localIp",
                 new Broadcaster(this).getWlanAddress().getHostAddress());
         properties.setProperty("masterUrl", "http://10.0.0.6:10010/MasterService.json");
+        properties.setProperty("enableDiscovery", "true");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         configuration = new Configuration(properties);
     }
