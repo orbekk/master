@@ -46,7 +46,7 @@ public class BroadcastListener {
         
         String address = packet.getAddress().getHostAddress();
         logger.debug("Received broadcast from " + address +
-                ": " + new String(packet.getData()));
+                ": " + new String(packet.getData(), 0, packet.getLength()));
         return packet;
     }
     
