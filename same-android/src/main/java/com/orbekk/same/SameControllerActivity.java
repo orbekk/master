@@ -64,9 +64,10 @@ public class SameControllerActivity extends Activity {
             new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(SameControllerActivity.this,
-                    "Join network " + networkNames.get(position),
-                    Toast.LENGTH_SHORT).show();      
+            String networkName = networkNames.get(position);
+            int networkIndex = networkNames.indexOf(networkName);
+            String masterUrl = networkUrls.get(networkIndex);
+            joinNetwork(masterUrl);      
         }
     };
     
