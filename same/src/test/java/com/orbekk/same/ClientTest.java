@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
-public class ClientServiceImplTest {
+public class ClientTest {
     private State state = new State("ClientNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private Client client = new Client(state, connections,
