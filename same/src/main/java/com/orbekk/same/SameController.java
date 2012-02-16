@@ -148,4 +148,8 @@ public class SameController {
     public Master getMaster() {
         return master;
     }
+    
+    public VariableFactory createVariableFactory() {
+        return new VariableFactory(client.getInterface());
+    }
 }
