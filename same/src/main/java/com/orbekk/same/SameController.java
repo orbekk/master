@@ -60,7 +60,7 @@ public class SameController {
         ServerContainer server = new ServerBuilder(port)
         .withServlet(new StateServlet(client.getInterface()), "/_/state")
         .withService(client.getService(), ClientService.class)
-        .withService(master, MasterService.class)
+        .withService(master.getService(), MasterService.class)
         .withService(paxos, PaxosService.class)
         .build();
         
@@ -116,12 +116,12 @@ public class SameController {
     public void join() {
         try {
             server.join();
-            master.join();
+            client.interrupt();
+            master.interrupt();
             if (discoveryService != null) {
                 discoveryService.join();
             }
         } catch (InterruptedException e) {
-            master.interrupt();
             try {
                 server.stop();
             } catch (Exception e1) {

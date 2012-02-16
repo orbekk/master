@@ -3,16 +3,16 @@ package com.orbekk.same;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
 import org.codehaus.jackson.type.TypeReference;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
-public class MasterServiceImplTest {
+public class MasterTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
     private Master master;
+    private MasterService masterS;
 
     public static class UnreachableClient implements ClientService {
         @Override
@@ -37,31 +37,16 @@ public class MasterServiceImplTest {
     public void setUp() {
         state.update(".masterUrl", "http://master/MasterService.json", 1);
         master = new Master(state, connections, broadcaster);
-        connections.masterMap.put("http://master/MasterService.json", master);
+        masterS = master.getService();
+        connections.masterMap.put("http://master/MasterService.json",
+                masterS);
     }
-    
+
     @Test
-    public void testJsonState() {
-        List<String> participants =
-                state.getParsedData(".participants",
-                        new TypeReference<List<String>>() { });
-        assertEquals(participants.size(), 0);
-        participants.add("http://SomeUrl/");
-        state.updateFromObject(".participants", participants, 1);
-    }
-    
-    @Test
-    public void joinNetworkAddsClient() {
-        master.joinNetworkRequest("http://clientUrl");
+    public void joinNetworkAddsClient() throws Exception {
+        masterS.joinNetworkRequest("http://clientUrl");
         List<String> participants = state.getList(".participants");
         assertTrue(participants.contains("http://clientUrl"));
-    }
-    
-    @Test
-    public void workLoopClearsUpdatedComponents() {
-        state.update("Test", "Content", 0);
-        assertTrue(master._performWork());
-        assertTrue(state.getAndClearUpdatedComponents().isEmpty());
     }
 
     @Test
@@ -72,13 +57,13 @@ public class MasterServiceImplTest {
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master/MasterService.json");
-        assertTrue(master._performWork());
+        master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
     }
-    
+
     @Test
-    public void validStateRequest() {
+    public void updateStateRequest() throws Exception {
         Client client1 = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json");
@@ -93,41 +78,42 @@ public class MasterServiceImplTest {
         client1.joinNetwork("http://master/MasterService.json");
         client2.joinNetwork("http://master/MasterService.json");
         
-        assertTrue(master._performWork());
+        master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertTrue(state.getList(".participants").contains("http://client2/ClientService.json"));
         assertEquals(state, client1.testGetState());
         
-        assertTrue(master.updateStateRequest("A", "1", 0));
-        assertTrue(master._performWork());
+        assertTrue(masterS.updateStateRequest("A", "1", 0));
+        master.performWork();
         
         assertEquals(state, client1.testGetState());
         assertEquals(state, client2.testGetState());
         
-        assertFalse(master.updateStateRequest("A", "2", 0));
-        assertTrue(master.updateStateRequest("A", "3", 1));
-        assertTrue(master._performWork());
+        assertFalse(masterS.updateStateRequest("A", "2", 0));
+        assertTrue(masterS.updateStateRequest("A", "3", 1));
+        master.performWork();
         
         assertEquals(state, client1.testGetState());
         assertEquals(state, client2.testGetState());
     }
-    
+
     @Test
-    public void masterRemovesParticipant() {
+    public void masterRemovesParticipant() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json");
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork("http://master/MasterService.json");
-        assertTrue(master._performWork());
+        master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         
         connections.clientMap.put("http://client/ClientService.json",
                 new UnreachableClient());
-        master.updateStateRequest("NewState", "NewStateData", 0);
-        master._performWork();
+        masterS.updateStateRequest("NewState", "NewStateData", 0);
+        master.performWork();
         
         assertEquals("[]", state.getDataOf(".participants"));
     }
+
 }
