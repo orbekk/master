@@ -38,6 +38,18 @@ abstract public class WorkQueue<E> extends Thread implements List<E> {
      * Called until the queue is empty.
      */
     protected abstract void onChange();
+
+    /**
+     * Perform work until the queue is empty.
+     *
+     * Can be used for testing or for combining several WorkQueues in
+     * a single thread.
+     */
+    public synchronized void performWork() {
+        while (!isEmpty()) {
+            onChange();
+        }
+    }
     
     @Override
     public void run() {
