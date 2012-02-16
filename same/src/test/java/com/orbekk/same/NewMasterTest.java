@@ -43,6 +43,26 @@ public class NewMasterTest {
     }
 
     @Test
+    public void joinNetworkAddsClient() throws Exception {
+        masterS.joinNetworkRequest("http://clientUrl");
+        List<String> participants = state.getList(".participants");
+        assertTrue(participants.contains("http://clientUrl"));
+    }
+
+    @Test
+    public void clientJoin() {
+        Client client = new Client(
+                new State("ClientNetwork"), connections,
+                "http://client/ClientService.json");
+        ClientService clientS = client.getService();
+        connections.clientMap.put("http://client/ClientService.json", clientS);
+        client.joinNetwork("http://master/MasterService.json");
+        master.performWork();
+        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
+        assertEquals(state, client.testGetState());
+    }
+
+    @Test
     public void updateStateRequest() throws Exception {
         Client client1 = new Client(
                 new State("ClientNetwork"), connections,
@@ -76,4 +96,24 @@ public class NewMasterTest {
         assertEquals(state, client1.testGetState());
         assertEquals(state, client2.testGetState());
     }
+
+    @Test
+    public void masterRemovesParticipant() throws Exception {
+        Client client = new Client(
+                new State("ClientNetwork"), connections,
+                "http://client/ClientService.json");
+        ClientService clientS = client.getService();
+        connections.clientMap.put("http://client/ClientService.json", clientS);
+        client.joinNetwork("http://master/MasterService.json");
+        master.performWork();
+        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
+        
+        connections.clientMap.put("http://client/ClientService.json",
+                new UnreachableClient());
+        masterS.updateStateRequest("NewState", "NewStateData", 0);
+        master.performWork();
+        
+        assertEquals("[]", state.getDataOf(".participants"));
+    }
+
 }
