@@ -33,10 +33,12 @@ public class StateServlet extends HttpServlet {
         }
         
         try {
-            client.set(request.getParameter("key"), request.getParameter("value"));
+            String key = request.getParameter("key");
+            String value = request.getParameter("value");
+            long revision = client.getState().getRevision(key);
+            client.set(key, value, revision);
             response.getWriter().println("Updated component: " +
-                    request.getParameter("key") + "=" +
-                    request.getParameter("value"));
+                    key + "=" + value);
         } catch (UpdateConflict e) {
             response.getWriter().println("Update conflict: " +
                     throwableToString(e));

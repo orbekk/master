@@ -28,9 +28,9 @@ public class Client implements DiscoveryListener {
             return new State(state);
         }
         
-        public void set(String name, String data) throws UpdateConflict {
+        public void set(String name, String data, long revision)
+                throws UpdateConflict {
             String masterUrl = state.getDataOf(".masterUrl");
-            long revision = state.getRevision(name) + 1;
             MasterService master = connections.getMaster(masterUrl);
             try {
                 boolean success = master.updateStateRequest(name, data,
