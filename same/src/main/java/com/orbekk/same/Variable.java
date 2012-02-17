@@ -11,7 +11,7 @@ public interface Variable<T> {
     }
     
     T get();
-    void set(T value);
+    void set(T value) throws UpdateConflict;
     void update();
     void setOnChangeListener(OnChangeListener<T> listener);
 }

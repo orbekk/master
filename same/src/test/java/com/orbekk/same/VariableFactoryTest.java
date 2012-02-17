@@ -1,9 +1,11 @@
 package com.orbekk.same;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -18,12 +20,14 @@ public class VariableFactoryTest {
     
     TypeReference<Integer> intType = new TypeReference<Integer>() {};
     TypeReference<List<String>> listType = new TypeReference<List<String>>() {};
+    TypeReference<String> stringType = new TypeReference<String>() {};
     
     @Before
     public void setUp() {
         client = mock(Client.ClientInterface.class);
         vf = new VariableFactory(client);
         initializeSampleState();
+        when(client.getState()).thenReturn(sampleState);
     }
     
     public void initializeSampleState() {
@@ -34,19 +38,25 @@ public class VariableFactoryTest {
     
     @Test
     public void getsInitialValue() {
-        when(client.getState()).thenReturn(sampleState);
         Variable<Integer> testVariable = vf.create("TestVariable", intType);
         assertEquals(1, (int)testVariable.get());
     }
     
     @Test
     public void updatesValue() {
-        when(client.getState()).thenReturn(sampleState);
         Variable<List<String>> list = vf.create("TestList", listType);
         assertTrue(list.get().isEmpty());
         sampleState.update("TestList", "[\"CONTENT\"]", 2);
         list.update();
         assertEquals(1, list.get().size());
         assertEquals("CONTENT", list.get().get(0));
+    }
+    
+    @Test
+    public void setsValue() throws Exception {
+        Variable<String> string = vf.create("X", stringType);
+        assertNull(string.get());
+        string.set("NewValue");
+        verify(client).set("X", "\"NewValue\"", 0);
     }
 }
