@@ -54,7 +54,7 @@ public class Client implements DiscoveryListener {
             boolean status = state.update(component, data, revision);
             if (status) {
                 if (stateListener != null) {
-                    stateListener.stateChanged(component, data);
+                    stateListener.stateChanged(state.getComponent(component));
                 }
             } else {
                 logger.warn("Ignoring update: {}",
