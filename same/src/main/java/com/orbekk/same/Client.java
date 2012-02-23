@@ -20,16 +20,18 @@ public class Client implements DiscoveryListener {
             new ArrayList<StateChangedListener>();
     private NetworkNotificationListener networkListener;
     
-    public class ClientInterface {
-        private ClientInterface() {
+    public class ClientInterfaceImpl implements ClientInterface {
+        private ClientInterfaceImpl() {
         }
         
         /** Get a copy of all the client state.
          */
+        @Override
         public State getState() {
             return new State(state);
         }
         
+        @Override
         public void set(String name, String data, long revision)
                 throws UpdateConflict {
             String masterUrl = state.getDataOf(".masterUrl");
@@ -47,16 +49,18 @@ public class Client implements DiscoveryListener {
             }
         }
         
+        @Override
         public void addStateListener(StateChangedListener listener) {
             stateListeners.add(listener);
         }
         
+        @Override
         public void removeStateListener(StateChangedListener listener) {
             stateListeners.remove(listener);
         }
     }
     
-    private ClientInterface clientInterface = new ClientInterface();
+    private ClientInterface clientInterface = new ClientInterfaceImpl();
     
     private ClientService serviceImpl = new ClientService() {
         @Override

@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.same.Client;
+import com.orbekk.same.ClientInterface;
 import com.orbekk.same.UpdateConflict;
 import com.orbekk.same.Variable;
 import com.orbekk.same.VariableFactory;
 
 public class StateServlet extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Client.ClientInterface client;
+    private ClientInterface client;
     private VariableFactory variableFactory;
     private final static String TITLE = "State viewer";
     
-    public StateServlet(Client.ClientInterface client,
+    public StateServlet(ClientInterface client,
             VariableFactory variableFactory) {
         this.client = client;
         this.variableFactory = variableFactory;

@@ -16,7 +16,7 @@ import com.orbekk.same.State.Component;
  */
 public class VariableFactory {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Client.ClientInterface client;
+    private ClientInterface client;
     private ObjectMapper mapper = new ObjectMapper();
     
     private class VariableImpl<T> implements Variable<T>, StateChangedListener {
@@ -76,11 +76,11 @@ public class VariableFactory {
         }
     }
     
-    public static VariableFactory create(Client.ClientInterface client) {
+    public static VariableFactory create(ClientInterface client) {
         return new VariableFactory(client);
     }
     
-    VariableFactory(Client.ClientInterface client) {
+    VariableFactory(ClientInterface client) {
         this.client = client;
     }
     

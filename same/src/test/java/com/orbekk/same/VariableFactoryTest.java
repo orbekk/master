@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class VariableFactoryTest {
-    Client.ClientInterface client;
+    Client.ClientInterfaceImpl client;
     VariableFactory vf;
     State sampleState;
     
@@ -24,7 +24,7 @@ public class VariableFactoryTest {
     
     @Before
     public void setUp() {
-        client = mock(Client.ClientInterface.class);
+        client = mock(Client.ClientInterfaceImpl.class);
         vf = new VariableFactory(client);
         initializeSampleState();
         when(client.getState()).thenReturn(sampleState);
