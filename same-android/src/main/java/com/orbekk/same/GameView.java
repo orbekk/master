@@ -70,7 +70,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         private synchronized void setPosition(float x, float y) {
-            controller.setMyPosition(x / this.width, y / this.height);
+//            controller.setMyPosition(x / this.width, y / this.height);
         }
 
         @Override
