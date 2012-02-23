@@ -77,4 +77,8 @@ public class VariableFactory {
         variable.update();
         return variable;
     }
+    
+    public Variable<String> createString(String identifier) {
+        return create(identifier, new TypeReference<String>() {});
+    }
 }

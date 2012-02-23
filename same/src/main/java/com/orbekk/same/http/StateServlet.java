@@ -14,14 +14,19 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.Client;
 import com.orbekk.same.UpdateConflict;
+import com.orbekk.same.Variable;
+import com.orbekk.same.VariableFactory;
 
 public class StateServlet extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Client.ClientInterface client;
+    private VariableFactory variableFactory;
     private final static String TITLE = "State viewer";
     
-    public StateServlet(Client.ClientInterface client) {
+    public StateServlet(Client.ClientInterface client,
+            VariableFactory variableFactory) {
         this.client = client;
+        this.variableFactory = variableFactory;
     }
     
     private void handleSetState(HttpServletRequest request,
@@ -35,8 +40,9 @@ public class StateServlet extends HttpServlet {
         try {
             String key = request.getParameter("key");
             String value = request.getParameter("value");
-            long revision = client.getState().getRevision(key);
-            client.set(key, value, revision);
+            Variable<String> variable = variableFactory.createString(key);
+            variable.set(value);
+            
             response.getWriter().println("Updated component: " +
                     key + "=" + value);
         } catch (UpdateConflict e) {
@@ -98,5 +104,5 @@ public class StateServlet extends HttpServlet {
         PrintWriter w = response.getWriter();
         w.println("</body>");
         w.println("</html>");
-    }
+    }    
 }

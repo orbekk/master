@@ -57,8 +57,11 @@ public class SameController {
             discoveryService = new DiscoveryService(client, broadcastListener);
         }
         
+        StateServlet stateServlet = new StateServlet(client.getInterface(),
+                new VariableFactory(client.getInterface()));
+        
         ServerContainer server = new ServerBuilder(port)
-        .withServlet(new StateServlet(client.getInterface()), "/_/state")
+        .withServlet(stateServlet, "/_/state")
         .withService(client.getService(), ClientService.class)
         .withService(master.getService(), MasterService.class)
         .withService(paxos, PaxosService.class)
