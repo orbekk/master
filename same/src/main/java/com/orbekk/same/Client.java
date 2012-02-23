@@ -2,6 +2,7 @@ package com.orbekk.same;
 
 import static com.orbekk.same.StackTraceUtil.throwableToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.type.TypeReference;
@@ -15,7 +16,8 @@ public class Client implements DiscoveryListener {
     private ConnectionManager connections;
     private State state;
     private String myUrl;
-    private StateChangedListener stateListener;
+    private List<StateChangedListener> stateListeners =
+            new ArrayList<StateChangedListener>();
     private NetworkNotificationListener networkListener;
     
     public class ClientInterface {
@@ -44,6 +46,14 @@ public class Client implements DiscoveryListener {
                 throw new UpdateConflict("Unable to contact master. Update fails.");
             }
         }
+        
+        public void addStateListener(StateChangedListener listener) {
+            stateListeners.add(listener);
+        }
+        
+        public void removeStateListener(StateChangedListener listener) {
+            stateListeners.remove(listener);
+        }
     }
     
     private ClientInterface clientInterface = new ClientInterface();
@@ -53,8 +63,8 @@ public class Client implements DiscoveryListener {
         public void setState(String component, String data, long revision) throws Exception {
             boolean status = state.update(component, data, revision);
             if (status) {
-                if (stateListener != null) {
-                    stateListener.stateChanged(state.getComponent(component));
+                for (StateChangedListener listener : stateListeners) {
+                    listener.stateChanged(state.getComponent(component));
                 }
             } else {
                 logger.warn("Ignoring update: {}",
@@ -153,10 +163,6 @@ public class Client implements DiscoveryListener {
         return state;
     }
 
-    public void setStateChangedListener(StateChangedListener listener) {
-        this.stateListener = listener;
-    }
-    
     public void setNetworkListener(NetworkNotificationListener listener) {
         this.networkListener = listener;
     }

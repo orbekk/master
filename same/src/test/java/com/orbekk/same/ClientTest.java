@@ -34,4 +34,13 @@ public class ClientTest {
         client.discover("mockClient/ClientService.json");
         verify(mockClient).notifyNetwork("ClientNetwork", "master");
     }
+    
+    @Test public void stateListenerReceivesUpdate() throws Exception {
+        StateChangedListener listener = mock(StateChangedListener.class);
+        client.getInterface().addStateListener(listener);
+        clientS.setState("StateListenerVariable", "100", 1);
+        State.Component component = state.getComponent("StateListenerVariable");
+        assertEquals("100", component.getData());
+        verify(listener).stateChanged(eq(component));
+    }
 }
