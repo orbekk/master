@@ -6,18 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.same.SameInterface;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
 
 import android.graphics.Paint;
 
-public class GameController implements StateChangedListener {
+public class GameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private List<Player> remotePlayers = new ArrayList<Player>();
     private Player localPlayer;
     private ChangeListener changeListener = null;
-    private SameInterface same;
+//    private SameInterface same;
     
     public static class Player {
         public Paint color;
@@ -38,27 +37,20 @@ public class GameController implements StateChangedListener {
         return player;
     }
     
-    public static GameController create(Player localPlayer,
-            SameInterface same) {
-        GameController controller = new GameController(localPlayer, same);
-        same.addStateChangedListener(controller);
+    public static GameController create(Player localPlayer) {
+        GameController controller = new GameController(localPlayer);
+//        same.addStateChangedListener(controller);
         return controller;
     }
     
-    GameController(Player localPlayer, SameInterface same) {
+    GameController(Player localPlayer) {
         this.localPlayer = localPlayer;
-        this.same = same;
     }
     
-    public void setMyPosition(float x, float y) {
+    public void setMyPosition(float x, float y) throws UpdateConflict {
         this.localPlayer.posX = x;
         this.localPlayer.posY = y;
         changeListener.playerStatesChanged();
-        try {
-            same.set("position", x + "," + y);
-        } catch (UpdateConflict e) {
-            logger.warn("Update failed.", e);
-        }
     }
     
     public Player getLocalPlayer() {
@@ -73,8 +65,8 @@ public class GameController implements StateChangedListener {
         this.changeListener = listener;
     }
 
-    @Override
-    public void stateChanged(String id, String data) {
-        logger.info("StateChanged({}, {})", id, data);        
-    }
+//    @Override
+//    public void stateChanged(String id, String data) {
+//        logger.info("StateChanged({}, {})", id, data);        
+//    }
 }
