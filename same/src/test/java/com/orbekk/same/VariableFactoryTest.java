@@ -59,4 +59,22 @@ public class VariableFactoryTest {
         string.set("NewValue");
         verify(client).set("X", "\"NewValue\"", 0);
     }
+    
+    @Test
+    public void addsListener() throws Exception {
+        Variable<String> v = vf.create("X", stringType);
+        verify(client).addStateListener((StateChangedListener)v);
+    }
+    
+    @Test
+    public void listenerNotifies() throws Exception {
+        @SuppressWarnings("unchecked")
+        Variable.OnChangeListener<Integer> listener =
+                mock(Variable.OnChangeListener.class);
+        Variable<Integer> v = vf.create("z", intType);
+        v.setOnChangeListener(listener);
+        ((StateChangedListener) v).stateChanged(
+                new State.Component("z", 1, "abc"));
+        verify(listener).valueChanged(v);
+    }
 }

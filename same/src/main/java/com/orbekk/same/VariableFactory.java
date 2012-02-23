@@ -9,6 +9,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.State.Component;
+
 /**
  * TODO: Use WeakReference in order to make variables GC-able.
  */
@@ -17,11 +19,12 @@ public class VariableFactory {
     private Client.ClientInterface client;
     private ObjectMapper mapper = new ObjectMapper();
     
-    private class VariableImpl<T> implements Variable<T> {
+    private class VariableImpl<T> implements Variable<T>, StateChangedListener {
         String identifier;
         TypeReference<T> type;
         T value;
         long revision = 0;
+        OnChangeListener<T> listener = null;
     
         public VariableImpl(String identifier, TypeReference<T> type) {
             this.identifier = identifier;
@@ -59,8 +62,17 @@ public class VariableFactory {
         }
 
         @Override
-        public void setOnChangeListener(Variable.OnChangeListener<T> listener) {
-            throw new RuntimeException("Not implemented.");
+        public void setOnChangeListener(OnChangeListener<T> listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void stateChanged(Component component) {
+            if (component.getName().equals(identifier)) {
+                if (listener != null) {
+                    listener.valueChanged(this);
+                }
+            }
         }
     }
     
@@ -73,8 +85,9 @@ public class VariableFactory {
     }
     
     public <T> Variable<T> create(String identifier, TypeReference<T> type) {
-        Variable<T> variable = new VariableImpl<T>(identifier, type);
+        VariableImpl<T> variable = new VariableImpl<T>(identifier, type);
         variable.update();
+        client.addStateListener(variable);
         return variable;
     }
     
