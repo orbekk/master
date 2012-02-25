@@ -97,6 +97,7 @@ public class SameService extends Service {
                     Messenger messenger = message.replyTo;
                     if (messenger != null) {
                         stateReceivers.add(messenger);
+                        sendAllState(messenger);
                     } else {
                         logger.error("ADD_STATE_RECEIVER: Missing Messenger.");
                     }
@@ -126,6 +127,21 @@ public class SameService extends Service {
             stateReceivers.removeAll(dropped);
         }
     };
+    
+    private void sendAllState(Messenger messenger) {
+        State state = sameController.getClient().getInterface().getState();
+        for (Component c : state.getComponents()) {
+            Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
+            message.obj = c;
+            try {
+                messenger.send(message);
+            } catch (RemoteException e) {
+                logger.warn("Failed to send state.");
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
     
     private void initializeConfiguration() {
         Properties properties = new Properties();
