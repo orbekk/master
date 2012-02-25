@@ -15,6 +15,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import com.orbekk.same.State.Component;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
@@ -107,6 +108,16 @@ public class SameService extends Service {
     
     private final Messenger messenger = new Messenger(new InterfaceHandler());
 
+    private StateChangedListener stateListener = new StateChangedListener() {
+        @Override
+        public void stateChanged(Component component) {
+            for (Messenger messenger : stateReceivers) {
+                Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
+                message.obj = component;
+            }
+        }
+    };
+    
     private void initializeConfiguration() {
         Properties properties = new Properties();
         String localIp = new Broadcaster(this)

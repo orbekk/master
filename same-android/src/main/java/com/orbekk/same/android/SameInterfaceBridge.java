@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.widget.Toast;
 
 import com.orbekk.same.ClientInterface;
 import com.orbekk.same.SameService;
@@ -23,6 +24,10 @@ public class SameInterfaceBridge implements ClientInterface {
     class ResponseHandler extends Handler {
         @Override public void handleMessage(Message message) {
             switch (message.what) {
+            case SameService.UPDATED_STATE_MESSAGE:
+                State.Component component = (State.Component)message.obj;
+                Toast.makeText(context, "Updated: " + component,
+                        Toast.LENGTH_SHORT).show();
             default:
                 logger.warn("Received unknown message from service: {}",
                         message);
