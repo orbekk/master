@@ -3,19 +3,18 @@ package com.orbekk.same;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.widget.Toast;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.orbekk.same.NetworkNotificationListener;
-import com.orbekk.same.SameController;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
@@ -24,7 +23,7 @@ public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
     public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
-    public final static int JOIN_NETWORK = 4;    
+    public final static int JOIN_NETWORK = 4;
     
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
@@ -66,6 +65,16 @@ public class SameService extends Service {
                     Toast.makeText(SameService.this,
                         (String)message.obj, Toast.LENGTH_SHORT)
                             .show();
+                    Messenger responseService = message.replyTo;
+                    if (responseService != null) {
+                        Message response = Message.obtain(null, DISPLAY_MESSAGE);
+                        response.obj = "Response from SameService";
+                        try {
+                            responseService.send(response);
+                        } catch (RemoteException e) {
+                            logger.error("Failed to respond.", e);
+                        }
+                    }
                     break;
                 case SEARCH_NETWORKS:
                     logger.info("SEARCH_NETWORKS");

@@ -19,7 +19,8 @@
         </activity>
         
         <activity android:name=".SameControllerActivity"/>
-
+        <activity android:name=".VariableTestActivity"/>
+        
         <service android:name=".SameService" />
     </application>
 
