@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.orbekk.same.android.SameInterfaceBridge;
+import com.orbekk.same.android.ClientInterfaceBridge;
 
 public class VariableTestActivity extends Activity {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private SameInterfaceBridge client;
+    private ClientInterfaceBridge client;
     
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +18,7 @@ public class VariableTestActivity extends Activity {
     
     @Override public void onResume() {
         super.onResume();
-        client = new SameInterfaceBridge(this);
+        client = new ClientInterfaceBridge(this);
         client.connect();
     }
     

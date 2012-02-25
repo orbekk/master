@@ -20,7 +20,7 @@ import com.orbekk.same.State;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
 
-public class SameInterfaceBridge implements ClientInterface {
+public class ClientInterfaceBridge implements ClientInterface {
     class ResponseHandler extends Handler {
         @Override public void handleMessage(Message message) {
             switch (message.what) {
@@ -60,7 +60,7 @@ public class SameInterfaceBridge implements ClientInterface {
         }
     };
     
-    public SameInterfaceBridge(Context context) {
+    public ClientInterfaceBridge(Context context) {
         this.context = context;
     }
     
