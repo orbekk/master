@@ -24,6 +24,8 @@ public class SameService extends Service {
     public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
     public final static int JOIN_NETWORK = 4;
+    public final static int UPDATED_STATE_MESSAGE = 5;
+    public final static int ADD_STATE_RECEIVER = 6;
     
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
@@ -38,6 +40,7 @@ public class SameService extends Service {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameController sameController = null;
     private Configuration configuration = null;
+    private ArrayList<Messenger> stateReceivers = new ArrayList<Messenger>();
     
     private ArrayList<String> networkNames = new ArrayList<String>();
     private ArrayList<String> networkUrls = new ArrayList<String>();
@@ -88,6 +91,14 @@ public class SameService extends Service {
                     logger.info("JOIN_NETWORK");
                     String masterUrl = (String)message.obj;
                     sameController.getClient().joinNetwork(masterUrl);
+                case ADD_STATE_RECEIVER:
+                    logger.info("ADD_STATE_RECEIVER: {}", message);
+                    Messenger messenger = message.replyTo;
+                    if (messenger != null) {
+                        stateReceivers.add(messenger);
+                    } else {
+                        logger.error("ADD_STATE_RECEIVER: Missing Messenger.");
+                    }
                 default:
                     super.handleMessage(message);
             }

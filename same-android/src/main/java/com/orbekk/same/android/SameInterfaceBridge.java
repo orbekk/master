@@ -39,14 +39,13 @@ public class SameInterfaceBridge implements ClientInterface {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             serviceMessenger = new Messenger(service);
-            Message display_message = Message.obtain(null,
-                    SameService.DISPLAY_MESSAGE);
-            display_message.obj = "Message from bridge.";
-            display_message.replyTo = responseMessenger;
+            Message message = Message.obtain(null,
+                    SameService.ADD_STATE_RECEIVER);
+            message.replyTo = responseMessenger;
             try {
-                serviceMessenger.send(display_message);
+                serviceMessenger.send(message);
             } catch (RemoteException e) {
-                logger.error("Failed to send message to service.");
+                e.printStackTrace();
             }
         }
 
