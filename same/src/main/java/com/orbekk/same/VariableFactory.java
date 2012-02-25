@@ -59,6 +59,7 @@ public class VariableFactory {
         @Override
         public void update() {
             value = client.getState().getParsedData(identifier, type);
+            revision = client.getState().getRevision(identifier);
         }
 
         @Override
