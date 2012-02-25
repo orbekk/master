@@ -111,10 +111,19 @@ public class SameService extends Service {
     private StateChangedListener stateListener = new StateChangedListener() {
         @Override
         public void stateChanged(Component component) {
+            ArrayList<Messenger> dropped = new ArrayList<Messenger>();
             for (Messenger messenger : stateReceivers) {
                 Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
                 message.obj = component;
+                try {
+                    messenger.send(message);
+                } catch (RemoteException e) {
+                    logger.warn("Failed to send update. Dropping state receiver.");
+                    e.printStackTrace();
+                    dropped.add(messenger);
+                }
             }
+            stateReceivers.removeAll(dropped);
         }
     };
     
@@ -168,6 +177,8 @@ public class SameService extends Service {
             try {
                 sameController.start();
                 sameController.getClient().setNetworkListener(networkListener);
+                sameController.getClient().getInterface()
+                    .addStateListener(stateListener);
             } catch (Exception e) {
                 logger.error("Failed to start server", e);
             }
