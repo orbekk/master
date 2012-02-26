@@ -37,6 +37,7 @@ public class ClientInterfaceBridge implements ClientInterface {
             case SameService.UPDATED_STATE_MESSAGE:
                 State.Component component = (State.Component)message.obj;
                 updateState(component);
+                break;
             default:
                 logger.warn("Received unknown message from service: {}",
                         message);
