@@ -52,4 +52,5 @@ public class StateViewerActivity extends Activity {
         client.removeStateListener(stateListener);
         client.disconnect();
     }
+    
 }

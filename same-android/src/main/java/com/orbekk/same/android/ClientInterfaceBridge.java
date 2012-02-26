@@ -20,6 +20,7 @@ import com.orbekk.same.SameService;
 import com.orbekk.same.State;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
+import com.orbekk.same.VariableFactory;
 
 public class ClientInterfaceBridge implements ClientInterface {
     private State state;
@@ -126,4 +127,7 @@ public class ClientInterfaceBridge implements ClientInterface {
         listeners.remove(listener);
     }
 
+    public VariableFactory createVariableFactory() {
+        return VariableFactory.create(this);
+    }
 }
