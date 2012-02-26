@@ -13,5 +13,7 @@ public interface Variable<T> {
     T get();
     void set(T value) throws UpdateConflict;
     void update();
+    void waitForChange();
+    boolean waitingForUpdate();
     void setOnChangeListener(OnChangeListener<T> listener);
 }

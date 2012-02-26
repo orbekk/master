@@ -88,7 +88,7 @@ public class ClientInterfaceBridge implements ClientInterface {
         Intent intent = new Intent(context, SameService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
-
+        
     private void disconnectFromService() {
         Message message = Message.obtain(null, SameService.REMOVE_STATE_RECEIVER);
         message.obj = responseMessenger;
@@ -123,7 +123,7 @@ public class ClientInterfaceBridge implements ClientInterface {
         message.obj = component;
         if (serviceMessenger == null) {
             logger.warn("Not connected to service. Ignore update: {}", component);
-            return;
+            throw new UpdateConflict("Not connected to Android Service.");
         }
         try {
             serviceMessenger.send(message);

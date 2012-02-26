@@ -92,7 +92,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             newPlayer.posX = x / width;
             newPlayer.posY = y / width;
             try {
-                player.set(newPlayer);
+                if (!player.waitingForUpdate()) {
+                    player.set(newPlayer);
+                }
             } catch (UpdateConflict e) {
                 Toast.makeText(context, "Failed to update position.",
                         Toast.LENGTH_SHORT).show();

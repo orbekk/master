@@ -25,6 +25,7 @@ public class VariableFactory {
         T value;
         long revision = 0;
         OnChangeListener<T> listener = null;
+        boolean waitingForUpdate;
     
         public VariableImpl(String identifier, TypeReference<T> type) {
             this.identifier = identifier;
@@ -37,21 +38,25 @@ public class VariableFactory {
         }
 
         @Override
-        public void set(T value) throws UpdateConflict {
+        public synchronized void set(T value) throws UpdateConflict {
             try {
                 String serializedValue = mapper.writeValueAsString(value);
                 client.set(identifier, serializedValue, revision);
+                waitingForUpdate = true;
             } catch (JsonGenerationException e) {
                 logger.warn("Failed to convert to JSON: {}", value);
                 logger.warn("Parse exception.", e);
+                waitingForUpdate = false;
                 throw new RuntimeException(e);
             } catch (JsonMappingException e) {
                 logger.warn("Failed to convert to JSON: {}", value);
                 logger.warn("Parse exception.", e);
+                waitingForUpdate = false;
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 logger.warn("Failed to cornvert to JSON: {}", value);
                 logger.warn("Parse exception.", e);
+                waitingForUpdate = false;
                 throw new RuntimeException(e);
             }
         }
@@ -68,11 +73,30 @@ public class VariableFactory {
         }
 
         @Override
-        public void stateChanged(Component component) {
+        public synchronized void waitForChange() {
+            while (waitingForUpdate) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    waitingForUpdate = false;
+                    return;
+                }
+            }
+        }
+        
+        @Override
+        public synchronized boolean waitingForUpdate() {
+            return waitingForUpdate;
+        }
+        
+        @Override
+        public synchronized void stateChanged(Component component) {
             if (component.getName().equals(identifier)) {
                 if (listener != null) {
                     listener.valueChanged(this);
                 }
+                waitingForUpdate = false;
+                notifyAll();
             }
         }
     }
