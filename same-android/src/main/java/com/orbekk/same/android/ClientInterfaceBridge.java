@@ -1,5 +1,7 @@
 package com.orbekk.same.android;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +14,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.widget.Toast;
 
 import com.orbekk.same.ClientInterface;
 import com.orbekk.same.SameService;
@@ -21,13 +22,20 @@ import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
 
 public class ClientInterfaceBridge implements ClientInterface {
+    private State state;
+    private ArrayList<StateChangedListener> listeners = 
+            new ArrayList<StateChangedListener>();
+    
     class ResponseHandler extends Handler {
         @Override public void handleMessage(Message message) {
+            if (serviceMessenger == null) {
+                logger.warn("Ignoring message to disabled ResponseHandler.");
+                return;
+            }
             switch (message.what) {
             case SameService.UPDATED_STATE_MESSAGE:
                 State.Component component = (State.Component)message.obj;
-                Toast.makeText(context, "Updated: " + component,
-                        Toast.LENGTH_SHORT).show();
+                updateState(component);
             default:
                 logger.warn("Received unknown message from service: {}",
                         message);
@@ -60,40 +68,62 @@ public class ClientInterfaceBridge implements ClientInterface {
         }
     };
     
+    private void updateState(State.Component component) {
+        state.update(component.getName(), component.getData(),
+                component.getRevision());
+        for (StateChangedListener listener : listeners) {
+            listener.stateChanged(component);
+        }
+    }
+    
     public ClientInterfaceBridge(Context context) {
         this.context = context;
     }
     
     public void connect() {
+        state = new State(".Temporary");
         Intent intent = new Intent(context, SameService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
+    private void disconnectFromService() {
+        Message message = Message.obtain(null, SameService.REMOVE_STATE_RECEIVER);
+        message.obj = responseMessenger;
+        try {
+            serviceMessenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void disconnect() {
         if (serviceMessenger != null) {
+            disconnectFromService();
             context.unbindService(serviceConnection);
+            state = null;
         }
     }
 
     @Override
     public State getState() {
-        return null;
+        return new State(state);
     }
 
     @Override
     public void set(String name, String data, long revision) throws UpdateConflict {
         logger.info("set({}, {}, {}",
                 new Object[]{name, data, revision});
+        throw new RuntimeException("Not implemented.");
     }
 
     @Override
     public void addStateListener(StateChangedListener listener) {
-        logger.info("addStateListener()");
+        listeners.add(listener);
     }
 
     @Override
     public void removeStateListener(StateChangedListener listener) {
-        logger.info("removeStateListener()");
+        listeners.remove(listener);
     }
 
 }

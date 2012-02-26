@@ -33,6 +33,9 @@ public class MainActivity extends Activity {
         case R.id.variable_test:
             startActivity(new Intent(this, VariableTestActivity.class));
             break;
+        case R.id.state_viewer:
+            startActivity(new Intent(this, StateViewerActivity.class));
+            break;
         default:
             logger.error("Unknown menu entry: {}", item);
         }

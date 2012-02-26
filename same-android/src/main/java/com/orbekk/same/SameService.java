@@ -2,6 +2,7 @@ package com.orbekk.same;
 
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class SameService extends Service {
     public final static int JOIN_NETWORK = 4;
     public final static int UPDATED_STATE_MESSAGE = 5;
     public final static int ADD_STATE_RECEIVER = 6;
+    public final static int REMOVE_STATE_RECEIVER = 7;
     
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
@@ -41,7 +43,7 @@ public class SameService extends Service {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameController sameController = null;
     private Configuration configuration = null;
-    private ArrayList<Messenger> stateReceivers = new ArrayList<Messenger>();
+    private Vector<Messenger> stateReceivers = new Vector<Messenger>();
     
     private ArrayList<String> networkNames = new ArrayList<String>();
     private ArrayList<String> networkUrls = new ArrayList<String>();
@@ -92,6 +94,7 @@ public class SameService extends Service {
                     logger.info("JOIN_NETWORK");
                     String masterUrl = (String)message.obj;
                     sameController.getClient().joinNetwork(masterUrl);
+                    break;
                 case ADD_STATE_RECEIVER:
                     logger.info("ADD_STATE_RECEIVER: {}", message);
                     Messenger messenger = message.replyTo;
@@ -101,6 +104,12 @@ public class SameService extends Service {
                     } else {
                         logger.error("ADD_STATE_RECEIVER: Missing Messenger.");
                     }
+                    break;
+                case REMOVE_STATE_RECEIVER:
+                    logger.info("REMOVE_STATE_RECEIVER: {}", message);
+                    Messenger droppedMessenger = (Messenger)message.obj;
+                    stateReceivers.remove(droppedMessenger);
+                    break;
                 default:
                     super.handleMessage(message);
             }
@@ -112,19 +121,21 @@ public class SameService extends Service {
     private StateChangedListener stateListener = new StateChangedListener() {
         @Override
         public void stateChanged(Component component) {
-            ArrayList<Messenger> dropped = new ArrayList<Messenger>();
-            for (Messenger messenger : stateReceivers) {
-                Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
-                message.obj = component;
-                try {
-                    messenger.send(message);
-                } catch (RemoteException e) {
-                    logger.warn("Failed to send update. Dropping state receiver.");
-                    e.printStackTrace();
-                    dropped.add(messenger);
+            synchronized (stateReceivers) {
+                ArrayList<Messenger> dropped = new ArrayList<Messenger>();
+                for (Messenger messenger : stateReceivers) {
+                    Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
+                    message.obj = component;
+                    try {
+                        messenger.send(message);
+                    } catch (RemoteException e) {
+                        logger.warn("Failed to send update. Dropping state receiver.");
+                        e.printStackTrace();
+                        dropped.add(messenger);
+                    }
                 }
+                stateReceivers.removeAll(dropped);
             }
-            stateReceivers.removeAll(dropped);
         }
     };
     

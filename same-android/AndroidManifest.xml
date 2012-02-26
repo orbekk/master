@@ -20,6 +20,7 @@
         
         <activity android:name=".SameControllerActivity"/>
         <activity android:name=".VariableTestActivity"/>
+        <activity android:name=".StateViewerActivity"/>
         
         <service android:name=".SameService" />
     </application>
