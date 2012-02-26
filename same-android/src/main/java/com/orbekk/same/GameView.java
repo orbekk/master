@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.ClientService;
 import com.orbekk.same.Client;
-import com.orbekk.same.SameInterface;
 import com.orbekk.same.UpdateConflict;
 
 import android.content.Context;
@@ -15,29 +14,48 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private GameThread thread;
     
+    static class Player {
+        public float posX;
+        public float posY;
+    }
+    
     static class GameThread extends Thread
-            implements GameController.ChangeListener {
+            implements Variable.OnChangeListener<Player> {
         private Logger logger = LoggerFactory.getLogger(getClass());
         private int height = 0;
         private int width = 0;
         private SurfaceHolder holder;
         private Context context;
         private Paint background;
-        private GameController controller;
+        private Variable<Player> player;
+        private Paint color = new Paint();
         
         public GameThread(SurfaceHolder holder, Context context,
-                GameController controller) {
+                Variable<Player> player) {
             this.holder = holder;
             this.context = context;
-            this.controller = controller;
-            this.controller.setChangeListener(this);
+            this.player = player;
             background = new Paint();
             background.setARGB(255, 0, 0, 0);
+            color.setARGB(255, 255, 0, 0);
+        }
+        
+        public void setUp() {
+            Player player_ = new Player();
+            player_.posX = 0.5f;
+            player_.posY = 0.5f;
+            player.setOnChangeListener(this);
+            try {
+                player.set(player_);
+            } catch (UpdateConflict e) {
+                e.printStackTrace();
+            }
         }
         
         public void setSize(int width, int height) {
@@ -49,12 +67,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         
         private void doDraw(Canvas c) {
             c.drawRect(0.0f, 0.0f, width+1.0f, height+1.0f, background);
-            for (GameController.Player p : controller.getRemotePlayers()) {
-                c.drawCircle(p.posX * width, p.posY * height, 20.0f, p.color);
+            Player player_ = player.get();
+            if (player_ == null) {
+                return;
             }
-            GameController.Player localPlayer = controller.getLocalPlayer();
-            c.drawCircle(localPlayer.posX * width, localPlayer.posY * height,
-                    20.0f, localPlayer.color);
+            c.drawCircle(player_.posX * width, player_.posY * height,
+                    20.0f, color);
         }
         
         @Override public void run() {
@@ -70,19 +88,30 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         private synchronized void setPosition(float x, float y) {
-//            controller.setMyPosition(x / this.width, y / this.height);
+            Player newPlayer = new Player();
+            newPlayer.posX = x / width;
+            newPlayer.posY = y / width;
+            try {
+                player.set(newPlayer);
+            } catch (UpdateConflict e) {
+                Toast.makeText(context, "Failed to update position.",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
-        public void playerStatesChanged() {
+        public void valueChanged(Variable<Player> unused) {
+            logger.info("Variable updated.");
+            player.update();
             run();
         }
     }
     
-    public GameView(Context context, GameController controller) {
+    public GameView(Context context, Variable<Player> player) {
         super(context);
         getHolder().addCallback(this);
-        thread = new GameThread(getHolder(), context, controller);
+        thread = new GameThread(getHolder(), context, player);
+        thread.setUp();
     }
 
     @Override

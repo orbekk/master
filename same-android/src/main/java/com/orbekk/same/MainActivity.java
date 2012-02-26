@@ -36,6 +36,9 @@ public class MainActivity extends Activity {
         case R.id.state_viewer:
             startActivity(new Intent(this, StateViewerActivity.class));
             break;
+        case R.id.graphics_demo:
+            startActivity(new Intent(this, GraphicsActivity.class));
+            break;
         default:
             logger.error("Unknown menu entry: {}", item);
         }

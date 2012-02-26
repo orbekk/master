@@ -10,5 +10,9 @@
     <item
         android:id="@+id/state_viewer"
         android:title="State Monitor"/>
+    
+    <item
+        android:id="@+id/graphics_demo"
+        android:title="Graphics demo"/>
 
 </menu>

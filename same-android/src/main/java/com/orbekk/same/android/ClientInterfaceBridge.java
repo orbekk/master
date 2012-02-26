@@ -121,6 +121,10 @@ public class ClientInterfaceBridge implements ClientInterface {
     public void set(Component component) throws UpdateConflict {
         Message message = Message.obtain(null, SameService.SET_STATE);
         message.obj = component;
+        if (serviceMessenger == null) {
+            logger.warn("Not connected to service. Ignore update: {}", component);
+            return;
+        }
         try {
             serviceMessenger.send(message);
         } catch (RemoteException e) {

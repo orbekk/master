@@ -21,6 +21,7 @@
         <activity android:name=".SameControllerActivity"/>
         <activity android:name=".VariableTestActivity"/>
         <activity android:name=".StateViewerActivity"/>
+        <activity android:name=".GraphicsActivity"/>
         
         <service android:name=".SameService" />
     </application>
