@@ -9,6 +9,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.State.Component;
 import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
@@ -47,6 +48,12 @@ public class Client implements DiscoveryListener {
                 logger.error("Unable to contact master. Update fails.", e);
                 throw new UpdateConflict("Unable to contact master. Update fails.");
             }
+        }
+        
+        @Override
+        public void set(Component component) throws UpdateConflict {
+            set(component.getName(), component.getData(), 
+                    component.getRevision());
         }
         
         @Override

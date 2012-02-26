@@ -29,6 +29,7 @@ public class SameService extends Service {
     public final static int UPDATED_STATE_MESSAGE = 5;
     public final static int ADD_STATE_RECEIVER = 6;
     public final static int REMOVE_STATE_RECEIVER = 7;
+    public final static int SET_STATE = 8;
     
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
@@ -110,6 +111,16 @@ public class SameService extends Service {
                     Messenger droppedMessenger = (Messenger)message.obj;
                     stateReceivers.remove(droppedMessenger);
                     break;
+                case SET_STATE:
+                    // TODO: Respond to the callee somehow.
+                    State.Component updatedComponent =
+                            (State.Component)message.obj;
+                    try {
+                        sameController.getClient().getInterface().set(
+                                updatedComponent);
+                    } catch (UpdateConflict e) {
+                        logger.info("Update failed: {}", updatedComponent);
+                    }
                 default:
                     super.handleMessage(message);
             }

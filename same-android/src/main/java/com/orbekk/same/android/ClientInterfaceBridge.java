@@ -18,6 +18,7 @@ import android.os.RemoteException;
 import com.orbekk.same.ClientInterface;
 import com.orbekk.same.SameService;
 import com.orbekk.same.State;
+import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
 import com.orbekk.same.VariableFactory;
@@ -113,9 +114,19 @@ public class ClientInterfaceBridge implements ClientInterface {
 
     @Override
     public void set(String name, String data, long revision) throws UpdateConflict {
-        logger.info("set({}, {}, {}",
-                new Object[]{name, data, revision});
-        throw new RuntimeException("Not implemented.");
+        set(new Component(name, revision, data));
+    }
+
+    @Override
+    public void set(Component component) throws UpdateConflict {
+        Message message = Message.obtain(null, SameService.SET_STATE);
+        message.obj = component;
+        try {
+            serviceMessenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            throw new UpdateConflict(e.getMessage());
+        }
     }
 
     @Override
@@ -131,4 +142,5 @@ public class ClientInterfaceBridge implements ClientInterface {
     public VariableFactory createVariableFactory() {
         return VariableFactory.create(this);
     }
+
 }
