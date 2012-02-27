@@ -37,18 +37,14 @@ public class StateServlet extends HttpServlet {
                     "Usage: action=set&key=DesiredKey&value=DesiredValue");
         }
 
-        try {
-            String key = request.getParameter("key");
-            String value = request.getParameter("value");
-            Variable<String> variable = variableFactory.createString(key);
-            variable.set(value);
+        String key = request.getParameter("key");
+        String value = request.getParameter("value");
+        Variable<String> variable = variableFactory.createString(key);
 
-            response.getWriter().println("Updated component: " +
-                    key + "=" + value);
-        } catch (UpdateConflict e) {
-            response.getWriter().println("Update conflict: " +
-                    throwableToString(e));
-        }
+        variable.set(value).waitFor();
+        
+        response.getWriter().println("Updated component: " +
+                key + "=" + value);
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
+import com.orbekk.util.DelayedOperation;
 import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
@@ -32,27 +33,28 @@ public class Client implements DiscoveryListener {
             return new State(state);
         }
 
-        public void set(String name, String data, long revision)
-                throws UpdateConflict {
+        // TODO: Do this asynchronously? Currently this is already achieved
+        // on Android, which makes the Java and Android versions different.
+        @Override
+        public DelayedOperation set(Component component) {
+            DelayedOperation op = new DelayedOperation();
             String masterUrl = state.getDataOf(".masterUrl");
             MasterService master = connections.getMaster(masterUrl);
             try {
-                boolean success = master.updateStateRequest(name, data,
-                        revision);
+                boolean success = master.updateStateRequest(
+                        component.getName(), component.getData(),
+                        component.getRevision());
                 if (!success) {
-                    throw new UpdateConflict("State update conflict when " +
-                            "updating " + name);
+                    op.complete(DelayedOperation.Status
+                            .createConflict("Conflict from master"));
                 }
             } catch (Exception e) {
                 logger.error("Unable to contact master. Update fails.", e);
-                throw new UpdateConflict("Unable to contact master. Update fails.");
+                String e_ = throwableToString(e);
+                op.complete(DelayedOperation.Status.createError(
+                        "Error contacting master. Update fails: " + e_));
             }
-        }
-
-        @Override
-        public void set(Component component) throws UpdateConflict {
-            set(component.getName(), component.getData(), 
-                    component.getRevision());
+            return op;
         }
 
         @Override

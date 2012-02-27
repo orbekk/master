@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
+import com.orbekk.util.DelayedOperation;
 
 /**
  * TODO: Use WeakReference in order to make variables GC-able.
@@ -37,12 +38,12 @@ public class VariableFactory {
         }
 
         @Override
-        public void set(T value) throws UpdateConflict {
+        public DelayedOperation set(T value) {
             try {
                 String serializedValue = mapper.writeValueAsString(value);
                 State.Component update = new State.Component(identifier,
                         revision, serializedValue);
-                client.set(update);
+                return client.set(update);
             } catch (JsonGenerationException e) {
                 logger.warn("Failed to convert to JSON: {}", value);
                 logger.warn("Parse exception.", e);

@@ -1,5 +1,7 @@
 package com.orbekk.same;
 
+import com.orbekk.util.DelayedOperation;
+
 public interface Variable<T> {
     public interface OnChangeListener<T> {
         /**
@@ -11,7 +13,7 @@ public interface Variable<T> {
     }
 
     T get();
-    void set(T value) throws UpdateConflict;
+    DelayedOperation set(T value);
     void update();
     void setOnChangeListener(OnChangeListener<T> listener);
 }

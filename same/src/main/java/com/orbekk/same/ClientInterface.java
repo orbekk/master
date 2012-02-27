@@ -1,8 +1,10 @@
 package com.orbekk.same;
 
+import com.orbekk.util.DelayedOperation;
+
 public interface ClientInterface {
     State getState();
-    void set(State.Component component) throws UpdateConflict;
+    DelayedOperation set(State.Component component);
     void addStateListener(StateChangedListener listener);
     void removeStateListener(StateChangedListener listener);
 }
