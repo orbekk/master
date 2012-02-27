@@ -1,7 +1,7 @@
 package com.orbekk.paxos;
 
 public interface PaxosService {
-    
+
     /**
      * @return N == proposalNumber if a promise is made.
      *      -M if another promise already was made, where M is the promise

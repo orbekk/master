@@ -23,12 +23,12 @@ public class SameController {
     private DiscoveryService discoveryService;
     private BroadcasterFactory broadcasterFactory;
     private Configuration configuration;
-    
+
     /**
      * Timeout for remote operations in milliseconds.
      */
     private static final int timeout = 10000;
-    
+
     public static SameController create(BroadcasterFactory broadcasterFactory,
             Configuration configuration) {
         int port = configuration.getInt("port");
@@ -36,47 +36,47 @@ public class SameController {
                 timeout, timeout);
         State clientState = new State(".InvalidClientNetwork");
         Broadcaster broadcaster = BroadcasterImpl.getDefaultBroadcastRunner();
-        
+
         String baseUrl = String.format("http://%s:%s/",
                 configuration.get("localIp"), configuration.getInt("port"));
-        
+
         String masterUrl = baseUrl + "MasterService.json";
         String clientUrl = baseUrl + "ClientService.json";
-        
+
         Master master = Master.create(connections, broadcaster,
                 masterUrl, configuration.get("networkName"));
-        
+
         Client client = new Client(clientState, connections,
                 clientUrl);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
-        
+
         DiscoveryService discoveryService = null;
         if ("true".equals(configuration.get("enableDiscovery"))) {
             BroadcastListener broadcastListener = new BroadcastListener(
                     configuration.getInt("discoveryPort"));
             discoveryService = new DiscoveryService(client, broadcastListener);
         }
-        
+
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));
-        
+
         ServerContainer server = new ServerBuilder(port)
-            .withServlet(stateServlet, "/_/state")
-            .withService(client.getService(), ClientService.class)
-            .withService(master.getService(), MasterService.class)
-            .withService(paxos, PaxosService.class)
-            .build();
+        .withServlet(stateServlet, "/_/state")
+        .withService(client.getService(), ClientService.class)
+        .withService(master.getService(), MasterService.class)
+        .withService(paxos, PaxosService.class)
+        .build();
 
         SameController controller = new SameController(
                 configuration, server, master, client,
                 paxos, discoveryService, broadcasterFactory);
         return controller;
     }
-    
+
     public static SameController create(Configuration configuration) {
         return create(new DefaultBroadcasterFactory(), configuration);
     }
-    
+
     public SameController(
             Configuration configuration,
             ServerContainer server,
@@ -102,7 +102,7 @@ public class SameController {
             discoveryService.start();
         }
     }
-    
+
     public void stop() {
         try {
             client.interrupt();
@@ -115,7 +115,7 @@ public class SameController {
             logger.error("Failed to stop webserver", e);
         }
     }
-    
+
     public void join() {
         try {
             server.join();
@@ -132,26 +132,26 @@ public class SameController {
             }
         }
     }
-    
+
     public void searchNetworks() {
         BroadcasterInterface broadcaster = broadcasterFactory.create();
         String message = "Discover " + client.getUrl();
         broadcaster.sendBroadcast(configuration.getInt("discoveryPort"),
                 message.getBytes());
     }
-    
+
     public void joinNetwork(String url) {
         client.joinNetwork(url);
     }
-    
+
     public Client getClient() {
         return client;
     }
-    
+
     public Master getMaster() {
         return master;
     }
-    
+
     public VariableFactory createVariableFactory() {
         return new VariableFactory(client.getInterface());
     }

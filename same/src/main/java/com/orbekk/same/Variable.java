@@ -9,7 +9,7 @@ public interface Variable<T> {
          */
         void valueChanged(Variable<T> variable);
     }
-    
+
     T get();
     void set(T value) throws UpdateConflict;
     void update();

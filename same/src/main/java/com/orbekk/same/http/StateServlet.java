@@ -22,13 +22,13 @@ public class StateServlet extends HttpServlet {
     private ClientInterface client;
     private VariableFactory variableFactory;
     private final static String TITLE = "State viewer";
-    
+
     public StateServlet(ClientInterface client,
             VariableFactory variableFactory) {
         this.client = client;
         this.variableFactory = variableFactory;
     }
-    
+
     private void handleSetState(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         if (request.getParameter("key") == null ||
@@ -36,13 +36,13 @@ public class StateServlet extends HttpServlet {
             response.getWriter().println(
                     "Usage: action=set&key=DesiredKey&value=DesiredValue");
         }
-        
+
         try {
             String key = request.getParameter("key");
             String value = request.getParameter("value");
             Variable<String> variable = variableFactory.createString(key);
             variable.set(value);
-            
+
             response.getWriter().println("Updated component: " +
                     key + "=" + value);
         } catch (UpdateConflict e) {
@@ -50,7 +50,7 @@ public class StateServlet extends HttpServlet {
                     throwableToString(e));
         }
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
@@ -78,7 +78,7 @@ public class StateServlet extends HttpServlet {
         w.println(client.getState());
         w.println("</pre>");
     }
-    
+
     private void writeSetStateForm(HttpServletResponse response)
             throws IOException {
         PrintWriter w = response.getWriter();
@@ -90,7 +90,7 @@ public class StateServlet extends HttpServlet {
         w.println("<p><input type=\"submit\" value=\"Sumbit\" />");
         w.println("</form>");
     }
-    
+
     private void writeHeader(HttpServletResponse response) throws IOException {
         PrintWriter w = response.getWriter();
         w.println("<html>");
@@ -99,7 +99,7 @@ public class StateServlet extends HttpServlet {
         w.println("</head>");
         w.println("<body>");
     }
-    
+
     private void writeFooter(HttpServletResponse response) throws IOException {
         PrintWriter w = response.getWriter();
         w.println("</body>");

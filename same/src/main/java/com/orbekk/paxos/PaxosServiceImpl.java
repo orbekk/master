@@ -28,7 +28,7 @@ public class PaxosServiceImpl implements PaxosService {
             logger.info(tag + "propose({}, {}) = rejected " +
                     "(promised: {})",
                     new Object[]{clientUrl, proposalNumber,
-                            highestPromise});
+                    highestPromise});
             return -highestPromise;
         }
     }
@@ -45,7 +45,7 @@ public class PaxosServiceImpl implements PaxosService {
             logger.info(tag + "acceptRequest({}, {}) = rejected " +
                     "(promise={})",
                     new Object[]{clientUrl, proposalNumber,
-                            highestPromise});
+                    highestPromise});
             return -highestPromise;
         }
     }

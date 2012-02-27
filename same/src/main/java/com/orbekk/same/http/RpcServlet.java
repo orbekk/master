@@ -10,12 +10,12 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 
 public class RpcServlet extends HttpServlet {
     JsonRpcServer rpcServer;
-    
+
     public RpcServlet(JsonRpcServer rpcServer) {
         super();
         this.rpcServer = rpcServer;
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws IOException {

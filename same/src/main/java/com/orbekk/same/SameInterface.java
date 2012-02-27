@@ -10,18 +10,18 @@ public interface SameInterface {
      * Get the state with identifier 'id'.
      */
     String get(String id);
-    
+
     /**
      * Get the state with identifier 'id', converted to a Java
      * object of type T using Jackson.
      */
     <T> T get(String id, TypeReference<T> type);
-    
+
     /**
      * Get the state with identifier 'id' as a list.
      */
     List<String> getList(String id);
-    
+
     /**
      * Set the state.
      * 
@@ -33,7 +33,7 @@ public interface SameInterface {
      * Set from an object: Pass it, e.g., a List<String>.
      */
     void setObject(String id, Object data);
-    
+
     void addStateChangedListener(StateChangedListener listener);
     void removeStateChangedListener(StateChangedListener listener);
 }

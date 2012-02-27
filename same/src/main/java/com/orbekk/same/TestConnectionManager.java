@@ -10,7 +10,7 @@ import com.orbekk.paxos.PaxosService;
  */
 public class TestConnectionManager implements ConnectionManager {
     public Map<String, ClientService> clientMap =
-        new HashMap<String, ClientService>();
+            new HashMap<String, ClientService>();
     public Map<String, MasterService> masterMap =
             new HashMap<String, MasterService>();
     public Map<String, PaxosService> paxosMap =
@@ -19,14 +19,17 @@ public class TestConnectionManager implements ConnectionManager {
     public TestConnectionManager() {
     }
 
+    @Override
     public ClientService getClient(String url) {
         return clientMap.get(url);
     }
 
+    @Override
     public MasterService getMaster(String url) {
         return masterMap.get(url);
     }
-    
+
+    @Override
     public PaxosService getPaxos(String url) {
         return paxosMap.get(url);
     }

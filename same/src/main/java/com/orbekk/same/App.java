@@ -20,7 +20,7 @@ public class App {
             logger.error("Error in App.", e);
         }
     }
-    
+
     public static void main(String[] args) {
         new App().run(args);
     }

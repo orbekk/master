@@ -12,23 +12,23 @@ public class ServerContainer {
     Server server;
     int port;
     ServletContextHandler context = null;
-    
+
     public ServerContainer(Server server, int port, ServletContextHandler context) {
         this.server = server;
         this.port = port;
         this.context = context;
     }
-    
+
     public static ServerContainer create(int port) {
         Server server = new Server(port);
         return new ServerContainer(server, port, null);
     }
-    
+
     public void setContext(ServletContextHandler context) {
         server.setHandler(context);
         this.context = context;
     }
-    
+
     public void setReuseAddress(boolean on) {
         Connector connector = server.getConnectors()[0];
         if (connector instanceof AbstractConnector) {
@@ -36,7 +36,7 @@ public class ServerContainer {
             connector_.setReuseAddress(on);
         }
     }
-    
+
     public int getPort() {
         if (port == 0) {
             return server.getConnectors()[0].getLocalPort();
@@ -44,17 +44,17 @@ public class ServerContainer {
             return port;
         }
     }
-    
+
     public void start() throws Exception {
         server.start();
         logger.info("Started server on port {}", getPort());
     }
- 
+
     public void stop() throws Exception {
         server.stop();
         logger.info("Server stopped.");
     }
-    
+
     public void join() throws InterruptedException {
         server.join();
     }

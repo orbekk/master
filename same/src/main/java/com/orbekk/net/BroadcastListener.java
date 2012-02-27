@@ -13,11 +13,11 @@ public class BroadcastListener {
     private int port;
     private Logger logger = LoggerFactory.getLogger(getClass());
     DatagramSocket socket;
-    
+
     public BroadcastListener(int port) {
         this.port = port;
     }
-    
+
     public synchronized DatagramPacket listen() {
         logger.debug("Waiting for broadcast on port " + port);
         try {
@@ -43,17 +43,17 @@ public class BroadcastListener {
             logger.warn("Exception when listening for broadcast: {}", e);
             return null;
         }
-        
+
         String address = packet.getAddress().getHostAddress();
         logger.debug("Received broadcast from " + address +
                 ": " + new String(packet.getData(), 0, packet.getLength()));
         return packet;
     }
-    
+
     public void interrupt() {
         socket.close();
     }
-    
+
     public static void main(String[] args) {
         int port = Integer.parseInt(args[0]);
         BroadcastListener listener = new BroadcastListener(port);

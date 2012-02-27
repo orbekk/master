@@ -115,16 +115,16 @@ public class Master {
             final List<State.Component> components) {
         broadcaster.broadcast(destinations, new ServiceOperation() {
             @Override public void run(String url) {
-                 ClientService client = connections.getClient(url);
-                 try {
-                     for (Component c : components) {
-                         client.setState(c.getName(), c.getData(),
-                                 c.getRevision());
-                     }
-                 } catch (Exception e) {
-                     logger.info("Client {} failed to receive state update.", url);
-                     removeParticipant(url);
-                 }
+                ClientService client = connections.getClient(url);
+                try {
+                    for (Component c : components) {
+                        client.setState(c.getName(), c.getData(),
+                                c.getRevision());
+                    }
+                } catch (Exception e) {
+                    logger.info("Client {} failed to receive state update.", url);
+                    removeParticipant(url);
+                }
             }
         });
     }

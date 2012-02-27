@@ -16,21 +16,21 @@ abstract public class WorkQueue<E> extends Thread implements List<E> {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private volatile List<E> list = null;
     private volatile boolean done = false;
-    
+
     public WorkQueue() {
         list = new ArrayList<E>();
     }
-    
+
     public WorkQueue(Collection<? extends E> collection) {
         list = new ArrayList<E>(collection);
     }
-    
+
     public synchronized List<E> getAndClear() {
         List<E> copy = new ArrayList<E>(list);
         list.clear();
         return copy;
     }
-    
+
     /**
      * OnChange event.
      * 
@@ -50,7 +50,7 @@ abstract public class WorkQueue<E> extends Thread implements List<E> {
             onChange();
         }
     }
-    
+
     @Override
     public void run() {
         while (!done) {
@@ -71,8 +71,8 @@ abstract public class WorkQueue<E> extends Thread implements List<E> {
             }
         }
     }
-    
-    
+
+
     @Override
     public synchronized boolean add(E e) {
         notifyAll();

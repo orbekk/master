@@ -12,14 +12,14 @@ public class MasterProposer {
     private String myUrl;
     private List<String> paxosUrls = new ArrayList<String>();
     private ConnectionManager connections;
-    
+
     public MasterProposer(String clientUrl, List<String> paxosUrls,
             ConnectionManager connections) {
         this.myUrl = clientUrl;
         this.paxosUrls = paxosUrls;
         this.connections = connections;
     }
-    
+
     private int internalPropose(int proposalNumber) {
         int bestPromise = -proposalNumber;
         int promises = 0;
@@ -43,7 +43,7 @@ public class MasterProposer {
             return bestPromise;
         }
     }
-    
+
     private int internalAcceptRequest(int proposalNumber) {
         int bestAccepted = -proposalNumber;
         int accepts = 0;
@@ -79,11 +79,11 @@ public class MasterProposer {
             return false;
         }
     }
-    
+
     public boolean proposeRetry(int proposalNumber) {
         int nextProposal = proposalNumber;
         int result = 0;
-        
+
         while (result != nextProposal) {
             result = internalPropose(nextProposal);
             if (result == nextProposal) {
@@ -94,7 +94,7 @@ public class MasterProposer {
                 nextProposal = -result + 1;
             }
         }
-        
+
         return true;
     }
 }

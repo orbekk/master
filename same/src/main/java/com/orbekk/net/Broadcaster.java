@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
 
 public class Broadcaster implements BroadcasterInterface {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     public List<InetAddress> getBroadcastAddresses() {
         List<InetAddress> broadcastAddresses = new LinkedList<InetAddress>();
-        
+
         Enumeration<NetworkInterface> interfaces;
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
@@ -48,6 +48,7 @@ public class Broadcaster implements BroadcasterInterface {
         return broadcastAddresses;
     }
 
+    @Override
     public boolean sendBroadcast(int port, byte[] data) {
         boolean successful = false;
         for (InetAddress broadcastAddress : getBroadcastAddresses()) {
@@ -67,7 +68,7 @@ public class Broadcaster implements BroadcasterInterface {
         }
         return successful;
     }
-    
+
     public static void main(String[] args) {
         int port = Integer.parseInt(args[0]);
         Broadcaster broadcaster = new Broadcaster();

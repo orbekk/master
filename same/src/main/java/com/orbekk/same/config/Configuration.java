@@ -11,18 +11,18 @@ import org.slf4j.LoggerFactory;
 public class Configuration {
     public final static String configurationProperty =
             "com.orbekk.same.config.file";
-            
+
     static final Logger logger = LoggerFactory.getLogger(Configuration.class);
     Properties configuration = new Properties();
-    
+
     public Configuration(Properties properties) {
         this.configuration = properties;
     }
-    
+
     Configuration() {
         // Use factory methods.
     }
-    
+
     public static Configuration loadOrDie() {
         Configuration configuration = new Configuration();
         boolean status = configuration.loadDefault();
@@ -32,13 +32,13 @@ public class Configuration {
         }
         return configuration;
     }
-    
+
     public static Configuration load() {
         Configuration configuration = new Configuration();
         configuration.loadDefault();
         return configuration;
     }
-    
+
     public boolean loadDefault() {
         String filename = System.getProperty(configurationProperty);
         if (filename != null) {
@@ -60,7 +60,7 @@ public class Configuration {
         }
         return false;
     }
-    
+
     public String get(String name) {
         String value = configuration.getProperty(name);
         if (value == null) {
@@ -68,7 +68,7 @@ public class Configuration {
         }
         return value;
     }
-    
+
     public Integer getInt(String name) {
         if (get(name) == null) {
             return null;

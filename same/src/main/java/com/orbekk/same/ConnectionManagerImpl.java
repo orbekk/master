@@ -17,7 +17,7 @@ public class ConnectionManagerImpl implements ConnectionManager {
     private int readTimeout;
     private Map<String, MyJsonRpcHttpClient> connectionCache =
             new HashMap<String, MyJsonRpcHttpClient>();
-    
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
@@ -33,11 +33,11 @@ public class ConnectionManagerImpl implements ConnectionManager {
             throws MalformedURLException {
         if (!connectionCache.containsKey(url)) {
             connectionCache.put(url, new MyJsonRpcHttpClient(new URL(url),
-                connectionTimeout, readTimeout));
+                    connectionTimeout, readTimeout));
         }
         return connectionCache.get(url);
     }
-    
+
     private <T>T getClassProxy(String url, Class<T> clazz) {
         T service = null;
         try {
@@ -61,7 +61,7 @@ public class ConnectionManagerImpl implements ConnectionManager {
     public MasterService getMaster(String url) {
         return getClassProxy(url, MasterService.class);
     }
-    
+
     @Override
     public PaxosService getPaxos(String url) {
         return getClassProxy(url, PaxosService.class);

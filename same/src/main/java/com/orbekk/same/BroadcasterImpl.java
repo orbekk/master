@@ -13,11 +13,12 @@ public class BroadcasterImpl implements Broadcaster {
     public static BroadcasterImpl getDefaultBroadcastRunner() {
         return new BroadcasterImpl(Executors.newFixedThreadPool(20));
     }
-    
+
     public BroadcasterImpl(Executor executor) {
         this.executor = executor;
     }
 
+    @Override
     public synchronized void broadcast(final List<String> targets,
             final ServiceOperation operation) {
         for (final String t : targets) {

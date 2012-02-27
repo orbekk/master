@@ -31,9 +31,9 @@ public class MyJsonRpcHttpClient extends JsonRpcHttpClient {
     private URL serviceUrl;
     private JsonRpcClient rpcClient;
     private HttpClient httpClient;
-    
+
     public MyJsonRpcHttpClient(URL serviceUrl, int connectionTimeout,
-                int readTimeout) {
+            int readTimeout) {
         super(null);
         httpClient = new DefaultHttpClient();
         HttpParams params = httpClient.getParams();
@@ -41,8 +41,8 @@ public class MyJsonRpcHttpClient extends JsonRpcHttpClient {
         HttpConnectionParams.setSoTimeout(params, readTimeout);
         rpcClient = new JsonRpcClient();
         this.serviceUrl = serviceUrl;
-   }
-   
+    }
+
     @Override
     public synchronized Object invoke(
             final String methodName, final Object[] arguments, Type returnType, 
@@ -59,15 +59,15 @@ public class MyJsonRpcHttpClient extends JsonRpcHttpClient {
             }
         });
         entity.setContentType("application/json-rpc");
-        
+
         HttpPost post = new HttpPost(serviceUrl.toString());
-     
+
         for (Map.Entry<String, String> entry : extraHeaders.entrySet()) {
             post.addHeader(entry.getKey(), entry.getValue());
         }
-        
+
         post.setEntity(entity);
-        
+
         HttpResponse response = httpClient.execute(post);
         HttpEntity responseEntity = response.getEntity();
 

@@ -24,22 +24,22 @@ public class State {
     private Map<String, Component> state = new HashMap<String, Component>(); 
     private ObjectMapper mapper = new ObjectMapper();
     private Set<String> updatedComponents = new TreeSet<String>();
-    
+
     public State(String networkName) {
         update(".networkName", networkName, 1);
         updateFromObject(".participants", new ArrayList<String>(), 1);
     }
-    
+
     public State(State other) {
         state.putAll(other.state);
     }
-    
+
     public synchronized void clear() {
         logger.info("Clearing state.");
         updatedComponents.clear();
         state.clear();
     }
-    
+
     public synchronized void forceUpdate(String componentName,
             String data, long revision) {
         Component oldComponent = state.get(componentName);
@@ -48,7 +48,7 @@ public class State {
         state.put(componentName, newComponent);
         updatedComponents.add(componentName);
     }
-    
+
     public synchronized boolean update(String componentName, String data,
             long revision) {
         Component component = null;
@@ -57,7 +57,7 @@ public class State {
         } else {
             component = state.get(componentName);       
         }
-        
+
         if (revision > component.getRevision()) {
             Component oldComponent = new Component(component);
             component.setName(componentName);
@@ -71,7 +71,7 @@ public class State {
             return false;
         }
     }
-    
+
     /**
      * Get a copy of a component.
      */
@@ -83,7 +83,7 @@ public class State {
             return null;
         }
     }
-      
+
     public String getDataOf(String componentName) {
         Component component = state.get(componentName);
         if (component != null) {
@@ -92,7 +92,7 @@ public class State {
             return null;
         }
     }
-    
+
     public long getRevision(String componentName) {
         Component component = state.get(componentName);
         if (component != null) {
@@ -103,7 +103,7 @@ public class State {
             return 0;
         }
     }
-    
+
     /**
      * Parses a JSON value using Jackson ObjectMapper.
      */
@@ -126,12 +126,12 @@ public class State {
         }
         return null;
     }
-    
+
     public List<String> getList(String componentName) {
         return getParsedData(componentName,
                 new TypeReference<List<String>>(){});
     }
-    
+
     public boolean updateFromObject(String componentName, Object data, long revision) {
         String dataS;
         try {
@@ -151,14 +151,14 @@ public class State {
             return false;
         }
     }
-    
+
     /**
      * Pretty print a component.
      */
     public String show(String componentName) {
         return componentName + ": " + state.get(componentName);
     }
-    
+
     /**
      * Returns a list of all the components in this State.
      * 
@@ -171,7 +171,7 @@ public class State {
         }
         return list;
     }
-    
+
     public synchronized List<Component> getAndClearUpdatedComponents() {
         List<Component> components = new ArrayList<Component>();
         for (String name : updatedComponents) {
@@ -185,7 +185,7 @@ public class State {
         private String name;
         private long revision;
         private String data;
-        
+
         /**
          * Copy constructor.
          */
@@ -194,21 +194,21 @@ public class State {
             this.revision = other.revision;
             this.data = other.data;
         }
-        
+
         public Component(String name, long revision, String data) {
             this.name = name;
             this.revision = revision;
             this.data = data;
         }
-        
+
         public long getRevision() {
             return revision;
         }
-        
+
         public void setRevision(long revision) {
             this.revision = revision;
         }
-        
+
         public String getData() {
             return data;
         }
@@ -216,29 +216,29 @@ public class State {
         public void setData(String data) {
             this.data = data;
         }       
-        
+
         public String getName() {
             return name;
         }
-        
+
         public void setName(String name) {
             this.name = name;
         }
-        
+
         @Override public String toString() {
             return "[" + this.name + ": " + this.data + "@" + revision + "]";
         }
-        
+
         @Override public boolean equals(Object other) {
             if (!(other instanceof Component)) {
                 return false;
             }
             Component o = (Component)other;
             return name.equals(o.name) && data.equals(o.data) &&
-            		revision == o.revision;
+                    revision == o.revision;
         }
     }
-    
+
     @Override public String toString() {
         StringBuilder output = new StringBuilder();
         output.append("State(\n");
@@ -248,7 +248,7 @@ public class State {
         output.append(")");
         return output.toString();
     }
-    
+
     @Override public boolean equals(Object other) {
         if (!(other instanceof State)) {
             return false;

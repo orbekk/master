@@ -18,14 +18,14 @@ public class VariableFactory {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ClientInterface client;
     private ObjectMapper mapper = new ObjectMapper();
-    
+
     private class VariableImpl<T> implements Variable<T>, StateChangedListener {
         String identifier;
         TypeReference<T> type;
         T value;
         long revision = 0;
         OnChangeListener<T> listener = null;
-    
+
         public VariableImpl(String identifier, TypeReference<T> type) {
             this.identifier = identifier;
             this.type = type;
@@ -41,7 +41,7 @@ public class VariableFactory {
             try {
                 String serializedValue = mapper.writeValueAsString(value);
                 State.Component update = new State.Component(identifier,
-                		revision, serializedValue);
+                        revision, serializedValue);
                 client.set(update);
             } catch (JsonGenerationException e) {
                 logger.warn("Failed to convert to JSON: {}", value);
@@ -78,22 +78,22 @@ public class VariableFactory {
             }
         }
     }
-    
+
     public static VariableFactory create(ClientInterface client) {
         return new VariableFactory(client);
     }
-    
+
     VariableFactory(ClientInterface client) {
         this.client = client;
     }
-    
+
     public <T> Variable<T> create(String identifier, TypeReference<T> type) {
         VariableImpl<T> variable = new VariableImpl<T>(identifier, type);
         variable.update();
         client.addStateListener(variable);
         return variable;
     }
-    
+
     public Variable<String> createString(String identifier) {
         return create(identifier, new TypeReference<String>() {});
     }
