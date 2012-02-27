@@ -31,6 +31,7 @@ public class SameService extends Service {
     public final static int REMOVE_STATE_RECEIVER = 7;
     public final static int SET_STATE = 8;
     
+    // TODO: Remove these and use messengers instead of broadcast intents.
     public final static String AVAILABLE_NETWORKS_UPDATE =
             "com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE";
     public final static String AVAILABLE_NETWORKS =
@@ -112,7 +113,8 @@ public class SameService extends Service {
                     stateReceivers.remove(droppedMessenger);
                     break;
                 case SET_STATE:
-                    // TODO: Respond to the callee somehow.
+                    // TODO: We may get errors here and we need to inform the
+                    // caller. Perhaps combine with some sort of callback.
                     State.Component updatedComponent =
                             (State.Component)message.obj;
                     try {
