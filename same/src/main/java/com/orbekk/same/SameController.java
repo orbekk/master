@@ -61,11 +61,11 @@ public class SameController {
                 new VariableFactory(client.getInterface()));
 
         ServerContainer server = new ServerBuilder(port)
-        .withServlet(stateServlet, "/_/state")
-        .withService(client.getService(), ClientService.class)
-        .withService(master.getService(), MasterService.class)
-        .withService(paxos, PaxosService.class)
-        .build();
+            .withServlet(stateServlet, "/_/state")
+            .withService(client.getService(), ClientService.class)
+            .withService(master.getService(), MasterService.class)
+            .withService(paxos, PaxosService.class)
+            .build();
 
         SameController controller = new SameController(
                 configuration, server, master, client,
