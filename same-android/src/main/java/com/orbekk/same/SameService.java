@@ -20,16 +20,28 @@ import com.orbekk.same.State.Component;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
+import com.orbekk.util.DelayedOperation;
 
 public class SameService extends Service {
     public final static int DISPLAY_MESSAGE = 1;
     public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
     public final static int JOIN_NETWORK = 4;
-    public final static int UPDATED_STATE_MESSAGE = 5;
-    public final static int ADD_STATE_RECEIVER = 6;
-    public final static int REMOVE_STATE_RECEIVER = 7;
-    public final static int SET_STATE = 8;
+    public final static int ADD_STATE_RECEIVER = 5;
+    public final static int REMOVE_STATE_RECEIVER = 6;
+    
+    /**
+     * arg1: Operation number.
+     * obj: Updated component.
+     */
+    public final static int SET_STATE = 7;
+    public final static int UPDATED_STATE_CALLBACK = 8;
+    
+    /**
+     * arg1: Operation number.
+     * obj: Operation status.
+     */
+    public final static int OPERATION_STATUS_CALLBACK = 9;
     
     // TODO: Remove these and use messengers instead of broadcast intents.
     public final static String AVAILABLE_NETWORKS_UPDATE =
@@ -113,19 +125,21 @@ public class SameService extends Service {
                     stateReceivers.remove(droppedMessenger);
                     break;
                 case SET_STATE:
-                    // TODO: We may get errors here and we need to inform the
-                    // caller. Perhaps combine with some sort of callback.
+                    logger.info("SET_STATE: oId: {}, comp: {}", message.arg1, message.obj); 
                     State.Component updatedComponent =
                             (State.Component)message.obj;
-                    try {
-                        sameController.getClient().getInterface().set(
-                                updatedComponent);
-                    } catch (UpdateConflict e) {
-                        logger.info("Update failed: {}", updatedComponent);
-                    }
+                    int id = message.arg1;
+                    logger.info("Running operation.");
+                    DelayedOperation op = sameController.getClient().getInterface()
+                            .set(updatedComponent);
+                    logger.info("Operation finished. Sending callback.");
+                    operationStatusCallback(op, id, message.replyTo);
+                    logger.info("Callback sent.");
+                    break;
                 default:
                     super.handleMessage(message);
             }
+            logger.info("Finished handling message.");
         }
     }
     
@@ -137,7 +151,7 @@ public class SameService extends Service {
             synchronized (stateReceivers) {
                 ArrayList<Messenger> dropped = new ArrayList<Messenger>();
                 for (Messenger messenger : stateReceivers) {
-                    Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
+                    Message message = Message.obtain(null, UPDATED_STATE_CALLBACK);
                     message.obj = component;
                     try {
                         messenger.send(message);
@@ -152,10 +166,26 @@ public class SameService extends Service {
         }
     };
     
+    private void operationStatusCallback(DelayedOperation op, int id, Messenger replyTo) {
+        op.waitFor();
+        synchronized (stateReceivers) {
+            Message message = Message.obtain(null,
+                    OPERATION_STATUS_CALLBACK, id);
+            message.obj = op.getStatus();
+            try {
+                messenger.send(message);
+            } catch (RemoteException e) {
+                logger.warn("Unable to send update result: " + 
+                        op.getStatus());
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private void sendAllState(Messenger messenger) {
         State state = sameController.getClient().getInterface().getState();
         for (Component c : state.getComponents()) {
-            Message message = Message.obtain(null, UPDATED_STATE_MESSAGE);
+            Message message = Message.obtain(null, UPDATED_STATE_CALLBACK);
             message.obj = c;
             try {
                 messenger.send(message);

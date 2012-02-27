@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orbekk.same.android.ClientInterfaceBridge;
+import com.orbekk.util.DelayedOperation;
 
 public class VariableTestActivity extends Activity {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -36,12 +37,13 @@ public class VariableTestActivity extends Activity {
     public void setVariable(View unused) {
         EditText et = (EditText)findViewById(R.id.set_variable_text);
         String newValue = et.getText().toString();
-        try {
-            variable.set(newValue);
-        } catch (UpdateConflict e) {
-            Toast.makeText(this, "Failed to update.", Toast.LENGTH_SHORT)
+        logger.info("Setting variable.");
+        DelayedOperation op = variable.set(newValue);
+        logger.info("Waiting for delayed operation.");
+        if (!op.getStatus().isOk()) {
+            Toast.makeText(this, "Failed to update: " + op.getStatus(),
+                    Toast.LENGTH_SHORT)
                 .show();
-            e.printStackTrace();
         }
     }
     

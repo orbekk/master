@@ -51,11 +51,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             player_.posX = 0.5f;
             player_.posY = 0.5f;
             player.setOnChangeListener(this);
-            try {
-                player.set(player_);
-            } catch (UpdateConflict e) {
-                e.printStackTrace();
-            }
+            player.set(player_);
         }
         
         public void setSize(int width, int height) {
@@ -91,12 +87,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             Player newPlayer = new Player();
             newPlayer.posX = x / width;
             newPlayer.posY = y / width;
-            try {
-                player.set(newPlayer);
-            } catch (UpdateConflict e) {
-                Toast.makeText(context, "Failed to update position.",
-                        Toast.LENGTH_SHORT).show();
-            }
+            player.set(newPlayer);
         }
 
         @Override

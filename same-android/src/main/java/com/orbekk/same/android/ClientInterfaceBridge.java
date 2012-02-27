@@ -1,6 +1,8 @@
 package com.orbekk.same.android;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +24,15 @@ import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.UpdateConflict;
 import com.orbekk.same.VariableFactory;
+import com.orbekk.util.DelayedOperation;
 
 public class ClientInterfaceBridge implements ClientInterface {
     private State state;
     private ArrayList<StateChangedListener> listeners = 
             new ArrayList<StateChangedListener>();
+    private Map<Integer, DelayedOperation> ongoingOperations =
+            new HashMap<Integer, DelayedOperation>();
+    private int nextOperationNumber = 0;
     
     class ResponseHandler extends Handler {
         @Override public void handleMessage(Message message) {
@@ -35,9 +41,15 @@ public class ClientInterfaceBridge implements ClientInterface {
                 return;
             }
             switch (message.what) {
-            case SameService.UPDATED_STATE_MESSAGE:
+            case SameService.UPDATED_STATE_CALLBACK:
                 State.Component component = (State.Component)message.obj;
                 updateState(component);
+                break;
+            case SameService.OPERATION_STATUS_CALLBACK:
+                int operationNumber = message.arg1;
+                DelayedOperation.Status status =
+                        (DelayedOperation.Status)message.obj;
+                completeOperation(operationNumber, status);
                 break;
             default:
                 logger.warn("Received unknown message from service: {}",
@@ -54,14 +66,16 @@ public class ClientInterfaceBridge implements ClientInterface {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            serviceMessenger = new Messenger(service);
-            Message message = Message.obtain(null,
-                    SameService.ADD_STATE_RECEIVER);
-            message.replyTo = responseMessenger;
-            try {
-                serviceMessenger.send(message);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            synchronized (ClientInterfaceBridge.this) {
+                serviceMessenger = new Messenger(service);
+                Message message = Message.obtain(null,
+                        SameService.ADD_STATE_RECEIVER);
+                message.replyTo = responseMessenger;
+                try {
+                    serviceMessenger.send(message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -76,6 +90,22 @@ public class ClientInterfaceBridge implements ClientInterface {
                 component.getRevision());
         for (StateChangedListener listener : listeners) {
             listener.stateChanged(component);
+        }
+    }
+    
+    private synchronized DelayedOperation createOperation() {
+        DelayedOperation op = new DelayedOperation();
+        op.setIdentifier(nextOperationNumber);
+        nextOperationNumber += 1;
+        ongoingOperations.put(op.getIdentifier(), op);
+        return op;
+    }
+    
+    private synchronized void completeOperation(int operationNumber,
+        DelayedOperation.Status status) {
+        DelayedOperation op = ongoingOperations.remove(operationNumber);
+        if (op != null) {
+            op.complete(status);
         }
     }
     
@@ -113,24 +143,32 @@ public class ClientInterfaceBridge implements ClientInterface {
     }
 
     @Override
-    public void set(String name, String data, long revision) throws UpdateConflict {
-        set(new Component(name, revision, data));
-    }
-
-    @Override
-    public void set(Component component) throws UpdateConflict {
-        Message message = Message.obtain(null, SameService.SET_STATE);
-        message.obj = component;
+    public DelayedOperation set(Component component) {
+        DelayedOperation op = createOperation();
         if (serviceMessenger == null) {
             logger.warn("Not connected to service. Ignore update: {}", component);
-            return;
+            completeOperation(op.getIdentifier(),
+                    DelayedOperation.Status.createError(
+                            "Not connected to service."));
+            return op;
         }
+        
+        Message message = Message.obtain(null, SameService.SET_STATE,
+                op.getIdentifier());
+        // this has to be Parcelable.
+//        message.obj = component;
+        message.replyTo = responseMessenger;
         try {
+            logger.info("Sending update to service.");
             serviceMessenger.send(message);
+            logger.info("Service finished update.");
         } catch (RemoteException e) {
             e.printStackTrace();
-            throw new UpdateConflict(e.getMessage());
+            completeOperation(op.getIdentifier(), 
+                    DelayedOperation.Status.createError(
+                            "Error contacting service: " + e.getMessage()));
         }
+        return op;
     }
 
     @Override
