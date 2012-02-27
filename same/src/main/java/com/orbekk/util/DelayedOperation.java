@@ -1,6 +1,6 @@
 package com.orbekk.util;
 
-public class DelayedOperation<T> {
+public class DelayedOperation {
     public static class Status {
         public final static int OK = 1;
         public final static int CONFLICT = 2;
@@ -53,13 +53,11 @@ public class DelayedOperation<T> {
         }
     }
 
-    private T argument;
     private Status status;
     private boolean isDone;
     private int identifier;
 
-    public DelayedOperation(T argument) {
-        this.argument = argument;
+    public DelayedOperation() {
     }
 
     public Status getStatus() {
