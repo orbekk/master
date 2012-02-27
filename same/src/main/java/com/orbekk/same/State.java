@@ -234,7 +234,8 @@ public class State {
                 return false;
             }
             Component o = (Component)other;
-            return name == o.name && data == o.data && revision == o.revision;
+            return name.equals(o.name) && data.equals(o.data) &&
+            		revision == o.revision;
         }
     }
     

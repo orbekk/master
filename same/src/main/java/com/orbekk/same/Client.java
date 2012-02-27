@@ -32,7 +32,6 @@ public class Client implements DiscoveryListener {
             return new State(state);
         }
         
-        @Override
         public void set(String name, String data, long revision)
                 throws UpdateConflict {
             String masterUrl = state.getDataOf(".masterUrl");

@@ -57,7 +57,7 @@ public class VariableFactoryTest {
         Variable<String> string = vf.create("X", stringType);
         assertNull(string.get());
         string.set("NewValue");
-        verify(client).set("X", "\"NewValue\"", 0);
+        verify(client).set(new State.Component("X", 0, "\"NewValue\""));
     }
     
     @Test

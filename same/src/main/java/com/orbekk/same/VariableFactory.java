@@ -40,7 +40,9 @@ public class VariableFactory {
         public void set(T value) throws UpdateConflict {
             try {
                 String serializedValue = mapper.writeValueAsString(value);
-                client.set(identifier, serializedValue, revision);
+                State.Component update = new State.Component(identifier,
+                		revision, serializedValue);
+                client.set(update);
             } catch (JsonGenerationException e) {
                 logger.warn("Failed to convert to JSON: {}", value);
                 logger.warn("Parse exception.", e);
