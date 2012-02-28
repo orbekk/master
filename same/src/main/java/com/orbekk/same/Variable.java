@@ -15,5 +15,6 @@ public interface Variable<T> {
     T get();
     DelayedOperation set(T value);
     void update();
-    void setOnChangeListener(OnChangeListener<T> listener);
+    void addOnChangeListener(OnChangeListener<T> listener);
+    void removeOnChangeListener(OnChangeListener<T> listener);
 }

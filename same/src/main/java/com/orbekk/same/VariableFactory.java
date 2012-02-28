@@ -1,6 +1,7 @@
 package com.orbekk.same;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -25,7 +26,8 @@ public class VariableFactory {
         TypeReference<T> type;
         T value;
         long revision = 0;
-        OnChangeListener<T> listener = null;
+        ArrayList<OnChangeListener<T>> listeners =
+                new ArrayList<OnChangeListener<T>>();
 
         public VariableImpl(String identifier, TypeReference<T> type) {
             this.identifier = identifier;
@@ -66,14 +68,19 @@ public class VariableFactory {
         }
 
         @Override
-        public void setOnChangeListener(OnChangeListener<T> listener) {
-            this.listener = listener;
+        public synchronized void addOnChangeListener(OnChangeListener<T> listener) {
+            listeners.add(listener);
+        }
+        
+        @Override
+        public synchronized void removeOnChangeListener(OnChangeListener<T> listener) {
+            listeners.remove(listener);
         }
 
         @Override
-        public void stateChanged(Component component) {
+        public synchronized void stateChanged(Component component) {
             if (component.getName().equals(identifier)) {
-                if (listener != null) {
+                for (OnChangeListener<T> listener : listeners) {
                     listener.valueChanged(this);
                 }
             }

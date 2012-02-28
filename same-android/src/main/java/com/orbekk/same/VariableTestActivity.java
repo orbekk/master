@@ -68,13 +68,14 @@ public class VariableTestActivity extends Activity {
         client.connect();
         variable = client.createVariableFactory()
                 .createString("TestVariable");
-        variable.setOnChangeListener(onChangeListener);
+        variable.addOnChangeListener(onChangeListener);
         variable.set("Hello, World!");
         displayVariable();
     }
     
     @Override public void onStop() {
         super.onStop();
+        variable.removeOnChangeListener(onChangeListener);
         client.disconnect();
     }
 }

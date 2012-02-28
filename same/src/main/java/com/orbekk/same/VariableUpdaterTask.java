@@ -7,11 +7,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class VariableUpdaterTask<T> extends Thread
         implements Variable.OnChangeListener<T> {
     private Variable<T> variable;
-    private T newValue;
+    private volatile T newValue;
     private AtomicBoolean hasNewValue = new AtomicBoolean(false);
     private AtomicBoolean isReady = new AtomicBoolean(true);
     
     public VariableUpdaterTask(Variable<T> variable) {
+        super("VariableUpdater");
         this.variable = variable;
     }
     
@@ -47,7 +48,9 @@ public class VariableUpdaterTask<T> extends Thread
         }
     }
     
+    @Override
     public void run() {
+        variable.addOnChangeListener(this);
         while (true) {
             waitFor(isReady);
             waitFor(hasNewValue);
@@ -56,6 +59,7 @@ public class VariableUpdaterTask<T> extends Thread
             }
             performWork();
         }
+        variable.removeOnChangeListener(this);
     }
 
     @Override

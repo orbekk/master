@@ -72,7 +72,7 @@ public class VariableFactoryTest {
         Variable.OnChangeListener<Integer> listener =
                 mock(Variable.OnChangeListener.class);
         Variable<Integer> v = vf.create("z", intType);
-        v.setOnChangeListener(listener);
+        v.addOnChangeListener(listener);
         ((StateChangedListener) v).stateChanged(
                 new State.Component("z", 1, "abc"));
         verify(listener).valueChanged(v);
