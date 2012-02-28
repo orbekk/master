@@ -29,7 +29,7 @@ public class TjwsServerBuilder {
         return withServlet(new RpcServlet(server), pathSpec);
     }
     
-    public TjwsServerContainer build() {
+    public ServerContainer build() {
         TjwsServerContainer server = TjwsServerContainer.create(port);
         for (int i = 0; i < servletPaths.size(); i++) {
             String path = servletPaths.get(i);

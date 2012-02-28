@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import Acme.Serve.Serve;
 
-public class TjwsServerContainer {
+public class TjwsServerContainer implements ServerContainer {
     private static class MyServer extends Serve {
         public void join() {
             try {
@@ -31,18 +31,34 @@ public class TjwsServerContainer {
         this.server = server;
     }
     
+    /* (non-Javadoc)
+     * @see com.orbekk.same.http.ServerContainer#getPort()
+     */
+    @Override
     public int getPort() {
         return (Integer)this.server.getAttribute(Serve.ARG_PORT);
     }
     
+    /* (non-Javadoc)
+     * @see com.orbekk.same.http.ServerContainer#start()
+     */
+    @Override
     public void start() {
         server.runInBackground();
     }
     
+    /* (non-Javadoc)
+     * @see com.orbekk.same.http.ServerContainer#stop()
+     */
+    @Override
     public void stop() {
         server.stopBackground();
     }
     
+    /* (non-Javadoc)
+     * @see com.orbekk.same.http.ServerContainer#join()
+     */
+    @Override
     public void join() {
         server.join();
     }
