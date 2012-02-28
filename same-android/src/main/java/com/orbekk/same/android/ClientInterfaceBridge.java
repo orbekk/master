@@ -22,7 +22,6 @@ import com.orbekk.same.SameService;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
-import com.orbekk.same.UpdateConflict;
 import com.orbekk.same.VariableFactory;
 import com.orbekk.util.DelayedOperation;
 
@@ -32,6 +31,8 @@ public class ClientInterfaceBridge implements ClientInterface {
             new ArrayList<StateChangedListener>();
     private Map<Integer, DelayedOperation> ongoingOperations =
             new HashMap<Integer, DelayedOperation>();
+    /** This is used to queue operations until connected to the service. */
+    private ArrayList<Message> pendingOperations = new ArrayList<Message>();
     private int nextOperationNumber = 0;
     
     class ResponseHandler extends Handler {
@@ -80,6 +81,7 @@ public class ClientInterfaceBridge implements ClientInterface {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+                sendPendingOperations();
             }
         }
 
@@ -147,31 +149,34 @@ public class ClientInterfaceBridge implements ClientInterface {
     }
 
     @Override
-    public DelayedOperation set(Component component) {
+    public synchronized DelayedOperation set(Component component) {
         DelayedOperation op = createOperation();
-        if (serviceMessenger == null) {
-            logger.warn("Not connected to service. Ignore update: {}", component);
-            completeOperation(op.getIdentifier(),
-                    DelayedOperation.Status.createError(
-                            "Not connected to service."));
-            return op;
-        }
-        
         Message message = Message.obtain(null, SameService.SET_STATE);
         message.arg1 = op.getIdentifier();
         message.setData(new ComponentBundle(component).getBundle());
         message.replyTo = responseMessenger;
-        try {
-            logger.info("Sending update to service. No state.");
-            serviceMessenger.send(message);
-            logger.info("Service finished update.");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            completeOperation(op.getIdentifier(), 
-                    DelayedOperation.Status.createError(
-                            "Error contacting service: " + e.getMessage()));
-        }
+        pendingOperations.add(message);
+        sendPendingOperations();
         return op;
+    }
+    
+    private synchronized void sendPendingOperations() {
+        if (serviceMessenger == null) {
+            logger.warn("Not connected to service. Delaying operations {}",
+                    pendingOperations);
+            return;
+        }
+        for (Message message : pendingOperations) {
+            try {
+                serviceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                completeOperation(message.arg1, 
+                        DelayedOperation.Status.createError(
+                                "Error contacting service: " + e.getMessage()));
+            }
+        }
+        pendingOperations.clear();
     }
 
     @Override
