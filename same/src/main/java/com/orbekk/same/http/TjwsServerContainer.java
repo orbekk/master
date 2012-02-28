@@ -1,9 +1,10 @@
 package com.orbekk.same.http;
 
-import java.util.Properties;
+import javax.servlet.http.HttpServlet;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import Acme.Serve.Serve;
 
 public class TjwsServerContainer {
@@ -44,5 +45,9 @@ public class TjwsServerContainer {
     
     public void join() {
         server.join();
+    }
+    
+    public void addServlet(String pathSpec, HttpServlet servlet) {
+        server.addServlet(pathSpec, servlet);
     }
 }
