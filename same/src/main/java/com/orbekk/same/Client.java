@@ -44,7 +44,9 @@ public class Client implements DiscoveryListener {
                 boolean success = master.updateStateRequest(
                         component.getName(), component.getData(),
                         component.getRevision());
-                if (!success) {
+                if (success) {
+                    op.complete(DelayedOperation.Status.createOk());
+                } else {
                     op.complete(DelayedOperation.Status
                             .createConflict("Conflict from master"));
                 }

@@ -23,7 +23,7 @@
         <activity android:name=".StateViewerActivity"/>
         <activity android:name=".GraphicsActivity"/>
         
-        <service android:name=".SameService" />
+        <service android:name=".SameService" android:process="com.orbekk.same.SameService"/>
     </application>
 
 </manifest>

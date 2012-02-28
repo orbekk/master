@@ -26,6 +26,18 @@ public class DelayedOperation {
             this.message = message;
         }
 
+        public boolean isOk() {
+            return status == OK;
+        }
+        
+        public int getStatusCode() {
+            return status;
+        }
+        
+        public String getMessage() {
+            return message;
+        }
+        
         @Override public String toString() {
             switch(status) {
             case OK:

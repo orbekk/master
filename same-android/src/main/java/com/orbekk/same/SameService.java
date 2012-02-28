@@ -17,6 +17,7 @@ import android.os.RemoteException;
 import android.widget.Toast;
 
 import com.orbekk.same.State.Component;
+import com.orbekk.same.android.ComponentBundle;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
@@ -32,14 +33,19 @@ public class SameService extends Service {
     
     /**
      * arg1: Operation number.
-     * obj: Updated component.
+     * bundle: A Bundle created with ComponentBundle
      */
     public final static int SET_STATE = 7;
+    
+    /**
+     * bundle: A Bundle created with ComponentBundle.
+     */
     public final static int UPDATED_STATE_CALLBACK = 8;
     
     /**
      * arg1: Operation number.
-     * obj: Operation status.
+     * arg2: Status code.
+     * obj: Status message.
      */
     public final static int OPERATION_STATUS_CALLBACK = 9;
     
@@ -127,9 +133,9 @@ public class SameService extends Service {
                 case SET_STATE:
                     logger.info("SET_STATE: oId: {}, comp: {}", message.arg1, message.obj); 
                     State.Component updatedComponent =
-                            (State.Component)message.obj;
+                            new ComponentBundle(message.getData()).getComponent();
                     int id = message.arg1;
-                    logger.info("Running operation.");
+                    logger.info("Running operation. Component: " + updatedComponent);
                     DelayedOperation op = sameController.getClient().getInterface()
                             .set(updatedComponent);
                     logger.info("Operation finished. Sending callback.");
@@ -152,7 +158,7 @@ public class SameService extends Service {
                 ArrayList<Messenger> dropped = new ArrayList<Messenger>();
                 for (Messenger messenger : stateReceivers) {
                     Message message = Message.obtain(null, UPDATED_STATE_CALLBACK);
-                    message.obj = component;
+                    message.setData(new ComponentBundle(component).getBundle());
                     try {
                         messenger.send(message);
                     } catch (RemoteException e) {
@@ -170,8 +176,10 @@ public class SameService extends Service {
         op.waitFor();
         synchronized (stateReceivers) {
             Message message = Message.obtain(null,
-                    OPERATION_STATUS_CALLBACK, id);
-            message.obj = op.getStatus();
+                    OPERATION_STATUS_CALLBACK);
+            message.arg1 = id;
+            message.arg2 = op.getStatus().getStatusCode();
+            message.obj = op.getStatus().getMessage();
             try {
                 messenger.send(message);
             } catch (RemoteException e) {
@@ -186,7 +194,7 @@ public class SameService extends Service {
         State state = sameController.getClient().getInterface().getState();
         for (Component c : state.getComponents()) {
             Message message = Message.obtain(null, UPDATED_STATE_CALLBACK);
-            message.obj = c;
+            message.setData(new ComponentBundle(c).getBundle());
             try {
                 messenger.send(message);
             } catch (RemoteException e) {
@@ -232,7 +240,7 @@ public class SameService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         logger.info("onStartCommand()");
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
     
     @Override

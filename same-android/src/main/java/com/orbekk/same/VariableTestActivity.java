@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +28,22 @@ public class VariableTestActivity extends Activity {
         }
     };
     
+    private class UpdateVariableTask
+            extends AsyncTask<String, Void, DelayedOperation.Status> {
+        @Override protected DelayedOperation.Status doInBackground(String... values) {
+            String value = values[0];
+            return variable.set(value).getStatus();
+        }
+        
+        @Override protected void onPostExecute(DelayedOperation.Status status) {
+            if (!status.isOk()) {
+                Toast.makeText(VariableTestActivity.this,
+                        "Update failed: " + status, Toast.LENGTH_SHORT)
+                                .show();
+            }
+        }
+    }
+    
     private void displayVariable() {
         TextView tv = (TextView)findViewById(R.id.variable_text);
         if (variable.get() != null) {
@@ -37,14 +54,7 @@ public class VariableTestActivity extends Activity {
     public void setVariable(View unused) {
         EditText et = (EditText)findViewById(R.id.set_variable_text);
         String newValue = et.getText().toString();
-        logger.info("Setting variable.");
-        DelayedOperation op = variable.set(newValue);
-        logger.info("Waiting for delayed operation.");
-        if (!op.getStatus().isOk()) {
-            Toast.makeText(this, "Failed to update: " + op.getStatus(),
-                    Toast.LENGTH_SHORT)
-                .show();
-        }
+        new UpdateVariableTask().execute(newValue);
     }
     
     @Override public void onCreate(Bundle savedInstanceState) {

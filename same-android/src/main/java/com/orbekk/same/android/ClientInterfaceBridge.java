@@ -42,13 +42,17 @@ public class ClientInterfaceBridge implements ClientInterface {
             }
             switch (message.what) {
             case SameService.UPDATED_STATE_CALLBACK:
-                State.Component component = (State.Component)message.obj;
+                State.Component component =
+                        new ComponentBundle(message.getData()).getComponent();
                 updateState(component);
                 break;
             case SameService.OPERATION_STATUS_CALLBACK:
                 int operationNumber = message.arg1;
+                logger.info("Received callback for operation {}", operationNumber);
+                int statusCode = message.getData().getInt("statusCode");
+                String statusMessage = message.getData().getString("statusMessage");
                 DelayedOperation.Status status =
-                        (DelayedOperation.Status)message.obj;
+                        new DelayedOperation.Status(statusCode, statusMessage);
                 completeOperation(operationNumber, status);
                 break;
             default:
@@ -153,13 +157,12 @@ public class ClientInterfaceBridge implements ClientInterface {
             return op;
         }
         
-        Message message = Message.obtain(null, SameService.SET_STATE,
-                op.getIdentifier());
-        // this has to be Parcelable.
-//        message.obj = component;
+        Message message = Message.obtain(null, SameService.SET_STATE);
+        message.arg1 = op.getIdentifier();
+        message.setData(new ComponentBundle(component).getBundle());
         message.replyTo = responseMessenger;
         try {
-            logger.info("Sending update to service.");
+            logger.info("Sending update to service. No state.");
             serviceMessenger.send(message);
             logger.info("Service finished update.");
         } catch (RemoteException e) {
