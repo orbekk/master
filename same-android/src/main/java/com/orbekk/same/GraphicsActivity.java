@@ -24,11 +24,15 @@ public class GraphicsActivity extends Activity {
         Variable<GameView.Player> player = client.createVariableFactory()
                 .create("Player", playerType);
         gameView = new GameView(this, player);
+        gameView.setUp();
         setContentView(gameView);
     }
     
     public void onStop() {
         super.onStop();
+        gameView.tearDown();
+        gameView = null;
         client.disconnect();
+        client = null;
     }
 }

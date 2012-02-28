@@ -23,6 +23,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread thread;
     
     static class Player {
+        public Player() {
+        }
+        public Player(float posX, float posY) {
+            this.posX = posX;
+            this.posY = posY;
+        }
+        
         public float posX;
         public float posY;
     }
@@ -36,8 +43,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private Context context;
         private Paint background;
         private Variable<Player> player;
-        private AtomicReference<Player> currentPosition =
-                new AtomicReference<Player>();
+        private VariableUpdaterTask<Player> updater;
         
         private Paint color = new Paint();
         
@@ -46,26 +52,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             this.holder = holder;
             this.context = context;
             this.player = player;
-            if (player.get() != null) {
-                currentPosition.set(player.get());
-            } else {
-                currentPosition.set(new Player() {{
-                    posX = 0.5f;
-                    posY = 0.5f;
-                }});
-            }
-            
             background = new Paint();
             background.setARGB(255, 0, 0, 0);
             color.setARGB(255, 255, 0, 0);
         }
         
         public void setUp() {
-            Player player_ = new Player();
-            player_.posX = 0.5f;
-            player_.posY = 0.5f;
-            player.setOnChangeListener(this);
-            player.set(player_);
+            player.addOnChangeListener(this);
+            updater = new VariableUpdaterTask<Player>(player);
+            updater.set(new Player(0.5f, 0.5f));
+            updater.start();
+        }
+        
+        public void tearDown() {
+            player.removeOnChangeListener(this);
+            updater.interrupt();
         }
         
         public void setSize(int width, int height) {
@@ -98,22 +99,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         private synchronized void setPosition(final float x, final float y) {
-            Player newPlayer = new Player() {{
-                posX = x / width;
-                posY = y / width;
-            }};
-            currentPosition.set(newPlayer);
+            if (player.get() == null || player.get().posX != x ||
+                    player.get().posY != y) {
+                Player newPlayer = new Player(x / width, y / height);
+                updater.set(newPlayer);
+            }
         }
 
         @Override
         public void valueChanged(Variable<Player> unused) {
             logger.info("Variable updated.");
             player.update();
-            if (player.get() == null ||
-                    currentPosition.get().posX != player.get().posX ||
-                    currentPosition.get().posY != player.get().posY) {
-                player.set(currentPosition.get());
-            }
             run();
         }
     }
@@ -122,9 +118,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(), context, player);
-        thread.setUp();
     }
 
+    public void setUp() {
+        thread.setUp();
+    }
+    
+    public void tearDown() {
+        thread.tearDown();
+    }
+    
     @Override
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint();
