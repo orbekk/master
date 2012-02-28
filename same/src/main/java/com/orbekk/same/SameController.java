@@ -10,13 +10,13 @@ import com.orbekk.net.DefaultBroadcasterFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.http.ServerBuilder;
-import com.orbekk.same.http.ServerContainer;
+import com.orbekk.same.http.JettyServerBuilder;
+import com.orbekk.same.http.JettyServerContainer;
 import com.orbekk.same.http.StateServlet;
 
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private ServerContainer server;
+    private JettyServerContainer server;
     private Master master;
     private Client client;
     private PaxosServiceImpl paxos;
@@ -60,7 +60,7 @@ public class SameController {
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));
 
-        ServerContainer server = new ServerBuilder(port)
+        JettyServerContainer server = new JettyServerBuilder(port)
             .withServlet(stateServlet, "/_/state")
             .withService(client.getService(), ClientService.class)
             .withService(master.getService(), MasterService.class)
@@ -79,7 +79,7 @@ public class SameController {
 
     public SameController(
             Configuration configuration,
-            ServerContainer server,
+            JettyServerContainer server,
             Master master,
             Client client,
             PaxosServiceImpl paxos,

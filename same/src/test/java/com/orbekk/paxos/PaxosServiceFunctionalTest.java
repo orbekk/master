@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.same.ConnectionManagerImpl;
 import com.orbekk.same.http.RpcServlet;
-import com.orbekk.same.http.ServerBuilder;
-import com.orbekk.same.http.ServerContainer;
+import com.orbekk.same.http.JettyServerBuilder;
+import com.orbekk.same.http.JettyServerContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,13 @@ import org.junit.Test;
 public class PaxosServiceFunctionalTest {
     ConnectionManagerImpl connections = new ConnectionManagerImpl(500, 500);
     List<String> paxosUrls = new ArrayList<String>();
-    ServerContainer server;
+    JettyServerContainer server;
     String myUrl;
     int successfulProposals = 0;
     
     @Before
     public void setUp() throws Exception {
-        ServerBuilder builder = new ServerBuilder(0);
+        JettyServerBuilder builder = new JettyServerBuilder(0);
         List<String> tempUrls = setupPaxos(builder, 10);
         server = builder.build();
         server.start();
@@ -40,7 +40,7 @@ public class PaxosServiceFunctionalTest {
         server.stop();
     }
     
-    public List<String> setupPaxos(ServerBuilder builder, int instances) {
+    public List<String> setupPaxos(JettyServerBuilder builder, int instances) {
         List<String> tempUrls = new ArrayList<String>();
         for (int i = 1; i <= instances; i++) {
             JsonRpcServer jsonServer = new JsonRpcServer(

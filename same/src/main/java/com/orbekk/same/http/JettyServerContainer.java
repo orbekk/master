@@ -7,21 +7,21 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerContainer {
+public class JettyServerContainer {
     Logger logger = LoggerFactory.getLogger(getClass());
     Server server;
     int port;
     ServletContextHandler context = null;
 
-    public ServerContainer(Server server, int port, ServletContextHandler context) {
+    public JettyServerContainer(Server server, int port, ServletContextHandler context) {
         this.server = server;
         this.port = port;
         this.context = context;
     }
 
-    public static ServerContainer create(int port) {
+    public static JettyServerContainer create(int port) {
         Server server = new Server(port);
-        return new ServerContainer(server, port, null);
+        return new JettyServerContainer(server, port, null);
     }
 
     public void setContext(ServletContextHandler context) {
