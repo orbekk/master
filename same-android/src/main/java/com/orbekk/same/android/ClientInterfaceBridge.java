@@ -90,7 +90,7 @@ public class ClientInterfaceBridge implements ClientInterface {
     };
     
     private void updateState(State.Component component) {
-        state.update(component.getName(), component.getData(),
+        state.forceUpdate(component.getName(), component.getData(),
                 component.getRevision());
         for (StateChangedListener listener : listeners) {
             listener.stateChanged(component);

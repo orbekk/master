@@ -16,6 +16,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private GameThread thread;
@@ -34,6 +36,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private Context context;
         private Paint background;
         private Variable<Player> player;
+        private AtomicReference<Player> currentPosition =
+                new AtomicReference<Player>();
+        
         private Paint color = new Paint();
         
         public GameThread(SurfaceHolder holder, Context context,
@@ -41,6 +46,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             this.holder = holder;
             this.context = context;
             this.player = player;
+            if (player.get() != null) {
+                currentPosition.set(player.get());
+            } else {
+                currentPosition.set(new Player() {{
+                    posX = 0.5f;
+                    posY = 0.5f;
+                }});
+            }
+            
             background = new Paint();
             background.setARGB(255, 0, 0, 0);
             color.setARGB(255, 255, 0, 0);
@@ -83,17 +97,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         
-        private synchronized void setPosition(float x, float y) {
-            Player newPlayer = new Player();
-            newPlayer.posX = x / width;
-            newPlayer.posY = y / width;
-            player.set(newPlayer);
+        private synchronized void setPosition(final float x, final float y) {
+            Player newPlayer = new Player() {{
+                posX = x / width;
+                posY = y / width;
+            }};
+            currentPosition.set(newPlayer);
         }
 
         @Override
         public void valueChanged(Variable<Player> unused) {
             logger.info("Variable updated.");
             player.update();
+            if (player.get() == null ||
+                    currentPosition.get().posX != player.get().posX ||
+                    currentPosition.get().posY != player.get().posY) {
+                player.set(currentPosition.get());
+            }
             run();
         }
     }
