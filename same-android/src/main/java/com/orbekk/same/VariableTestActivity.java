@@ -69,6 +69,7 @@ public class VariableTestActivity extends Activity {
         variable = client.createVariableFactory()
                 .createString("TestVariable");
         variable.setOnChangeListener(onChangeListener);
+        variable.set("Hello, World!");
         displayVariable();
     }
     
