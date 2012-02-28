@@ -1,5 +1,7 @@
 package com.orbekk.same.http;
 
+import java.util.Properties;
+
 import javax.servlet.http.HttpServlet;
 
 import org.slf4j.Logger;
@@ -22,8 +24,10 @@ public class TjwsServerContainer implements ServerContainer {
     private MyServer server;
     
     public static TjwsServerContainer create(int port) {
+        Properties properties = new Properties();
+        properties.put(Serve.ARG_PORT, port);
         MyServer server = new MyServer();
-        server.setAttribute(Serve.ARG_PORT, port);
+        server.arguments = properties;
         return new TjwsServerContainer(server);
     }
     

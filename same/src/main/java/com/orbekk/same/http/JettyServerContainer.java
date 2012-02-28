@@ -55,7 +55,11 @@ public class JettyServerContainer implements ServerContainer {
         logger.info("Server stopped.");
     }
 
-    public void join() throws InterruptedException {
-        server.join();
+    public void join() {
+        try {
+            server.join();
+        } catch (InterruptedException e) {
+            return;
+        }
     }
 }
