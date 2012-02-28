@@ -106,8 +106,8 @@ public class SameControllerActivity extends Activity {
     
     private void joinNetwork(String masterUrl) {
         logger.info("joinNetwork({})", masterUrl);
-        Message message = Message.obtain(null, SameService.JOIN_NETWORK,
-            masterUrl);
+        Message message = Message.obtain(null, SameService.JOIN_NETWORK);
+        message.getData().putString("masterUrl", masterUrl);
         try {
             sameService.send(message);
         } catch (RemoteException e) {

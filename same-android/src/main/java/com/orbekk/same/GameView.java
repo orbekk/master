@@ -1,12 +1,9 @@
 package com.orbekk.same;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.orbekk.same.State.Component;
-import com.orbekk.same.ClientService;
-import com.orbekk.same.Client;
-import com.orbekk.same.UpdateConflict;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,9 +11,6 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -44,6 +38,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private Paint background;
         private Variable<Player> player;
         private VariableUpdaterTask<Player> updater;
+        private AtomicBoolean shouldRedraw = new AtomicBoolean(true);
         
         private Paint color = new Paint();
         
@@ -87,15 +82,34 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         
         @Override public void run() {
-            Canvas c = null;
-            try {
-                c = holder.lockCanvas();
-                synchronized(holder) {
-                    doDraw(c);
+            while (true) {
+                Canvas c = null;
+                try {
+                    c = holder.lockCanvas();
+                    synchronized(holder) {
+                        doDraw(c);
+                    }
+                } finally {
+                    holder.unlockCanvasAndPost(c);
                 }
-            } finally {
-                holder.unlockCanvasAndPost(c);
+                synchronized (this) {
+                    if (Thread.interrupted()) {
+                        break;
+                    }
+                    try {
+                        while (!shouldRedraw.get()) {
+                            wait();
+                        }
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
             }
+        }
+        
+        private synchronized void setShouldRedraw() {
+            shouldRedraw.set(true);
+            notifyAll();
         }
         
         private synchronized void setPosition(final float x, final float y) {
@@ -107,10 +121,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         @Override
-        public void valueChanged(Variable<Player> unused) {
+        public synchronized void valueChanged(Variable<Player> unused) {
             logger.info("Variable updated.");
             player.update();
-            run();
+            setShouldRedraw();
         }
     }
     
@@ -151,7 +165,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         logger.info("SurfaceDestroyed()");
-        // TODO: Stop thread.
+        thread.interrupt();
     }
     
     @Override

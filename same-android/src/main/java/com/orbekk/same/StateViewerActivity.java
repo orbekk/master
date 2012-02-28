@@ -51,6 +51,7 @@ public class StateViewerActivity extends Activity {
         super.onStop();
         client.removeStateListener(stateListener);
         client.disconnect();
+        client = null;
     }
     
 }

@@ -36,7 +36,7 @@ public class ClientInterfaceBridge implements ClientInterface {
     private int nextOperationNumber = 0;
     
     class ResponseHandler extends Handler {
-        @Override public void handleMessage(Message message) {
+        @Override public synchronized void handleMessage(Message message) {
             if (serviceMessenger == null) {
                 logger.warn("Ignoring message to disabled ResponseHandler.");
                 return;
@@ -119,7 +119,7 @@ public class ClientInterfaceBridge implements ClientInterface {
         this.context = context;
     }
     
-    public void connect() {
+    public synchronized void connect() {
         state = new State(".Temporary");
         Intent intent = new Intent(context, SameService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -135,11 +135,12 @@ public class ClientInterfaceBridge implements ClientInterface {
         }
     }
     
-    public void disconnect() {
+    public synchronized void disconnect() {
         if (serviceMessenger != null) {
             disconnectFromService();
+        }
+        if (serviceConnection != null) {
             context.unbindService(serviceConnection);
-            state = null;
         }
     }
 

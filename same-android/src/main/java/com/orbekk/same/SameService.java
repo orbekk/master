@@ -24,9 +24,12 @@ import com.orbekk.same.config.Configuration;
 import com.orbekk.util.DelayedOperation;
 
 public class SameService extends Service {
-    public final static int DISPLAY_MESSAGE = 1;
     public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
+    
+    /**
+     * masterUrl: getData().getString("masterUrl")
+     */
     public final static int JOIN_NETWORK = 4;
     public final static int ADD_STATE_RECEIVER = 5;
     public final static int REMOVE_STATE_RECEIVER = 6;
@@ -87,21 +90,6 @@ public class SameService extends Service {
     class InterfaceHandler extends Handler {
         @Override public void handleMessage(Message message) {
             switch (message.what) {
-                case DISPLAY_MESSAGE:
-                    Toast.makeText(SameService.this,
-                        (String)message.obj, Toast.LENGTH_SHORT)
-                            .show();
-                    Messenger responseService = message.replyTo;
-                    if (responseService != null) {
-                        Message response = Message.obtain(null, DISPLAY_MESSAGE);
-                        response.obj = "Response from SameService";
-                        try {
-                            responseService.send(response);
-                        } catch (RemoteException e) {
-                            logger.error("Failed to respond.", e);
-                        }
-                    }
-                    break;
                 case SEARCH_NETWORKS:
                     logger.info("SEARCH_NETWORKS");
                     sameController.searchNetworks();
@@ -112,7 +100,7 @@ public class SameService extends Service {
                     break;
                 case JOIN_NETWORK:
                     logger.info("JOIN_NETWORK");
-                    String masterUrl = (String)message.obj;
+                    String masterUrl = message.getData().getString("masterUrl");
                     sameController.getClient().joinNetwork(masterUrl);
                     break;
                 case ADD_STATE_RECEIVER:
