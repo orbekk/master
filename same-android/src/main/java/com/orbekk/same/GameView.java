@@ -86,11 +86,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Canvas c = null;
                 try {
                     c = holder.lockCanvas();
-                    synchronized(holder) {
-                        doDraw(c);
+                    if (c != null) {
+                        synchronized(holder) {
+                            doDraw(c);
+                        }
                     }
                 } finally {
-                    holder.unlockCanvasAndPost(c);
+                    if (c != null) {
+                        holder.unlockCanvasAndPost(c);
+                    }
                 }
                 synchronized (this) {
                     if (Thread.interrupted()) {
