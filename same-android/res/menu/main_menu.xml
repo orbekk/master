@@ -14,5 +14,9 @@
     <item
         android:id="@+id/graphics_demo"
         android:title="Graphics demo"/>
+    
+    <item
+        android:id="@+id/benchmark"
+        android:title="Benchmark"/>
 
 </menu>

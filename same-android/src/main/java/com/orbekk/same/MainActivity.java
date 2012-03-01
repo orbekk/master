@@ -3,6 +3,8 @@ package com.orbekk.same;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.same.android.benchmark.RepeatedSetVariableActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +41,8 @@ public class MainActivity extends Activity {
         case R.id.graphics_demo:
             startActivity(new Intent(this, GraphicsActivity.class));
             break;
+        case R.id.benchmark:
+            startActivity(new Intent(this, RepeatedSetVariableActivity.class));
         default:
             logger.error("Unknown menu entry: {}", item);
         }

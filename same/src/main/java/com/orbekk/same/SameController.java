@@ -12,6 +12,7 @@ import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
 import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
+import com.orbekk.same.http.JettyServerBuilder;
 import com.orbekk.same.http.TjwsServerBuilder;
 
 public class SameController {
@@ -60,7 +61,7 @@ public class SameController {
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));
 
-        ServerContainer server = new TjwsServerBuilder(port)
+        ServerContainer server = new JettyServerBuilder(port)
             .withServlet(stateServlet, "/_/state")
             .withService(client.getService(), ClientService.class)
             .withService(master.getService(), MasterService.class)
