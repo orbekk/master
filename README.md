@@ -27,7 +27,7 @@ try {
     VariableFactory variableFactory = client.createVariableFactory();
     Variable<String> myVariable = variableFactory.createString("MyVariable");
 
-    // Set the variable.
+    // Set the variable. It is automatically distributed to your other devices.
     myVariable.set("Hello, Same!");
 
     // Run update() to get the most recent version.
