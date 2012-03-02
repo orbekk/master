@@ -1,13 +1,10 @@
 package com.orbekk.same.android;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.orbekk.same.android.R;
-import com.orbekk.same.android.net.Broadcaster;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -27,7 +24,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.orbekk.same.android.net.Broadcaster;
 
 public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());

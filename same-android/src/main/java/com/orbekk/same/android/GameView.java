@@ -5,16 +5,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.same.Variable;
-import com.orbekk.same.VariableUpdaterTask;
-import com.orbekk.same.Variable.OnChangeListener;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.orbekk.same.Variable;
+import com.orbekk.same.VariableUpdaterTask;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -38,7 +37,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         private int height = 0;
         private int width = 0;
         private SurfaceHolder holder;
-        private Context context;
         private Paint background;
         private Variable<Player> player;
         private VariableUpdaterTask<Player> updater;
@@ -46,10 +44,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         
         private Paint color = new Paint();
         
-        public GameThread(SurfaceHolder holder, Context context,
-                Variable<Player> player) {
+        public GameThread(SurfaceHolder holder, Variable<Player> player) {
             this.holder = holder;
-            this.context = context;
             this.player = player;
             background = new Paint();
             background.setARGB(255, 0, 0, 0);
@@ -139,7 +135,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(Context context, Variable<Player> player) {
         super(context);
         getHolder().addCallback(this);
-        thread = new GameThread(getHolder(), context, player);
+        thread = new GameThread(getHolder(), player);
     }
 
     public void setUp() {

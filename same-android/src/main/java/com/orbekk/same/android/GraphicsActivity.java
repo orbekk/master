@@ -1,11 +1,10 @@
 package com.orbekk.same.android;
 
-import org.codehaus.jackson.type.TypeReference;
-
-import com.orbekk.same.Variable;
-
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.orbekk.same.Types;
+import com.orbekk.same.Variable;
 
 public class GraphicsActivity extends Activity {
     private GameView gameView;
@@ -20,9 +19,8 @@ public class GraphicsActivity extends Activity {
         super.onResume();
         client = new ClientInterfaceBridge(this);
         client.connect();
-        TypeReference playerType = new TypeReference<GameView.Player>() {};
         Variable<GameView.Player> player = client.createVariableFactory()
-                .create("Player", playerType);
+                .create("Player", Types.fromType(GameView.Player.class));
         gameView = new GameView(this, player);
         gameView.setUp();
         setContentView(gameView);

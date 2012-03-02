@@ -14,13 +14,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.widget.Toast;
 
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
 import com.orbekk.same.State;
-import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.State.Component;
+import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
