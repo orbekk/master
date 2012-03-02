@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.orbekk.same.directory.NetworkEntry;
+
 public class NetworkEntryTest {
     @Test
     public void testExpiry() {

@@ -1,10 +1,12 @@
-package com.orbekk.same.discovery;
+package com.orbekk.same.directory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DiscoveryServiceImpl implements DiscoveryService {
+import com.orbekk.same.discovery.DirectoryService;
+
+public class DirectoryServiceImpl implements DirectoryService {
     public final static long EXPIRE_TIME = 15 * 60l * 1000;  // 15 minutes
     List<NetworkEntry> networkList = new ArrayList<NetworkEntry>();
     

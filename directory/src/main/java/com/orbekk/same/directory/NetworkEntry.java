@@ -1,4 +1,4 @@
-package com.orbekk.same.discovery;
+package com.orbekk.same.directory;
 
 public class NetworkEntry {
     public String networkName;
