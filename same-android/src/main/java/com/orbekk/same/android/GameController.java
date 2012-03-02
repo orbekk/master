@@ -1,4 +1,4 @@
-package com.orbekk.same;
+package com.orbekk.same.android;
 
 import java.util.ArrayList;
 import java.util.List;

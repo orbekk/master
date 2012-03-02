@@ -1,9 +1,13 @@
-package com.orbekk.same;
+package com.orbekk.same.android;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.orbekk.same.Variable;
+import com.orbekk.same.VariableUpdaterTask;
+import com.orbekk.same.Variable.OnChangeListener;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -141,7 +141,7 @@ public class Client implements DiscoveryListener {
         }          
     }
 
-    ClientInterface getInterface() {
+    public ClientInterface getInterface() {
         return clientInterface;
     }
 

@@ -1,8 +1,8 @@
-package com.orbekk.same;
+package com.orbekk.same.android;
 
 import org.codehaus.jackson.type.TypeReference;
 
-import com.orbekk.same.android.ClientInterfaceBridge;
+import com.orbekk.same.Variable;
 
 import android.app.Activity;
 import android.os.Bundle;

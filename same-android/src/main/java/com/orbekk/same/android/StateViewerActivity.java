@@ -1,4 +1,4 @@
-package com.orbekk.same;
+package com.orbekk.same.android;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.orbekk.same.android.R;
+import com.orbekk.same.State;
+import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.State.Component;
-import com.orbekk.same.android.ClientInterfaceBridge;
 
 public class StateViewerActivity extends Activity {
     private Logger logger = LoggerFactory.getLogger(getClass());

@@ -1,4 +1,4 @@
-package com.orbekk.same;
+package com.orbekk.same.android;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orbekk.same.android.ClientInterfaceBridge;
+import com.orbekk.same.android.R;
+import com.orbekk.same.Variable;
+import com.orbekk.same.android.R.id;
+import com.orbekk.same.android.R.layout;
+import com.orbekk.same.Variable.OnChangeListener;
 import com.orbekk.util.DelayedOperation;
 
 public class VariableTestActivity extends Activity {

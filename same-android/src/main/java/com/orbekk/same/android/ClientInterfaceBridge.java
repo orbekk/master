@@ -18,7 +18,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import com.orbekk.same.ClientInterface;
-import com.orbekk.same.SameService;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
