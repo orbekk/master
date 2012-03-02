@@ -10,6 +10,7 @@ import com.orbekk.net.DefaultBroadcasterFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
+import com.orbekk.same.discovery.DiscoveryService;
 import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
 import com.orbekk.same.http.JettyServerBuilder;

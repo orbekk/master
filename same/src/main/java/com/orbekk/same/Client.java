@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.same.State.Component;
+import com.orbekk.same.discovery.DiscoveryListener;
 import com.orbekk.util.DelayedOperation;
 import com.orbekk.util.WorkQueue;
 
