@@ -17,27 +17,29 @@ An incomplete list of implemented and planned features.
 ## Example
 With Same you can share variables easily, like so:
 
-    // First: Some setup to get all your devices connected to the same network.
-    // Then, in your Activity:
-    ClientInterfaceBridge client = new ClientInterfaceBridge(this);
-    client.connect();
-    try {
-        // A VariableFactory is used to create distributed objects.
-        VariableFactory variableFactory = client.createVariableFactory();
-        Variable<String> myVariable = variableFactory.createString("MyVariable");
+```Java
+// First: Some setup to get all your devices connected to the same network.
+// Then, in your Activity:
+ClientInterfaceBridge client = new ClientInterfaceBridge(this);
+client.connect();
+try {
+    // A VariableFactory is used to create distributed objects.
+    VariableFactory variableFactory = client.createVariableFactory();
+    Variable<String> myVariable = variableFactory.createString("MyVariable");
 
-        // Set the variable.
-        myVariable.set("Hello, Same!");
+    // Set the variable.
+    myVariable.set("Hello, Same!");
 
-        // Run update() to get the most recent version.
-        myVariable.update();
+    // Run update() to get the most recent version.
+    myVariable.update();
 
-        // Get the current value.
-        Log.i("The current value is: " + myVariable.get());
-    } finally {
-        // Always remember to disconnect.
-        client.disconnect();
-    }
+    // Get the current value.
+    Log.i("The current value is: " + myVariable.get());
+} finally {
+    // Always remember to disconnect.
+    client.disconnect();
+}
+```
 
 ## Release log
 Pre-1.0: A release is a milestone in the project. Whenever the system seems to
