@@ -4,11 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="See menu."
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <ListView
+        android:id="@+id/activities_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
