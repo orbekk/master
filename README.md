@@ -28,3 +28,4 @@ be working fairly well, a commit is tagged as the release version.
 ### 0.1
 * Tag: working-graphics-0.1
 * An interactive graphics demo with several participants.
+* Web management on http://ip:port/_/state
