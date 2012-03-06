@@ -145,31 +145,6 @@ public class Client implements DiscoveryListener {
         return clientInterface;
     }
 
-    String lib_get(String name) {
-        return state.getDataOf(name);
-    }
-
-    <T> T lib_get(String name, TypeReference<T> type) {
-        return state.getParsedData(name, type);
-    }
-
-    void lib_set(String name, String data) throws UpdateConflict {
-        String masterUrl = state.getDataOf(".masterUrl");
-        long revision = state.getRevision(name) + 1;
-        MasterService master = connections.getMaster(masterUrl);
-        try {
-            boolean success = master.updateStateRequest(name, data,
-                    revision);
-            if (!success) {
-                throw new UpdateConflict("State update conflict when " +
-                        "updating " + name);
-            }
-        } catch (Exception e) {
-            logger.error("Unable to contact master. Update fails.", e);
-            throw new UpdateConflict("Unable to contact master. Update fails.");
-        }
-    }
-
     public State.Component getState(String name) {
         return state.getComponent(name);
     }
