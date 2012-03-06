@@ -24,6 +24,7 @@ import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.android.net.AndroidBroadcasterFactory;
 import com.orbekk.same.android.net.Broadcaster;
 import com.orbekk.same.config.Configuration;
+import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.util.DelayedOperation;
 
 public class SameService extends Service {
@@ -65,7 +66,9 @@ public class SameService extends Service {
 
     final static int SERVICE_PORT = 15068;
     final static int DISCOVERY_PORT = 15066;
-    
+    final static String DIRECTORY_URL = 
+            "http://flode.pvv.ntnu.no:15072/DirectoryService.json";
+
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameController sameController = null;
     private Configuration configuration = null;
@@ -196,6 +199,30 @@ public class SameService extends Service {
         }
     }
     
+    private void findNetworks() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                logger.info("Looking up networks.");
+                DirectoryService directory = sameController.getDirectory();
+                if (directory == null) {
+                    logger.warn("No discovery service configured.");
+                    return;
+                }
+                try {
+                    List<String> networks = directory.getNetworks();
+                    for (int i = 0; i < networks.size(); i += 2) {
+                        String name = networks.get(i);
+                        String url = networks.get(i + 1);
+                        networkListener.notifyNetwork(name,  url);
+                    }
+                } catch (Exception e) {
+                    logger.warn("Unable to contact discovery service.", e);
+                }
+            }
+        }).start();
+    }
+    
     private void initializeConfiguration() {
         Properties properties = new Properties();
         String localIp = new Broadcaster(this)
@@ -208,6 +235,7 @@ public class SameService extends Service {
         properties.setProperty("enableDiscovery", "true");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         properties.setProperty("networkName", "AndroidNetwork");
+        properties.setProperty("directoryUrl", DIRECTORY_URL);
         configuration = new Configuration(properties);
     }
     
@@ -248,6 +276,7 @@ public class SameService extends Service {
                 sameController.getClient().setNetworkListener(networkListener);
                 sameController.getClient().getInterface()
                     .addStateListener(stateListener);
+                findNetworks();
             } catch (Exception e) {
                 logger.error("Failed to start server", e);
             }
