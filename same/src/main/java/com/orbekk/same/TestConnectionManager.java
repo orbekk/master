@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.orbekk.paxos.PaxosService;
+import com.orbekk.same.discovery.DirectoryService;
 
 /**
  * This class is used in test.
@@ -15,6 +16,8 @@ public class TestConnectionManager implements ConnectionManager {
             new HashMap<String, MasterService>();
     public Map<String, PaxosService> paxosMap =
             new HashMap<String, PaxosService>();
+    public Map<String, DirectoryService> directoryMap =
+            new HashMap<String, DirectoryService>();
 
     public TestConnectionManager() {
     }
@@ -32,5 +35,10 @@ public class TestConnectionManager implements ConnectionManager {
     @Override
     public PaxosService getPaxos(String url) {
         return paxosMap.get(url);
+    }
+
+    @Override
+    public DirectoryService getDirectory(String url) {
+        return directoryMap.get(url);
     }
 }

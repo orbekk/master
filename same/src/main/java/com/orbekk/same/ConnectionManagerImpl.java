@@ -1,9 +1,5 @@
 package com.orbekk.same;
 
-import com.googlecode.jsonrpc4j.ProxyUtil;
-import com.orbekk.net.MyJsonRpcHttpClient;
-import com.orbekk.paxos.PaxosService;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -11,6 +7,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.orbekk.net.MyJsonRpcHttpClient;
+import com.orbekk.paxos.PaxosService;
+import com.orbekk.same.discovery.DirectoryService;
+import com.orbekk.same.discovery.DiscoveryService;
 
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;
@@ -65,5 +67,10 @@ public class ConnectionManagerImpl implements ConnectionManager {
     @Override
     public PaxosService getPaxos(String url) {
         return getClassProxy(url, PaxosService.class);
+    }
+    
+    @Override
+    public DirectoryService getDirectory(String url) {
+        return getClassProxy(url, DirectoryService.class);
     }
 }
