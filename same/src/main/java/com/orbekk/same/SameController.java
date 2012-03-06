@@ -10,6 +10,7 @@ import com.orbekk.net.DefaultBroadcasterFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
+import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.same.discovery.DiscoveryService;
 import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
@@ -25,6 +26,7 @@ public class SameController {
     private DiscoveryService discoveryService;
     private BroadcasterFactory broadcasterFactory;
     private Configuration configuration;
+    private ConnectionManager connections;
 
     /**
      * Timeout for remote operations in milliseconds.
@@ -70,7 +72,7 @@ public class SameController {
             .build();
 
         SameController controller = new SameController(
-                configuration, server, master, client,
+                configuration, connections, server, master, client,
                 paxos, discoveryService, broadcasterFactory);
         return controller;
     }
@@ -81,6 +83,7 @@ public class SameController {
 
     public SameController(
             Configuration configuration,
+            ConnectionManager connections,
             ServerContainer server,
             Master master,
             Client client,
@@ -88,6 +91,7 @@ public class SameController {
             DiscoveryService discoveryService,
             BroadcasterFactory broadcasterFactory) {
         this.configuration = configuration;
+        this.connections = connections;
         this.server = server;
         this.master = master;
         this.client = client;
@@ -152,6 +156,15 @@ public class SameController {
 
     public Master getMaster() {
         return master;
+    }
+    
+    public DirectoryService getDirectory() {
+        String directoryUrl = configuration.get("directoryUrl");
+        DirectoryService directory = null;
+        if (directoryUrl != null) {
+            directory = connections.getDirectory(directoryUrl);
+        }
+        return directory;
     }
 
     public VariableFactory createVariableFactory() {
