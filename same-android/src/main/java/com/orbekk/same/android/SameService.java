@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.widget.Toast;
 
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
@@ -243,6 +244,16 @@ public class SameService extends Service {
     private void create() {
         sameController.getClient().joinNetwork(
                 configuration.get("masterUrl"));
+        try {
+            sameController.getDirectory().registerNetwork(
+                    configuration.get("networkName"),
+                    configuration.get("masterUrl"));
+        } catch (Exception e) {
+            Toast.makeText(this, "Unable to register network. " +
+            		"Use manual address to join.",
+                    Toast.LENGTH_LONG).show();
+            logger.warn("Unable to advertise network.", e);
+        }
     }
     
     @Override
