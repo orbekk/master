@@ -20,12 +20,12 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.orbekk.same.android.net.Broadcaster;
+import com.orbekk.same.android.widget.NetworkListAdapter;
 
 public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -71,9 +71,9 @@ public class SameControllerActivity extends Activity {
     
     private void updateNetworkList() {
         ListView list = (ListView)findViewById(R.id.network_list);
-        list.setAdapter(new ArrayAdapter<String>(
+        list.setAdapter(new NetworkListAdapter(
                 SameControllerActivity.this,
-                R.layout.list_text_item, networkNames));        
+                R.layout.list_text_item, networkNames, networkUrls));        
     }
     
     
@@ -146,6 +146,8 @@ public class SameControllerActivity extends Activity {
         
         ListView networkList = (ListView)findViewById(R.id.network_list);
         networkList.setOnItemClickListener(networkListClickListener);
+        
+        updateNetworkList();
     }
     
     @Override public void onResume() {
