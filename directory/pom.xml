@@ -94,7 +94,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.orbekk.same.App</mainClass>
+              <mainClass>com.orbekk.same.directory.DirectoryApp</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
