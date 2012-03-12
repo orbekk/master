@@ -16,6 +16,7 @@ import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private ConnectionState connectionState = ConnectionState.DISCONNECTED;
     private ConnectionManager connections;
     private State state;
     private String myUrl;
@@ -69,6 +70,11 @@ public class Client implements DiscoveryListener {
         public void removeStateListener(StateChangedListener listener) {
             stateListeners.remove(listener);
         }
+
+        @Override
+        public ConnectionState getConnectionState() {
+            return Client.this.getConnectionState();
+        }
     }
 
     private ClientInterface clientInterface = new ClientInterfaceImpl();
@@ -76,6 +82,7 @@ public class Client implements DiscoveryListener {
     private ClientService serviceImpl = new ClientService() {
         @Override
         public void setState(String component, String data, long revision) throws Exception {
+            connectionState = ConnectionState.STABLE;
             boolean status = state.update(component, data, revision);
             if (status) {
                 for (StateChangedListener listener : stateListeners) {
@@ -123,6 +130,7 @@ public class Client implements DiscoveryListener {
     }
 
     public void interrupt() {
+        connectionState = ConnectionState.DISCONNECTED;
         discoveryThread.interrupt();
     }
 
@@ -130,8 +138,13 @@ public class Client implements DiscoveryListener {
         return myUrl;
     }
 
+    public ConnectionState getConnectionState() {
+        return connectionState;
+    }
+    
     public void joinNetwork(String masterUrl) {
         logger.info("joinNetwork({})", masterUrl);
+        connectionState = ConnectionState.UNSTABLE;
         MasterService master = connections.getMaster(masterUrl);
         state.clear();
         try {

@@ -7,4 +7,5 @@ public interface ClientInterface {
     DelayedOperation set(State.Component component);
     void addStateListener(StateChangedListener listener);
     void removeStateListener(StateChangedListener listener);
+    ConnectionState getConnectionState();
 }

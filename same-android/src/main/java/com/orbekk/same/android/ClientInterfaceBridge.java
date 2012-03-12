@@ -18,6 +18,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import com.orbekk.same.ClientInterface;
+import com.orbekk.same.ConnectionState;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
@@ -191,6 +192,12 @@ public class ClientInterfaceBridge implements ClientInterface {
 
     public VariableFactory createVariableFactory() {
         return VariableFactory.create(this);
+    }
+
+    /** Doesn't work yet. Maybe we needs a listener interface? */
+    @Override
+    public ConnectionState getConnectionState() {
+        return null;
     }
 
 }
