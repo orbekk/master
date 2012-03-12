@@ -5,10 +5,10 @@ import static com.orbekk.same.StackTraceUtil.throwableToString;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.orbekk.paxos.MasterProposer;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.discovery.DiscoveryListener;
 import com.orbekk.util.DelayedOperation;
@@ -21,6 +21,9 @@ public class Client implements DiscoveryListener {
     private ConnectionManager connections;
     private State state;
     private String myUrl;
+    private String masterUrl;
+    private int masterId = -1;
+    
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
     private NetworkNotificationListener networkListener;
@@ -41,7 +44,11 @@ public class Client implements DiscoveryListener {
         @Override
         public DelayedOperation set(Component component) {
             DelayedOperation op = new DelayedOperation();
-            String masterUrl = state.getDataOf(".masterUrl");
+            if (connectionState != ConnectionState.STABLE) {
+                op.complete(DelayedOperation.Status.createError(
+                        "Not connected to master: " + connectionState));
+                return op;
+            }
             MasterService master = connections.getMaster(masterUrl);
             try {
                 boolean success = master.updateStateRequest(
@@ -83,7 +90,6 @@ public class Client implements DiscoveryListener {
     private ClientService serviceImpl = new ClientService() {
         @Override
         public void setState(String component, String data, long revision) throws Exception {
-            connectionState = ConnectionState.STABLE;
             boolean status = state.update(component, data, revision);
             if (status) {
                 for (StateChangedListener listener : stateListeners) {
@@ -107,6 +113,13 @@ public class Client implements DiscoveryListener {
         @Override
         public void discoveryRequest(String remoteUrl) {
             discoveryThread.add(remoteUrl);
+        }
+
+        @Override
+        public void masterTakeover(String masterUrl, String networkName, 
+                int masterId) throws Exception {
+            Client.this.masterUrl = masterUrl;
+            connectionState = ConnectionState.STABLE;
         }
     };
 
@@ -206,5 +219,20 @@ public class Client implements DiscoveryListener {
 
     public ClientService getService() {
         return serviceImpl;
+    }
+    
+    private List<String> getPaxosUrls() {
+        List<String> paxosUrls = new ArrayList<String>();
+        for (String participant : state.getList(".participants")) {
+            paxosUrls.add(participant.replace("ClientService", "PaxosService"));
+        }
+        return paxosUrls;
+    }
+    
+    private void startMasterElection() {
+        List<String> paxosUrls = getPaxosUrls();
+        MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
+                connections);
+        // TODO: Run election.
     }
 }

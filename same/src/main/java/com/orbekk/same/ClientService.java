@@ -7,4 +7,13 @@ public interface ClientService {
 
     // Manual discovery request by client.
     void discoveryRequest(String remoteUrl) throws Exception;
+    
+    /** A new master takes over.
+     * 
+     * @param masterUrl The new master URL.
+     * @param masterId The ID of the new master. Only accept if this is higher
+     *      than the current master.
+     */
+    void masterTakeover(String masterUrl, String networkName,
+            int masterId) throws Exception;
 }

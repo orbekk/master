@@ -1,9 +1,17 @@
 package com.orbekk.same;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
+
+import com.orbekk.util.DelayedOperation;
 
 public class ClientTest {
     private State state = new State("ClientNetwork");
@@ -11,6 +19,29 @@ public class ClientTest {
     private Client client = new Client(state, connections,
             "http://client/ClientService.json");
     private ClientService clientS = client.getService();
+    private MasterService mockMaster = mock(MasterService.class);    
+    
+    @Before public void setUp() {
+        connections.masterMap.put("master", mockMaster);
+    }
+    
+    @Test public void disconnectedFailsUpdate() throws Exception {
+        ClientInterface clientI = client.getInterface();
+        DelayedOperation op = clientI.set(null);
+        assertTrue(op.isDone());
+        assertFalse(op.getStatus().isOk());
+    }
+    
+    @Test public void connectedUpdateWorks() throws Exception {
+        clientS.masterTakeover("master", null, 0);
+        ClientInterface clientI = client.getInterface();
+        State.Component component = new State.Component(
+                "TestVariable", 1, "meow");
+        when(mockMaster.updateStateRequest("TestVariable", "meow", 1))
+                .thenReturn(true);
+        DelayedOperation op = clientI.set(component);
+        assertTrue(op.getStatus().isOk());
+    }
     
     @Test public void testSetState() throws Exception {
         clientS.setState("TestState", "Test data", 100);
