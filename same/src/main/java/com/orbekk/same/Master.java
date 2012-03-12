@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class Master {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
-    private State state;
+    State state;
     private Broadcaster broadcaster;
 
     public static Master create(ConnectionManager connections,

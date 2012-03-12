@@ -19,7 +19,7 @@ public class Client implements DiscoveryListener {
     /** TODO: Not really useful yet. Remove? */
     private ConnectionState connectionState = ConnectionState.DISCONNECTED;
     private ConnectionManager connections;
-    private State state;
+    State state;
     private String myUrl;
     private String masterUrl;
     private int masterId = -1;
@@ -148,6 +148,10 @@ public class Client implements DiscoveryListener {
         discoveryThread.interrupt();
     }
 
+    void performWork() {
+        discoveryThread.performWork();
+    }
+    
     public String getUrl() {
         return myUrl;
     }
