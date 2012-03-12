@@ -121,6 +121,10 @@ public class Master {
                         client.setState(c.getName(), c.getData(),
                                 c.getRevision());
                     }
+                    client.masterTakeover(
+                            state.getDataOf(".masterUrl"),
+                            state.getDataOf(".networkName"),
+                            0);
                 } catch (Exception e) {
                     logger.info("Client {} failed to receive state update.", url);
                     removeParticipant(url);

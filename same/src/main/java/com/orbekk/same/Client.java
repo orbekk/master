@@ -21,7 +21,7 @@ public class Client implements DiscoveryListener {
     private ConnectionManager connections;
     State state;
     private String myUrl;
-    private String masterUrl;
+    String masterUrl;
     private int masterId = -1;
     
     private List<StateChangedListener> stateListeners =

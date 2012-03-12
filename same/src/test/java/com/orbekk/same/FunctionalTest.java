@@ -28,8 +28,8 @@ public class FunctionalTest {
     TestBroadcaster broadcaster = new TestBroadcaster();
     
     @Before public void setUp() {
-        master = new Master(new State("TestMaster"), connections,
-                broadcaster);
+        master = Master.create(connections,
+                broadcaster, masterUrl, "TestMaster");
         connections.masterMap.put(masterUrl,
                 master.getService());
         client1 = newClient("TestClient1", "http://client1/ClientService.json");
@@ -83,6 +83,7 @@ public class FunctionalTest {
         }
         for (Client c : clients) {
             assertThat(c.getConnectionState(), is(ConnectionState.STABLE));
+            assertThat(c.masterUrl, is(masterUrl));
         }
     }
     
@@ -92,6 +93,7 @@ public class FunctionalTest {
         Variable<String> x2 = vf2.createString("x");
         x1.set("TestValue1");
         performWork();
+        x1.update();
         x2.update();
         assertThat(x1.get(), is("TestValue1"));
         assertThat(x2.get(), is("TestValue1"));
