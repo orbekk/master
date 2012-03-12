@@ -16,6 +16,7 @@ import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    /** TODO: Not really useful yet. Remove? */
     private ConnectionState connectionState = ConnectionState.DISCONNECTED;
     private ConnectionManager connections;
     private State state;
