@@ -1,5 +1,6 @@
 port=10010
 localIp=10.0.0.6
+baseUrl=http://10.0.0.6:10010/
 masterUrl=http://10.0.0.6:10010/MasterService.json
 enableDiscovery=true
 discoveryPort=15066

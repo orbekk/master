@@ -20,6 +20,7 @@ import com.orbekk.same.http.TjwsServerBuilder;
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ServerContainer server;
+    private MasterServiceProxy masterService;
     private Master master;
     private Client client;
     private PaxosServiceImpl paxos;
@@ -27,6 +28,7 @@ public class SameController {
     private BroadcasterFactory broadcasterFactory;
     private Configuration configuration;
     private ConnectionManager connections;
+    private Broadcaster serviceBroadcaster;
 
     /**
      * Timeout for remote operations in milliseconds.
@@ -47,8 +49,9 @@ public class SameController {
         String masterUrl = baseUrl + "MasterService.json";
         String clientUrl = baseUrl + "ClientService.json";
 
-        Master master = Master.create(connections, broadcaster,
-                masterUrl, configuration.get("networkName"));
+        MasterServiceProxy master = new MasterServiceProxy();
+//        Master master = Master.create(connections, broadcaster,
+//                masterUrl, configuration.get("networkName"));
 
         Client client = new Client(clientState, connections,
                 clientUrl);
@@ -67,13 +70,13 @@ public class SameController {
         ServerContainer server = new JettyServerBuilder(port)
             .withServlet(stateServlet, "/_/state")
             .withService(client.getService(), ClientService.class)
-            .withService(master.getService(), MasterService.class)
+            .withService(master, MasterService.class)
             .withService(paxos, PaxosService.class)
             .build();
 
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
-                paxos, discoveryService, broadcasterFactory);
+                paxos, discoveryService, broadcaster, broadcasterFactory);
         return controller;
     }
 
@@ -85,24 +88,25 @@ public class SameController {
             Configuration configuration,
             ConnectionManager connections,
             ServerContainer server,
-            Master master,
+            MasterServiceProxy master,
             Client client,
             PaxosServiceImpl paxos,
             DiscoveryService discoveryService,
+            Broadcaster serviceBroadcaster,
             BroadcasterFactory broadcasterFactory) {
         this.configuration = configuration;
         this.connections = connections;
         this.server = server;
-        this.master = master;
+        this.masterService = master;
         this.client = client;
         this.paxos = paxos;
         this.discoveryService = discoveryService;
+        this.serviceBroadcaster = serviceBroadcaster;
         this.broadcasterFactory = broadcasterFactory;
     }
 
     public void start() throws Exception {
         server.start();
-        master.start();
         client.start();
         if (discoveryService != null) {
             discoveryService.start();
@@ -112,7 +116,9 @@ public class SameController {
     public void stop() {
         try {
             client.interrupt();
-            master.interrupt();
+            if (master != null) {
+                master.interrupt();
+            }
             server.stop();
             if (discoveryService != null) {
                 discoveryService.interrupt();
@@ -126,7 +132,9 @@ public class SameController {
         try {
             server.join();
             client.interrupt();
-            master.interrupt();
+            if (master != null) {
+                master.interrupt();
+            }
             if (discoveryService != null) {
                 discoveryService.join();
             }
@@ -139,6 +147,19 @@ public class SameController {
         }
     }
 
+    public void createNetwork(String networkName) {
+        masterService.setService(null);
+        if (master != null) {
+            master.interrupt();
+        }
+        String masterUrl = configuration.get("baseUrl") +
+                "MasterService.json";
+        master = Master.create(connections, serviceBroadcaster,
+                masterUrl, configuration.get("networkName"));
+        masterService.setService(master.getService());
+        joinNetwork(masterUrl);
+    }
+    
     public void searchNetworks() {
         BroadcasterInterface broadcaster = broadcasterFactory.create();
         String message = "Discover " + client.getUrl();
