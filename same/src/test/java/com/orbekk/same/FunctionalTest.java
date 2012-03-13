@@ -1,6 +1,8 @@
 package com.orbekk.same;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -94,5 +96,27 @@ public class FunctionalTest {
         x2.update();
         assertThat(x1.get(), is("TestValue1"));
         assertThat(x2.get(), is("TestValue1"));
+    }
+    
+    @Test public void clientBecomesMaster() {
+        String newMasterUrl = "http://newMaster/MasterService.json";
+        final Master newMaster = Master.create(connections,
+                broadcaster, newMasterUrl, "TestMaster");
+        connections.masterMap.put(newMasterUrl, newMaster.getService());
+        joinClients();
+        MasterController controller = new MasterController() {
+            @Override
+            public void enableMaster(State lastKnownState) {
+                newMaster.resumeFrom(lastKnownState);
+            }
+            @Override
+            public void disableMaster() {
+            }
+        };
+        client1.setMasterController(controller);
+        client1.startMasterElection();
+        newMaster.performWork();
+        assertThat(client1.masterUrl, is(newMasterUrl));
+        assertThat(client2.masterUrl, is(newMasterUrl));
     }
 }

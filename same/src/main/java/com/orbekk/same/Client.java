@@ -23,6 +23,7 @@ public class Client implements DiscoveryListener {
     private String myUrl;
     String masterUrl;
     private int masterId = -1;
+    private MasterController masterController = null;
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -160,6 +161,10 @@ public class Client implements DiscoveryListener {
         return connectionState;
     }
     
+    public void setMasterController(MasterController masterController) {
+        this.masterController = masterController;
+    }
+    
     public void joinNetwork(String masterUrl) {
         logger.info("joinNetwork({})", masterUrl);
         connectionState = ConnectionState.UNSTABLE;
@@ -233,10 +238,15 @@ public class Client implements DiscoveryListener {
         return paxosUrls;
     }
     
-    private void startMasterElection() {
+    public void startMasterElection() {
+        if (masterController == null) {
+            logger.warn("Could not become master: No master controller.");
+            return;
+        }
         List<String> paxosUrls = getPaxosUrls();
         MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
                 connections);
         // TODO: Run election.
+        masterController.enableMaster(state);
     }
 }

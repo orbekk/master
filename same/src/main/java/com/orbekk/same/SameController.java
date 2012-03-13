@@ -130,6 +130,7 @@ public class SameController {
 
     public void start() throws Exception {
         server.start();
+        client.setMasterController(masterController);
         client.start();
         if (discoveryService != null) {
             discoveryService.start();
