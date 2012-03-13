@@ -1,11 +1,10 @@
 package com.orbekk.same;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("unchecked")
 public class VariableUpdaterTaskTest {
     Variable<String> v;
     VariableUpdaterTask<String> updater;
