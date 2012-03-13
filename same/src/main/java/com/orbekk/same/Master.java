@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 public class Master {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
+    private String myUrl;
     State state;
     private Broadcaster broadcaster;
 
@@ -17,14 +18,15 @@ public class Master {
             Broadcaster broadcaster, String myUrl, String networkName) {
         State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
-        return new Master(state, connections, broadcaster);
+        return new Master(state, connections, broadcaster, myUrl);
     }
 
     Master(State initialState, ConnectionManager connections,
-            Broadcaster broadcaster) {
+            Broadcaster broadcaster, String myUrl) {
         this.state = initialState;
         this.connections = connections;
         this.broadcaster = broadcaster;
+        this.myUrl = myUrl;
     }
 
     private MasterService serviceImpl = new MasterService() {
@@ -135,5 +137,21 @@ public class Master {
 
     /** This master should take over from an earlier master. */
     public void resumeFrom(State lastKnownState) {
+        state = lastKnownState;
+        broadcaster.broadcast(state.getList(".participants"),
+                new ServiceOperation() {
+            @Override
+            public void run(String url) {
+                ClientService client = connections.getClient(url);
+                try {
+                    client.masterTakeover(myUrl,
+                            state.getDataOf(".networkName"), 0);
+                } catch (Exception e) {
+                    logger.info("Client {} failed to acknowledge new master. " +
+                    		"Removing {}", url);
+                    removeParticipant(url);
+                }
+            }
+        });
     }
 }
