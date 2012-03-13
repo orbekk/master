@@ -35,6 +35,29 @@ public class SameController {
      */
     private static final int timeout = 10000;
 
+    private MasterController masterController = new MasterController() {
+        @Override
+        public void enableMaster(State lastKnownState) {
+            String masterUrl = configuration.get("baseUrl") +
+                    "MasterService.json";
+            master = Master.create(connections, serviceBroadcaster,
+                    masterUrl, configuration.get("networkName"));
+            if (lastKnownState != null) {
+                master.resumeFrom(lastKnownState);
+            }
+            master.start();
+            masterService.setService(master.getService());
+        }
+
+        @Override
+        public void disableMaster() {
+            masterService.setService(null);
+            if (master != null) {
+                master.interrupt();
+            }
+        }
+    };
+    
     public static SameController create(BroadcasterFactory broadcasterFactory,
             Configuration configuration) {
         int port = configuration.getInt("port");
@@ -148,15 +171,10 @@ public class SameController {
     }
 
     public void createNetwork(String networkName) {
-        masterService.setService(null);
-        if (master != null) {
-            master.interrupt();
-        }
+        masterController.disableMaster();
+        masterController.enableMaster(null);
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
-        master = Master.create(connections, serviceBroadcaster,
-                masterUrl, configuration.get("networkName"));
-        masterService.setService(master.getService());
         joinNetwork(masterUrl);
     }
     

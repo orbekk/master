@@ -132,4 +132,8 @@ public class Master {
             }
         });
     }
+
+    /** This master should take over from an earlier master. */
+    public void resumeFrom(State lastKnownState) {
+    }
 }
