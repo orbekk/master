@@ -38,6 +38,10 @@ public class MasterTest {
         public void masterTakeover(String masterUrl, String networkName, int masterId)
                 throws Exception {
         }
+
+        @Override
+        public void masterDown() throws Exception {
+        }
     }
     
     @Before

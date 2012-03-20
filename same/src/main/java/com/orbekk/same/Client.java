@@ -123,6 +123,13 @@ public class Client implements DiscoveryListener {
             Client.this.masterUrl = masterUrl;
             connectionState = ConnectionState.STABLE;
         }
+
+        @Override
+        public void masterDown() throws Exception {
+            logger.info("Master is down.");
+            connectionState = ConnectionState.UNSTABLE;
+            tryBecomeMaster();
+        }
     };
 
     private WorkQueue<String> discoveryThread = new WorkQueue<String>() {
@@ -240,15 +247,30 @@ public class Client implements DiscoveryListener {
         return paxosUrls;
     }
     
-    public void startMasterElection() {
-        if (masterController == null) {
-            logger.warn("Could not become master: No master controller.");
-            return;
-        }
+    private void tryBecomeMaster() {
         List<String> paxosUrls = getPaxosUrls();
         MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
                 connections);
         // TODO: Run election.
+        if (masterController == null) {
+            logger.warn("Could not become master: No master controller.");
+            return;
+        }
         masterController.enableMaster(state);
+    }
+    
+    public void startMasterElection() {
+        List<String> participants = state.getList(".participants");
+        broadcaster.broadcast(participants, new ServiceOperation() {
+            @Override public void run(String url) {
+                ClientService client = connections.getClient(url);
+                try {
+                    client.masterDown();
+                } catch (Exception e) {
+                    logger.info("{}.masterDown() did not respond (ignored): " +
+                    		url, e);
+                }
+            }
+        });
     }
 }

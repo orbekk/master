@@ -16,4 +16,7 @@ public interface ClientService {
      */
     void masterTakeover(String masterUrl, String networkName,
             int masterId) throws Exception;
+    
+    /** The master is down, so start a new master election. */
+    void masterDown() throws Exception;
 }
