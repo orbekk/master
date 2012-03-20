@@ -123,7 +123,7 @@ public class Client implements DiscoveryListener {
         }
 
         @Override
-        public void masterTakeover(String masterUrl, String networkName, 
+        public synchronized void masterTakeover(String masterUrl, String networkName, 
                 int masterId) throws Exception {
             if (masterId <= Client.this.masterId) {
                 logger.warn("{}:{} tried to take over, but current master is " +
@@ -135,6 +135,7 @@ public class Client implements DiscoveryListener {
                     new Object[]{masterUrl, networkName, masterId});
             abortMasterElection();
             Client.this.masterUrl = masterUrl;
+            Client.this.masterId = masterId;
             connectionState = ConnectionState.STABLE;
         }
 
@@ -147,7 +148,7 @@ public class Client implements DiscoveryListener {
             }
             logger.warn("Master down.");
             connectionState = ConnectionState.UNSTABLE;
-            tryBecomeMaster();
+            tryBecomeMaster(masterId);
         }
     };
 
@@ -266,7 +267,7 @@ public class Client implements DiscoveryListener {
         return paxosUrls;
     }
     
-    private void tryBecomeMaster() {
+    private void tryBecomeMaster(int failedMasterId) {
         List<String> paxosUrls = getPaxosUrls();
         MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
                 connections);
@@ -283,7 +284,12 @@ public class Client implements DiscoveryListener {
             }
         };
         synchronized (this) {
-            currentMasterProposal = proposer.startProposalTask(1, sleeperTask);
+            if (failedMasterId < masterId) {
+                logger.info("Master election aborted. Master already chosen.");
+                return;
+            }
+            currentMasterProposal = proposer.startProposalTask(masterId + 1,
+                    sleeperTask);
         }
         Integer result = null;
         try {
@@ -310,11 +316,12 @@ public class Client implements DiscoveryListener {
     
     public void startMasterElection() {
         List<String> participants = state.getList(".participants");
+        final int masterId = getMasterIdEstimate();
         broadcaster.broadcast(participants, new ServiceOperation() {
             @Override public void run(String url) {
                 ClientService client = connections.getClient(url);
                 try {
-                    client.masterDown(getMasterIdEstimate());
+                    client.masterDown(masterId);
                 } catch (Exception e) {
                     logger.info("{}.masterDown() did not respond (ignored): " +
                     		url, e);

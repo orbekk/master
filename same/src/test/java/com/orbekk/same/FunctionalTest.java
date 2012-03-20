@@ -127,4 +127,32 @@ public class FunctionalTest {
         assertThat(client1.masterUrl, is(newMasterUrl));
         assertThat(client2.masterUrl, is(newMasterUrl));
     }
+    
+    @Test public void onlyOneNewMaster() {
+        String newMasterUrl = "http://newMaster/MasterService.json";
+        final Master newMaster = Master.create(connections,
+                broadcaster, newMasterUrl, "TestMaster");
+        connections.masterMap.put(newMasterUrl, newMaster.getService());
+        joinClients();
+        MasterController controller = new MasterController() {
+            boolean firstMaster = true;
+            @Override
+            public synchronized void enableMaster(State lastKnownState,
+                    int masterId) {
+                assertThat(firstMaster, is(true));
+                newMaster.resumeFrom(lastKnownState, masterId);
+                firstMaster = false;
+            }
+            @Override
+            public void disableMaster() {
+            }
+        };
+        client1.setMasterController(controller);
+        client2.setMasterController(controller);
+        client3.setMasterController(controller);
+        client1.startMasterElection();
+        newMaster.performWork();
+        assertThat(client1.masterUrl, is(newMasterUrl));
+        assertThat(client2.masterUrl, is(newMasterUrl));
+    }
 }

@@ -91,9 +91,9 @@ public class MasterProposer extends Thread {
     }
     
     Integer proposeRetry(int proposalNumber, Runnable retryAction) {
-        assert proposalNumber >= 0;
+        assert proposalNumber > 0;
         int nextProposal = proposalNumber;
-        int result = -1;
+        int result = nextProposal - 1;
 
         while (!Thread.interrupted() && result != nextProposal) {
             result = internalPropose(nextProposal);
