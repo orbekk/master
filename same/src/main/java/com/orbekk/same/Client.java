@@ -72,6 +72,7 @@ public class Client implements DiscoveryListener {
                 String e_ = throwableToString(e);
                 op.complete(DelayedOperation.Status.createError(
                         "Error contacting master. Update fails: " + e_));
+                startMasterElection();
             }
             return op;
         }

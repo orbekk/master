@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
+import com.orbekk.util.DelayedOperation;
 
 /** A functional test that runs with a master and several clients. */
 public class FunctionalTest {
@@ -28,12 +29,14 @@ public class FunctionalTest {
     List<Client> clients = new ArrayList<Client>();
     TestConnectionManager connections = new TestConnectionManager();
     TestBroadcaster broadcaster = new TestBroadcaster();
+    MasterServiceProxy masterServiceProxy;
     
     @Before public void setUp() {
         master = Master.create(connections,
                 broadcaster, masterUrl, "TestMaster");
+        masterServiceProxy = new MasterServiceProxy(master.getService());
         connections.masterMap.put(masterUrl,
-                master.getService());
+                masterServiceProxy);
         client1 = newClient("TestClient1", "http://client1/ClientService.json");
         vf1 = new VariableFactory(client1.getInterface());
         client2 = newClient("TestClient2", "http://client2/ClientService.json");
@@ -151,6 +154,35 @@ public class FunctionalTest {
         client2.setMasterController(controller);
         client3.setMasterController(controller);
         client1.startMasterElection();
+        newMaster.performWork();
+        assertThat(client1.masterUrl, is(newMasterUrl));
+        assertThat(client2.masterUrl, is(newMasterUrl));
+    }
+    
+    @Test public void masterFails() {
+        String newMasterUrl = "http://newMaster/MasterService.json";
+        final Master newMaster = Master.create(connections,
+                broadcaster, newMasterUrl, "TestMaster");
+        connections.masterMap.put(newMasterUrl, newMaster.getService());
+        joinClients();
+        MasterController controller = new MasterController() {
+            @Override
+            public synchronized void enableMaster(State lastKnownState,
+                    int masterId) {
+                newMaster.resumeFrom(lastKnownState, masterId);
+            }
+            @Override
+            public void disableMaster() {
+            }
+        };
+        client1.setMasterController(controller);
+        client2.setMasterController(controller);
+        client3.setMasterController(controller);
+        Variable<String> x1 = vf1.createString("TestMasterFailure");
+        masterServiceProxy.setService(null);
+        assertThat(x1.set("Woop, woop").getStatus().getStatusCode(),
+                is(DelayedOperation.Status.ERROR));
+        performWork();
         newMaster.performWork();
         assertThat(client1.masterUrl, is(newMasterUrl));
         assertThat(client2.masterUrl, is(newMasterUrl));
