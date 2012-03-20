@@ -136,7 +136,7 @@ public class Master {
     }
 
     /** This master should take over from an earlier master. */
-    public void resumeFrom(State lastKnownState) {
+    public void resumeFrom(State lastKnownState, final int masterId) {
         state = lastKnownState;
         broadcaster.broadcast(state.getList(".participants"),
                 new ServiceOperation() {
@@ -145,7 +145,7 @@ public class Master {
                 ClientService client = connections.getClient(url);
                 try {
                     client.masterTakeover(myUrl,
-                            state.getDataOf(".networkName"), 0);
+                            state.getDataOf(".networkName"), masterId);
                 } catch (Exception e) {
                     logger.info("Client {} failed to acknowledge new master. " +
                     		"Removing {}", url);

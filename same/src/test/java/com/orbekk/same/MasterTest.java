@@ -37,10 +37,12 @@ public class MasterTest {
         @Override
         public void masterTakeover(String masterUrl, String networkName, int masterId)
                 throws Exception {
+            throw new Exception("Unreachable client");
         }
 
         @Override
-        public void masterDown() throws Exception {
+        public void masterDown(int masterId) throws Exception {
+            throw new Exception("Unreachable client");
         }
     }
     

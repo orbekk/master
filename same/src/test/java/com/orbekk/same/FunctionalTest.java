@@ -112,8 +112,8 @@ public class FunctionalTest {
         joinClients();
         MasterController controller = new MasterController() {
             @Override
-            public void enableMaster(State lastKnownState) {
-                newMaster.resumeFrom(lastKnownState);
+            public void enableMaster(State lastKnownState, int masterId) {
+                newMaster.resumeFrom(lastKnownState, masterId);
             }
             @Override
             public void disableMaster() {

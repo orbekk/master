@@ -18,5 +18,5 @@ public interface ClientService {
             int masterId) throws Exception;
     
     /** The master is down, so start a new master election. */
-    void masterDown() throws Exception;
+    void masterDown(int masterId) throws Exception;
 }

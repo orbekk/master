@@ -26,7 +26,7 @@ public class Client implements DiscoveryListener {
     State state;
     private String myUrl;
     String masterUrl;
-    private int masterId = -1;
+    private int masterId = 0;
     private MasterController masterController = null;
     private Broadcaster broadcaster;
     private Future<Integer> currentMasterProposal = null;
@@ -125,6 +125,12 @@ public class Client implements DiscoveryListener {
         @Override
         public void masterTakeover(String masterUrl, String networkName, 
                 int masterId) throws Exception {
+            if (masterId <= Client.this.masterId) {
+                logger.warn("{}:{} tried to take over, but current master is " +
+                		"{}:{}. Ignoring", new Object[]{masterUrl, masterId,
+                                state.getDataOf(".masterUrl"),
+                                Client.this.masterId}); 
+            }
             logger.info("MasterTakeover({}, {}, {})",
                     new Object[]{masterUrl, networkName, masterId});
             abortMasterElection();
@@ -133,8 +139,13 @@ public class Client implements DiscoveryListener {
         }
 
         @Override
-        public void masterDown() throws Exception {
-            logger.info("Master is down.");
+        public void masterDown(int masterId) throws Exception {
+            if (masterId < Client.this.masterId) {
+                logger.info("Master {} is down, but current master is {}. Ignoring.",
+                        masterId, Client.this.masterId);
+                return;
+            }
+            logger.warn("Master down.");
             connectionState = ConnectionState.UNSTABLE;
             tryBecomeMaster();
         }
@@ -282,7 +293,7 @@ public class Client implements DiscoveryListener {
         } catch (CancellationException e) {
         }
         if (!currentMasterProposal.isCancelled() && result != null) {
-            masterController.enableMaster(state);
+            masterController.enableMaster(state, result);
         }
     }
     
@@ -293,13 +304,17 @@ public class Client implements DiscoveryListener {
         }
     }
     
+    private int getMasterIdEstimate() {
+        return masterId;
+    }
+    
     public void startMasterElection() {
         List<String> participants = state.getList(".participants");
         broadcaster.broadcast(participants, new ServiceOperation() {
             @Override public void run(String url) {
                 ClientService client = connections.getClient(url);
                 try {
-                    client.masterDown();
+                    client.masterDown(getMasterIdEstimate());
                 } catch (Exception e) {
                     logger.info("{}.masterDown() did not respond (ignored): " +
                     		url, e);

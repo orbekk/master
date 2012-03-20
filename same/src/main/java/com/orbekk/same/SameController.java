@@ -37,13 +37,13 @@ public class SameController {
 
     private MasterController masterController = new MasterController() {
         @Override
-        public void enableMaster(State lastKnownState) {
+        public void enableMaster(State lastKnownState, int masterId) {
             String masterUrl = configuration.get("baseUrl") +
                     "MasterService.json";
             master = Master.create(connections, serviceBroadcaster,
                     masterUrl, configuration.get("networkName"));
             if (lastKnownState != null) {
-                master.resumeFrom(lastKnownState);
+                master.resumeFrom(lastKnownState, masterId);
             }
             master.start();
             masterService.setService(master.getService());
@@ -173,7 +173,7 @@ public class SameController {
 
     public void createNetwork(String networkName) {
         masterController.disableMaster();
-        masterController.enableMaster(null);
+        masterController.enableMaster(null, 1);
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
         joinNetwork(masterUrl);
