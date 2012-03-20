@@ -30,11 +30,6 @@ public class MasterTest {
         }
 
         @Override
-        public void discoveryRequest(String remoteUrl) throws Exception {
-            throw new Exception("Unreachable client");
-        }
-
-        @Override
         public void masterTakeover(String masterUrl, String networkName, int masterId)
                 throws Exception {
             throw new Exception("Unreachable client");

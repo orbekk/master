@@ -13,11 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import com.orbekk.paxos.MasterProposer;
 import com.orbekk.same.State.Component;
-import com.orbekk.same.discovery.DiscoveryListener;
 import com.orbekk.util.DelayedOperation;
 import com.orbekk.util.WorkQueue;
 
-public class Client implements DiscoveryListener {
+public class Client {
     public static long MASTER_TAKEOVER_TIMEOUT = 4000l;
     private Logger logger = LoggerFactory.getLogger(getClass());
     /** TODO: Not really useful yet. Remove? */
@@ -119,11 +118,6 @@ public class Client implements DiscoveryListener {
         }
 
         @Override
-        public void discoveryRequest(String remoteUrl) {
-            discoveryThread.add(remoteUrl);
-        }
-
-        @Override
         public synchronized void masterTakeover(String masterUrl, String networkName, 
                 int masterId) throws Exception {
             logger.info("MasterTakeover({}, {}, {})",
@@ -153,15 +147,6 @@ public class Client implements DiscoveryListener {
         }
     };
 
-    private WorkQueue<String> discoveryThread = new WorkQueue<String>() {
-        @Override protected void onChange() {
-            List<String> pending = getAndClear();
-            for (String url : pending) {
-                discover(url);
-            }
-        }
-    };
-
     public Client(State state, ConnectionManager connections,
             String myUrl, Broadcaster broadcaster) {
         this.state = state;
@@ -171,16 +156,13 @@ public class Client implements DiscoveryListener {
     }
 
     public void start() {
-        discoveryThread.start();
     }
 
     public void interrupt() {
         connectionState = ConnectionState.DISCONNECTED;
-        discoveryThread.interrupt();
     }
 
     void performWork() {
-        discoveryThread.performWork();
     }
     
     public String getUrl() {
@@ -226,39 +208,6 @@ public class Client implements DiscoveryListener {
 
     public void setNetworkListener(NetworkNotificationListener listener) {
         this.networkListener = listener;
-    }
-
-    public void sendDiscoveryRequest(String url) {
-        try {
-            connections.getClient(url)
-            .discoveryRequest(myUrl);
-        } catch (Exception e) {
-            logger.warn("Failed to send discovery request: {}",
-                    throwableToString(e));
-        }
-    }
-
-    @Override
-    public void discover(String url) {
-        String networkName = state.getDataOf(".networkName");
-        if (networkName.equals(".InvalidClientNetwork")) {
-            logger.warn("Client not joined to a network. Ignoring discovery");
-            return;
-        } else if (networkName.equals(".Private")) {
-            logger.info("Ignoring broadcast to .Private network.");
-            return;
-        }
-
-        if (!url.equals(myUrl)) {
-            try {
-                connections.getClient(url)
-                .notifyNetwork(state.getDataOf(".networkName"),
-                        state.getDataOf(".masterUrl"));
-            } catch (Exception e) {
-                logger.warn("Failed to contact new client {}: {}", url,
-                        throwableToString(e));
-            }
-        }
     }
 
     public ClientService getService() {

@@ -57,15 +57,6 @@ public class ClientTest {
         verify(listener).notifyNetwork("MyNetwork", "MasterUrl");
     }
     
-    @Test public void discover() throws Exception {
-        clientS.setState(".masterUrl", "master", 1);
-        ClientService mockClient = mock(ClientService.class);
-        connections.clientMap.put("mockClient/ClientService.json",
-                mockClient);
-        client.discover("mockClient/ClientService.json");
-        verify(mockClient).notifyNetwork("ClientNetwork", "master");
-    }
-    
     @Test public void stateListenerReceivesUpdate() throws Exception {
         StateChangedListener listener = mock(StateChangedListener.class);
         client.getInterface().addStateListener(listener);

@@ -12,7 +12,6 @@ import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.orbekk.net.MyJsonRpcHttpClient;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.same.discovery.DirectoryService;
-import com.orbekk.same.discovery.DiscoveryService;
 
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;

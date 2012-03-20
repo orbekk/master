@@ -5,9 +5,6 @@ public interface ClientService {
 
     void setState(String component, String data, long revision) throws Exception;
 
-    // Manual discovery request by client.
-    void discoveryRequest(String remoteUrl) throws Exception;
-    
     /** A new master takes over.
      * 
      * @param masterUrl The new master URL.
