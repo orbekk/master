@@ -49,6 +49,9 @@ be working fairly well, a commit is tagged as the release version.
 * Branch: master
 * Centralized network discovery: Enables network discovery on networks that
   don't support UDP broadcasts.
+* Master takeover: When the master dies, another client should take over.
+  This version does not recover inconsistent state. This version will not
+  work on Android.
 
 ### 0.2
 * Tag: 0.2-new-main-screen
