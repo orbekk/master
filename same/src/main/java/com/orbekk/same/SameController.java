@@ -42,9 +42,10 @@ public class SameController {
                     "MasterService.json";
             master = Master.create(connections, serviceBroadcaster,
                     masterUrl, configuration.get("networkName"));
-            if (lastKnownState != null) {
-                master.resumeFrom(lastKnownState, masterId);
+            if (lastKnownState == null) {
+                lastKnownState = master.state;
             }
+            master.resumeFrom(lastKnownState, masterId);
             master.start();
             masterService.setService(master.getService());
         }

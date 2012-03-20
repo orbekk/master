@@ -195,11 +195,16 @@ public class Client implements DiscoveryListener {
         this.masterController = masterController;
     }
     
+    private void reset() {
+        state.clear();
+        masterId = 0;
+    }
+    
     public void joinNetwork(String masterUrl) {
         logger.info("joinNetwork({})", masterUrl);
         connectionState = ConnectionState.UNSTABLE;
         MasterService master = connections.getMaster(masterUrl);
-        state.clear();
+        reset();
         try {
             master.joinNetworkRequest(myUrl);
         } catch (Exception e) {

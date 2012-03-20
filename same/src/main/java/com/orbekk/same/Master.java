@@ -13,6 +13,7 @@ public class Master {
     private String myUrl;
     State state;
     private Broadcaster broadcaster;
+    private volatile int masterId = 0;
 
     public static Master create(ConnectionManager connections,
             Broadcaster broadcaster, String myUrl, String networkName) {
@@ -119,14 +120,14 @@ public class Master {
             @Override public void run(String url) {
                 ClientService client = connections.getClient(url);
                 try {
+                    client.masterTakeover(
+                            state.getDataOf(".masterUrl"),
+                            state.getDataOf(".networkName"),
+                            masterId);
                     for (Component c : components) {
                         client.setState(c.getName(), c.getData(),
                                 c.getRevision());
                     }
-                    client.masterTakeover(
-                            state.getDataOf(".masterUrl"),
-                            state.getDataOf(".networkName"),
-                            0);
                 } catch (Exception e) {
                     logger.info("Client {} failed to receive state update.", url);
                     removeParticipant(url);
@@ -138,6 +139,8 @@ public class Master {
     /** This master should take over from an earlier master. */
     public void resumeFrom(State lastKnownState, final int masterId) {
         state = lastKnownState;
+        state.update(".masterUrl", myUrl, state.getRevision(".masterUrl") + 100);
+        this.masterId = masterId;
         broadcaster.broadcast(state.getList(".participants"),
                 new ServiceOperation() {
             @Override
