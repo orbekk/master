@@ -14,8 +14,11 @@ public class App {
         try {
             controller.start();
             controller.searchNetworks();
-            controller.createNetwork(configuration.get("networkName"));
-            controller.joinNetwork(configuration.get("masterUrl"));
+            if ("true".equals(configuration.get("isMaster"))) {
+                controller.createNetwork(configuration.get("networkName"));
+            } else {
+                controller.joinNetwork(configuration.get("masterUrl"));
+            }
             controller.join();
         } catch (Exception e) {
             logger.error("Error in App.", e);

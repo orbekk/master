@@ -80,6 +80,20 @@ public class Master {
             List<String> pending = getAndClear();
             logger.info("Sending full state to {}", pending);
             final List<Component> components = state.getComponents();
+            broadcaster.broadcast(pending, new ServiceOperation() {
+                @Override public void run(String url) {
+                    ClientService client = connections.getClient(url);
+                    try {
+                        client.masterTakeover(
+                                state.getDataOf(".masterUrl"),
+                                state.getDataOf(".networkName"),
+                                masterId);
+                    } catch (Exception e) {
+                        logger.info("Client {} failed to acknowledge master. Remove.");
+                        removeParticipant(url);
+                    }
+                }
+            });
             broadcastNewComponents(pending, components);
         }
     };
@@ -120,10 +134,6 @@ public class Master {
             @Override public void run(String url) {
                 ClientService client = connections.getClient(url);
                 try {
-                    client.masterTakeover(
-                            state.getDataOf(".masterUrl"),
-                            state.getDataOf(".networkName"),
-                            masterId);
                     for (Component c : components) {
                         client.setState(c.getName(), c.getData(),
                                 c.getRevision());

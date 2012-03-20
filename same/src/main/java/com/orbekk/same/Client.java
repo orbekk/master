@@ -126,14 +126,14 @@ public class Client implements DiscoveryListener {
         @Override
         public synchronized void masterTakeover(String masterUrl, String networkName, 
                 int masterId) throws Exception {
+            logger.info("MasterTakeover({}, {}, {})",
+                    new Object[]{masterUrl, networkName, masterId});
             if (masterId <= Client.this.masterId) {
                 logger.warn("{}:{} tried to take over, but current master is " +
                 		"{}:{}. Ignoring", new Object[]{masterUrl, masterId,
                                 state.getDataOf(".masterUrl"),
                                 Client.this.masterId}); 
             }
-            logger.info("MasterTakeover({}, {}, {})",
-                    new Object[]{masterUrl, networkName, masterId});
             abortMasterElection();
             Client.this.masterUrl = masterUrl;
             Client.this.masterId = masterId;
@@ -195,7 +195,7 @@ public class Client implements DiscoveryListener {
         this.masterController = masterController;
     }
     
-    private void reset() {
+    private synchronized void reset() {
         state.clear();
         masterId = 0;
     }
@@ -265,16 +265,22 @@ public class Client implements DiscoveryListener {
         return serviceImpl;
     }
     
-    private List<String> getPaxosUrls() {
+    private List<String> getPaxosUrlsNoMaster() {
         List<String> paxosUrls = new ArrayList<String>();
         for (String participant : state.getList(".participants")) {
-            paxosUrls.add(participant.replace("ClientService", "PaxosService"));
+            String masterPaxos = state.getDataOf(".masterUrl")
+                    .replace("MasterService", "PaxosService");
+            String paxos = participant.replace("ClientService", "PaxosService");
+            if (!paxos.equals(masterPaxos)) {
+                paxosUrls.add(participant.replace("ClientService", "PaxosService"));
+            }
         }
+        logger.info("Paxos urls: {}", paxosUrls);
         return paxosUrls;
     }
     
     private void tryBecomeMaster(int failedMasterId) {
-        List<String> paxosUrls = getPaxosUrls();
+        List<String> paxosUrls = getPaxosUrlsNoMaster();
         MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
                 connections);
         if (masterController == null) {
