@@ -18,7 +18,7 @@ import com.orbekk.util.DelayedOperation;
 import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
-    public static final long MASTER_TAKEOVER_TIMEOUT = 4000l;
+    public static long MASTER_TAKEOVER_TIMEOUT = 4000l;
     private Logger logger = LoggerFactory.getLogger(getClass());
     /** TODO: Not really useful yet. Remove? */
     private ConnectionState connectionState = ConnectionState.DISCONNECTED;
@@ -29,6 +29,7 @@ public class Client implements DiscoveryListener {
     private int masterId = -1;
     private MasterController masterController = null;
     private Broadcaster broadcaster;
+    private Future<Integer> currentMasterProposal = null;
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -124,6 +125,9 @@ public class Client implements DiscoveryListener {
         @Override
         public void masterTakeover(String masterUrl, String networkName, 
                 int masterId) throws Exception {
+            logger.info("MasterTakeover({}, {}, {})",
+                    new Object[]{masterUrl, networkName, masterId});
+            abortMasterElection();
             Client.this.masterUrl = masterUrl;
             connectionState = ConnectionState.STABLE;
         }
@@ -267,16 +271,25 @@ public class Client implements DiscoveryListener {
                 }
             }
         };
-        Future<Integer> proposal = proposer.startProposalTask(1, sleeperTask);
+        synchronized (this) {
+            currentMasterProposal = proposer.startProposalTask(1, sleeperTask);
+        }
         Integer result = null;
         try {
-            result = proposal.get();
+            result = currentMasterProposal.get();
         } catch (InterruptedException e) {
         } catch (ExecutionException e) {
         } catch (CancellationException e) {
         }
-        if (!proposal.isCancelled() && result != null) {
+        if (!currentMasterProposal.isCancelled() && result != null) {
             masterController.enableMaster(state);
+        }
+    }
+    
+    private synchronized void abortMasterElection() {
+        if (currentMasterProposal != null && !currentMasterProposal.isDone()) {
+            boolean status = currentMasterProposal.cancel(true);
+            logger.info("Abort status: {}", status);
         }
     }
     

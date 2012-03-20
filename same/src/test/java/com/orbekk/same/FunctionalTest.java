@@ -120,6 +120,8 @@ public class FunctionalTest {
             }
         };
         client1.setMasterController(controller);
+        client2.setMasterController(controller);
+        client3.setMasterController(controller);
         client1.startMasterElection();
         newMaster.performWork();
         assertThat(client1.masterUrl, is(newMasterUrl));
