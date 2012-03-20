@@ -77,7 +77,7 @@ public class SameController {
 //                masterUrl, configuration.get("networkName"));
 
         Client client = new Client(clientState, connections,
-                clientUrl);
+                clientUrl, BroadcasterImpl.getDefaultBroadcastRunner());
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
 
         DiscoveryService discoveryService = null;

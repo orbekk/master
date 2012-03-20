@@ -24,6 +24,7 @@ public class Client implements DiscoveryListener {
     String masterUrl;
     private int masterId = -1;
     private MasterController masterController = null;
+    private Broadcaster broadcaster;
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -134,10 +135,11 @@ public class Client implements DiscoveryListener {
     };
 
     public Client(State state, ConnectionManager connections,
-            String myUrl) {
+            String myUrl, Broadcaster broadcaster) {
         this.state = state;
         this.connections = connections;
         this.myUrl = myUrl;
+        this.broadcaster = broadcaster;
     }
 
     public void start() {

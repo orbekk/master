@@ -17,7 +17,7 @@ public class ClientTest {
     private State state = new State("ClientNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private Client client = new Client(state, connections,
-            "http://client/ClientService.json");
+            "http://client/ClientService.json", null);
     private ClientService clientS = client.getService();
     private MasterService mockMaster = mock(MasterService.class);    
     
