@@ -52,6 +52,7 @@ be working fairly well, a commit is tagged as the release version.
 * Master takeover: When the master dies, another client should take over.
   This version does not recover inconsistent state. This version will not
   work on Android.
+* UDP broadcast discovery no longer supported. Uses centralized discovery only.
 
 ### 0.2
 * Tag: 0.2-new-main-screen
