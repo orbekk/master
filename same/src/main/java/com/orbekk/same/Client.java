@@ -4,6 +4,9 @@ import static com.orbekk.same.StackTraceUtil.throwableToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import com.orbekk.util.DelayedOperation;
 import com.orbekk.util.WorkQueue;
 
 public class Client implements DiscoveryListener {
+    public static final long MASTER_TAKEOVER_TIMEOUT = 4000l;
     private Logger logger = LoggerFactory.getLogger(getClass());
     /** TODO: Not really useful yet. Remove? */
     private ConnectionState connectionState = ConnectionState.DISCONNECTED;
@@ -251,12 +255,29 @@ public class Client implements DiscoveryListener {
         List<String> paxosUrls = getPaxosUrls();
         MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
                 connections);
-        // TODO: Run election.
         if (masterController == null) {
             logger.warn("Could not become master: No master controller.");
             return;
         }
-        masterController.enableMaster(state);
+        Runnable sleeperTask = new Runnable() {
+            @Override public synchronized void run() {
+                try {
+                    wait(MASTER_TAKEOVER_TIMEOUT);
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        Future<Integer> proposal = proposer.startProposalTask(1, sleeperTask);
+        Integer result = null;
+        try {
+            result = proposal.get();
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
+        } catch (CancellationException e) {
+        }
+        if (!proposal.isCancelled() && result != null) {
+            masterController.enableMaster(state);
+        }
     }
     
     public void startMasterElection() {

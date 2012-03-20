@@ -12,6 +12,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.orbekk.paxos.PaxosService;
+import com.orbekk.paxos.PaxosServiceImpl;
+
 /** A functional test that runs with a master and several clients. */
 public class FunctionalTest {
     Master master;
@@ -44,6 +47,9 @@ public class FunctionalTest {
                 clientUrl, broadcaster);
         connections.clientMap.put(clientUrl, client.getService());
         clients.add(client);
+        String paxosUrl = clientUrl.replace("ClientService", "PaxosService");
+        PaxosService paxos = new PaxosServiceImpl(paxosUrl);
+        connections.paxosMap.put(paxosUrl, paxos);
         return client;
     }
     
