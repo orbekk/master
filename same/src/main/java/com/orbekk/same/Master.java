@@ -30,6 +30,10 @@ public class Master {
         this.myUrl = myUrl;
     }
 
+    public String getUrl() {
+        return myUrl;
+    }
+    
     private MasterService serviceImpl = new MasterService() {
         @Override
         public boolean updateStateRequest(String component,

@@ -222,11 +222,10 @@ public class SameService extends Service {
         Properties properties = new Properties();
         String localIp = new Networking(this)
                 .getWlanAddress().getHostAddress();
-        String localMaster = "http://" + localIp + ":" + SERVICE_PORT +
-                "/MasterService.json";
+        String baseUrl = "http://" + localIp + ":" + SERVICE_PORT + "/";
         properties.setProperty("port", ""+SERVICE_PORT);
         properties.setProperty("localIp", localIp);
-        properties.setProperty("masterUrl", localMaster);
+        properties.setProperty("baseUrl", baseUrl);
         properties.setProperty("enableDiscovery", "true");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         properties.setProperty("networkName", "AndroidNetwork");
@@ -236,12 +235,12 @@ public class SameService extends Service {
     
     /** Create a public network. */
     private void create() {
-        sameController.getClient().joinNetwork(
-                configuration.get("masterUrl"));
+        sameController.createNetwork(configuration.get("networkName"));
         try {
+            // SameController should take care of this.
             sameController.getDirectory().registerNetwork(
                     configuration.get("networkName"),
-                    configuration.get("masterUrl"));
+                    sameController.getMaster().getUrl());
         } catch (Exception e) {
             Toast.makeText(this, "Unable to register network. " +
             		"Use manual address to join.",

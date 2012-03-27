@@ -58,31 +58,22 @@ public class SameController {
                 timeout, timeout);
         State clientState = new State(".InvalidClientNetwork");
         Broadcaster broadcaster = BroadcasterImpl.getDefaultBroadcastRunner();
-
         String baseUrl = String.format("http://%s:%s/",
                 configuration.get("localIp"), configuration.getInt("port"));
-
-        String masterUrl = baseUrl + "MasterService.json";
         String clientUrl = baseUrl + "ClientService.json";
 
         MasterServiceProxy master = new MasterServiceProxy();
-//        Master master = Master.create(connections, broadcaster,
-//                masterUrl, configuration.get("networkName"));
-
         Client client = new Client(clientState, connections,
                 clientUrl, BroadcasterImpl.getDefaultBroadcastRunner());
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
-
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));
-
         ServerContainer server = new JettyServerBuilder(port)
             .withServlet(stateServlet, "/_/state")
             .withService(client.getService(), ClientService.class)
             .withService(master, MasterService.class)
             .withService(paxos, PaxosService.class)
             .build();
-
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
                 paxos, broadcaster);
