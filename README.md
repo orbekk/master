@@ -46,12 +46,15 @@ Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
 ### Next release
-* Branch: master
+* Advertise new master.
+
+### 0.3
+* Tag: 0.3
 * Centralized network discovery: Enables network discovery on networks that
   don't support UDP broadcasts.
-* Master takeover: When the master dies, another client should take over.
-  This version does not recover inconsistent state. This version will not
-  work on Android.
+* Master takeover: When the master dies, another client takes over.
+  This version does not recover inconsistent state.
+  This version does not advertise the new master URL.
 * UDP broadcast discovery no longer supported. Uses centralized discovery only.
 
 ### 0.2
