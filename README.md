@@ -47,6 +47,7 @@ be working fairly well, a commit is tagged as the release version.
 
 ### Next release
 * Advertise new master.
+* Kill SameService if SameController fails. (E.g. when binding Jetty)
 
 ### 0.3
 * Tag: 0.3
