@@ -71,7 +71,7 @@ public class RepeatedSetVariableActivity extends Activity {
     
     public void initializeVariable() {
         variable = client.createVariableFactory()
-                .create("BenchmarkVariable", Types.fromType(Integer.class));
+                .create("BenchmarkVariable", Types.INTEGER);
         variable.addOnChangeListener(changeListener);
         timer.start();
         variable.set(0);

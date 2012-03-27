@@ -7,7 +7,4 @@ public class Types {
             new TypeReference<String>() {};
     public final static TypeReference<Integer> INTEGER =
             new TypeReference<Integer>() {};
-    public static <T> TypeReference<T> fromType(Class<T> clazz) {
-        return new TypeReference<T>() {};
-    }
 }

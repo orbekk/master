@@ -127,6 +127,7 @@ public class Client {
                 		"{}:{}. Ignoring", new Object[]{masterUrl, masterId,
                                 state.getDataOf(".masterUrl"),
                                 Client.this.masterId}); 
+                return;
             }
             abortMasterElection();
             Client.this.masterUrl = masterUrl;

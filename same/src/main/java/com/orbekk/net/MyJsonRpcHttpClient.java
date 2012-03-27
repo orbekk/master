@@ -54,7 +54,7 @@ public class MyJsonRpcHttpClient extends JsonRpcHttpClient {
                 try {
                     rpcClient.invoke(methodName, arguments, out);
                 } catch (Exception e) {
-                    throw new IOException(e);
+                    throw new IOException(e.fillInStackTrace());
                 }
             }
         });
