@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.orbekk.same.android.net.Broadcaster;
+import com.orbekk.same.android.net.Networking;
 import com.orbekk.same.android.widget.NetworkListAdapter;
 
 public class SameControllerActivity extends Activity { 
@@ -117,7 +117,7 @@ public class SameControllerActivity extends Activity {
     private void showIpAddress() {
         TextView t = (TextView)findViewById(R.id.ipAddress);
         t.setText("My IP: ");
-        t.append(new Broadcaster(this).getWlanAddress().getHostAddress());
+        t.append(new Networking(this).getWlanAddress().getHostAddress());
     }
     
     public void doneClicked(View unused) {
@@ -125,13 +125,7 @@ public class SameControllerActivity extends Activity {
     }
     
     public void searchNetworks(View unused) {
-        logger.info("SearchNetworks()");
-        Message searchMessage = Message.obtain(null, SameService.SEARCH_NETWORKS);
-        try {
-            sameService.send(searchMessage);
-        } catch (RemoteException e) {
-            logger.error("Failed to send message", e);
-        }
+        logger.info("SearchNetworks() not working");
     }
 
     @Override

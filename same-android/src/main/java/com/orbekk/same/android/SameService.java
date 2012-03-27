@@ -22,14 +22,12 @@ import com.orbekk.same.SameController;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
-import com.orbekk.same.android.net.AndroidBroadcasterFactory;
-import com.orbekk.same.android.net.Broadcaster;
+import com.orbekk.same.android.net.Networking;
 import com.orbekk.same.config.Configuration;
 import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.util.DelayedOperation;
 
 public class SameService extends Service {
-    public final static int SEARCH_NETWORKS = 2;
     public final static int CREATE_NETWORK = 3;
     
     /**
@@ -97,10 +95,6 @@ public class SameService extends Service {
     class InterfaceHandler extends Handler {
         @Override public void handleMessage(Message message) {
             switch (message.what) {
-                case SEARCH_NETWORKS:
-                    logger.info("SEARCH_NETWORKS");
-                    sameController.searchNetworks();
-                    break;
                 case CREATE_NETWORK:
                     logger.info("CREATE_NETWORK");
                     create();
@@ -226,7 +220,7 @@ public class SameService extends Service {
     
     private void initializeConfiguration() {
         Properties properties = new Properties();
-        String localIp = new Broadcaster(this)
+        String localIp = new Networking(this)
                 .getWlanAddress().getHostAddress();
         String localMaster = "http://" + localIp + ":" + SERVICE_PORT +
                 "/MasterService.json";
@@ -279,9 +273,7 @@ public class SameService extends Service {
         
         if (sameController == null) {
             initializeConfiguration();
-            sameController = SameController.create(
-                    new AndroidBroadcasterFactory(this),
-                    configuration);
+            sameController = SameController.create(configuration);
             try {
                 sameController.start();
                 sameController.getClient().setNetworkListener(networkListener);

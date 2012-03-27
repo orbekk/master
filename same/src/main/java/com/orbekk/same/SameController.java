@@ -3,10 +3,6 @@ package com.orbekk.same;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.net.BroadcastListener;
-import com.orbekk.net.BroadcasterFactory;
-import com.orbekk.net.BroadcasterInterface;
-import com.orbekk.net.DefaultBroadcasterFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
@@ -23,7 +19,6 @@ public class SameController {
     private Master master;
     private Client client;
     private PaxosServiceImpl paxos;
-    private BroadcasterFactory broadcasterFactory;
     private Configuration configuration;
     private ConnectionManager connections;
     private Broadcaster serviceBroadcaster;
@@ -57,8 +52,7 @@ public class SameController {
         }
     };
     
-    public static SameController create(BroadcasterFactory broadcasterFactory,
-            Configuration configuration) {
+    public static SameController create(Configuration configuration) {
         int port = configuration.getInt("port");
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
@@ -91,12 +85,8 @@ public class SameController {
 
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
-                paxos, broadcaster, broadcasterFactory);
+                paxos, broadcaster);
         return controller;
-    }
-
-    public static SameController create(Configuration configuration) {
-        return create(new DefaultBroadcasterFactory(), configuration);
     }
 
     public SameController(
@@ -106,8 +96,7 @@ public class SameController {
             MasterServiceProxy master,
             Client client,
             PaxosServiceImpl paxos,
-            Broadcaster serviceBroadcaster,
-            BroadcasterFactory broadcasterFactory) {
+            Broadcaster serviceBroadcaster) {
         this.configuration = configuration;
         this.connections = connections;
         this.server = server;
@@ -115,7 +104,6 @@ public class SameController {
         this.client = client;
         this.paxos = paxos;
         this.serviceBroadcaster = serviceBroadcaster;
-        this.broadcasterFactory = broadcasterFactory;
     }
 
     public void start() throws Exception {
@@ -150,13 +138,6 @@ public class SameController {
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
         joinNetwork(masterUrl);
-    }
-    
-    public void searchNetworks() {
-        BroadcasterInterface broadcaster = broadcasterFactory.create();
-        String message = "Discover " + client.getUrl();
-        broadcaster.sendBroadcast(configuration.getInt("discoveryPort"),
-                message.getBytes());
     }
 
     public void joinNetwork(String url) {

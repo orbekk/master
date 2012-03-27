@@ -13,7 +13,6 @@ public class App {
         SameController controller = SameController.create(configuration);
         try {
             controller.start();
-            controller.searchNetworks();
             if ("true".equals(configuration.get("isMaster"))) {
                 controller.createNetwork(configuration.get("networkName"));
             } else {
