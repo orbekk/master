@@ -21,10 +21,18 @@ public class NetworkEntry {
     @Override
     public boolean equals(Object other) {
         if (other instanceof NetworkEntry) {
-            NetworkEntry otherEntry = (NetworkEntry)other;
-            return networkName.equals(otherEntry.networkName) &&
-                    masterUrl.equals(otherEntry.masterUrl);
+            NetworkEntry o = (NetworkEntry)other;
+            return stringEquals(networkName, o.networkName) &&
+                    stringEquals(masterUrl, o.masterUrl);
         }
         return false;
+    }
+    
+    private boolean stringEquals(String s1, String s2) {
+        if (s1 == null) {
+            return s2 == null;
+        } else {
+            return s1.equals(s2);
+        }
     }
 }
