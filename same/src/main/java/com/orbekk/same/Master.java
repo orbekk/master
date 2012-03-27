@@ -13,7 +13,7 @@ public class Master {
     private String myUrl;
     State state;
     private Broadcaster broadcaster;
-    private volatile int masterId = 0;
+    private volatile int masterId = 1;
 
     public static Master create(ConnectionManager connections,
             Broadcaster broadcaster, String myUrl, String networkName) {

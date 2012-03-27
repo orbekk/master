@@ -33,7 +33,7 @@ public class ClientTest {
     }
     
     @Test public void connectedUpdateWorks() throws Exception {
-        clientS.masterTakeover("master", null, 0);
+        clientS.masterTakeover("master", null, 1);
         ClientInterface clientI = client.getInterface();
         State.Component component = new State.Component(
                 "TestVariable", 1, "meow");

@@ -103,7 +103,8 @@ public class Client {
                     listener.stateChanged(state.getComponent(component));
                 }
             } else {
-                logger.warn("Ignoring update: {}",
+                logger.warn("Ignoring update: {) => {}",
+                        state.getComponent(component),
                         new State.Component(component, revision, data));
             }            
         }
@@ -261,7 +262,7 @@ public class Client {
         } catch (CancellationException e) {
         }
         if (!currentMasterProposal.isCancelled() && result != null) {
-            masterController.enableMaster(state, result);
+            masterController.enableMaster(new State(state), result);
         }
     }
     
