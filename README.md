@@ -46,8 +46,8 @@ Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
 ### Next release
-* Advertise new master.
-* Kill SameService if SameController fails. (E.g. when binding Jetty)
+* Advertise new master. => New clients can join the network.
+* Kill SameService if SameController fails. (E.g. when binding Jetty).
 
 ### 0.3
 * Tag: 0.3
