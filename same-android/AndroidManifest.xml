@@ -24,6 +24,7 @@
         <activity android:name=".GraphicsActivity"/>
         <activity android:name="com.orbekk.same.android.benchmark.RepeatedSetVariableActivity"/>
         <activity android:name="com.orbekk.same.android.benchmark.ExampleProtobufServerActivity"/>
+        <activity android:name="com.orbekk.same.android.benchmark.ExampleHttpServerActivity"/>
         <service  android:name=".SameService" android:process="com.orbekk.same.android.SameService"/>
     </application>
 

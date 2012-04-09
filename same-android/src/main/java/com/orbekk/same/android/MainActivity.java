@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.orbekk.same.android.R;
+import com.orbekk.same.android.benchmark.ExampleHttpServerActivity;
 import com.orbekk.same.android.benchmark.ExampleProtobufServerActivity;
 import com.orbekk.same.android.benchmark.RepeatedSetVariableActivity;
 
@@ -33,6 +33,8 @@ public class MainActivity extends Activity {
         activities.put("Benchmark", RepeatedSetVariableActivity.class);
         activities.put("ExampleProtobufServer (temp)", 
                 ExampleProtobufServerActivity.class);
+        activities.put("ExampleHttpServer (temp)", 
+                ExampleHttpServerActivity.class);
     }
     
     public final static List<String> activityList =
