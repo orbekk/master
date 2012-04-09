@@ -50,7 +50,6 @@ public class ClientBenchmark {
                 }
             });
         }
-        
         finished.await();
     }
     
@@ -75,7 +74,7 @@ public class ClientBenchmark {
         String host = args[0];
         int port = Integer.valueOf(args[1]);
         try {
-            benchmark(host, port, 1000, 10000);
+            benchmark(host, port, 100, 100000);
         } catch (InterruptedException e) {
             System.out.println("Benchmark failed.");
         }
