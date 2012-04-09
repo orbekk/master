@@ -23,6 +23,7 @@
         <activity android:name=".StateViewerActivity"/>
         <activity android:name=".GraphicsActivity"/>
         <activity android:name="com.orbekk.same.android.benchmark.RepeatedSetVariableActivity"/>
+        <activity android:name="com.orbekk.same.android.benchmark.ExampleProtobufServerActivity"/>
         <service  android:name=".SameService" android:process="com.orbekk.same.android.SameService"/>
     </application>
 
