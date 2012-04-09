@@ -1,0 +1,13 @@
+package com.orbekk.same.benchmark;
+
+option java_generic_services = true;
+
+message Data {
+    optional string message = 1;
+    optional int32 arg1 = 2;
+    optional int32 arg2 = 3;
+}
+
+service Service {
+    rpc MethodA (Data) returns (Data);
+}
