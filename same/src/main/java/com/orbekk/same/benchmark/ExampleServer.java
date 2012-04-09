@@ -1,6 +1,6 @@
 package com.orbekk.same.benchmark;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
@@ -9,7 +9,7 @@ import com.orbekk.same.benchmark.Example.Data;
 
 public class ExampleServer {
     private final static Logger logger =
-            Logger.getLogger(ExampleServer.class);
+            Logger.getLogger(ExampleServer.class.getName());
     private volatile SimpleProtobufServer server;
     
     class ServiceImpl extends Example.Service {
@@ -31,8 +31,9 @@ public class ExampleServer {
         logger.info("Running SimpleProtobufServer on port " + server.getPort());
     }
     
-    public void stopServer() throws InterruptedException {
+    public void stopServer() {
         server.interrupt();
+        logger.info("Server stopped.");
     }
     
     public static void main(String[] args) {
