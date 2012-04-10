@@ -5,6 +5,10 @@ option java_generic_services = true;
 message Empty {
 }
 
+message UpdateComponentResponse {
+    required bool success = 1;
+}
+
 message Component {
     required string id = 1;
     required string data = 2;
@@ -17,8 +21,17 @@ message MasterState {
     optional string network_name = 3;
 }
 
+message ClientState {
+    optional string url = 1;
+}
+
 service Client {
     rpc SetState (Component) returns (Empty);
     rpc MasterTakeover (MasterState) returns (Empty);
     rpc MasterDown (MasterState) returns (Empty);
+}
+
+service Master {
+    rpc JoinNetworkRequest (ClientState) returns (Empty);
+    rpc UpdateStateRequest (Component) returns (UpdateComponentResponse);
 }
