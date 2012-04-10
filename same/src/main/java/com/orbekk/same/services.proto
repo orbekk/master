@@ -25,6 +25,10 @@ message ClientState {
     optional string url = 1;
 }
 
+message NetworkDirectory {
+    repeated MasterState network = 1;
+}
+
 service Client {
     rpc SetState (Component) returns (Empty);
     rpc MasterTakeover (MasterState) returns (Empty);
@@ -34,4 +38,9 @@ service Client {
 service Master {
     rpc JoinNetworkRequest (ClientState) returns (Empty);
     rpc UpdateStateRequest (Component) returns (UpdateComponentResponse);
+}
+
+service Directory {
+    rpc RegisterNetwork (MasterState) returns (Empty);
+    rpc GetNetworks (Empty) returns (NetworkDirectory);
 }

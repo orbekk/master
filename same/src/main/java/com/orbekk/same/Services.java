@@ -2081,6 +2081,557 @@ public final class Services {
     // @@protoc_insertion_point(class_scope:com.orbekk.same.ClientState)
   }
   
+  public interface NetworkDirectoryOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // repeated .com.orbekk.same.MasterState network = 1;
+    java.util.List<com.orbekk.same.Services.MasterState> 
+        getNetworkList();
+    com.orbekk.same.Services.MasterState getNetwork(int index);
+    int getNetworkCount();
+    java.util.List<? extends com.orbekk.same.Services.MasterStateOrBuilder> 
+        getNetworkOrBuilderList();
+    com.orbekk.same.Services.MasterStateOrBuilder getNetworkOrBuilder(
+        int index);
+  }
+  public static final class NetworkDirectory extends
+      com.google.protobuf.GeneratedMessage
+      implements NetworkDirectoryOrBuilder {
+    // Use NetworkDirectory.newBuilder() to construct.
+    private NetworkDirectory(Builder builder) {
+      super(builder);
+    }
+    private NetworkDirectory(boolean noInit) {}
+    
+    private static final NetworkDirectory defaultInstance;
+    public static NetworkDirectory getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public NetworkDirectory getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_NetworkDirectory_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable;
+    }
+    
+    // repeated .com.orbekk.same.MasterState network = 1;
+    public static final int NETWORK_FIELD_NUMBER = 1;
+    private java.util.List<com.orbekk.same.Services.MasterState> network_;
+    public java.util.List<com.orbekk.same.Services.MasterState> getNetworkList() {
+      return network_;
+    }
+    public java.util.List<? extends com.orbekk.same.Services.MasterStateOrBuilder> 
+        getNetworkOrBuilderList() {
+      return network_;
+    }
+    public int getNetworkCount() {
+      return network_.size();
+    }
+    public com.orbekk.same.Services.MasterState getNetwork(int index) {
+      return network_.get(index);
+    }
+    public com.orbekk.same.Services.MasterStateOrBuilder getNetworkOrBuilder(
+        int index) {
+      return network_.get(index);
+    }
+    
+    private void initFields() {
+      network_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < network_.size(); i++) {
+        output.writeMessage(1, network_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      for (int i = 0; i < network_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, network_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.NetworkDirectory parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.NetworkDirectory prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.NetworkDirectoryOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_NetworkDirectory_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.NetworkDirectory.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNetworkFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        if (networkBuilder_ == null) {
+          network_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          networkBuilder_.clear();
+        }
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.NetworkDirectory.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.NetworkDirectory getDefaultInstanceForType() {
+        return com.orbekk.same.Services.NetworkDirectory.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.NetworkDirectory build() {
+        com.orbekk.same.Services.NetworkDirectory result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.NetworkDirectory buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.NetworkDirectory result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.NetworkDirectory buildPartial() {
+        com.orbekk.same.Services.NetworkDirectory result = new com.orbekk.same.Services.NetworkDirectory(this);
+        int from_bitField0_ = bitField0_;
+        if (networkBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            network_ = java.util.Collections.unmodifiableList(network_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.network_ = network_;
+        } else {
+          result.network_ = networkBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.NetworkDirectory) {
+          return mergeFrom((com.orbekk.same.Services.NetworkDirectory)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.NetworkDirectory other) {
+        if (other == com.orbekk.same.Services.NetworkDirectory.getDefaultInstance()) return this;
+        if (networkBuilder_ == null) {
+          if (!other.network_.isEmpty()) {
+            if (network_.isEmpty()) {
+              network_ = other.network_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNetworkIsMutable();
+              network_.addAll(other.network_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.network_.isEmpty()) {
+            if (networkBuilder_.isEmpty()) {
+              networkBuilder_.dispose();
+              networkBuilder_ = null;
+              network_ = other.network_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              networkBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNetworkFieldBuilder() : null;
+            } else {
+              networkBuilder_.addAllMessages(other.network_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.orbekk.same.Services.MasterState.Builder subBuilder = com.orbekk.same.Services.MasterState.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addNetwork(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // repeated .com.orbekk.same.MasterState network = 1;
+      private java.util.List<com.orbekk.same.Services.MasterState> network_ =
+        java.util.Collections.emptyList();
+      private void ensureNetworkIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          network_ = new java.util.ArrayList<com.orbekk.same.Services.MasterState>(network_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> networkBuilder_;
+      
+      public java.util.List<com.orbekk.same.Services.MasterState> getNetworkList() {
+        if (networkBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(network_);
+        } else {
+          return networkBuilder_.getMessageList();
+        }
+      }
+      public int getNetworkCount() {
+        if (networkBuilder_ == null) {
+          return network_.size();
+        } else {
+          return networkBuilder_.getCount();
+        }
+      }
+      public com.orbekk.same.Services.MasterState getNetwork(int index) {
+        if (networkBuilder_ == null) {
+          return network_.get(index);
+        } else {
+          return networkBuilder_.getMessage(index);
+        }
+      }
+      public Builder setNetwork(
+          int index, com.orbekk.same.Services.MasterState value) {
+        if (networkBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworkIsMutable();
+          network_.set(index, value);
+          onChanged();
+        } else {
+          networkBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setNetwork(
+          int index, com.orbekk.same.Services.MasterState.Builder builderForValue) {
+        if (networkBuilder_ == null) {
+          ensureNetworkIsMutable();
+          network_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          networkBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addNetwork(com.orbekk.same.Services.MasterState value) {
+        if (networkBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworkIsMutable();
+          network_.add(value);
+          onChanged();
+        } else {
+          networkBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addNetwork(
+          int index, com.orbekk.same.Services.MasterState value) {
+        if (networkBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworkIsMutable();
+          network_.add(index, value);
+          onChanged();
+        } else {
+          networkBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addNetwork(
+          com.orbekk.same.Services.MasterState.Builder builderForValue) {
+        if (networkBuilder_ == null) {
+          ensureNetworkIsMutable();
+          network_.add(builderForValue.build());
+          onChanged();
+        } else {
+          networkBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addNetwork(
+          int index, com.orbekk.same.Services.MasterState.Builder builderForValue) {
+        if (networkBuilder_ == null) {
+          ensureNetworkIsMutable();
+          network_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          networkBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllNetwork(
+          java.lang.Iterable<? extends com.orbekk.same.Services.MasterState> values) {
+        if (networkBuilder_ == null) {
+          ensureNetworkIsMutable();
+          super.addAll(values, network_);
+          onChanged();
+        } else {
+          networkBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearNetwork() {
+        if (networkBuilder_ == null) {
+          network_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          networkBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeNetwork(int index) {
+        if (networkBuilder_ == null) {
+          ensureNetworkIsMutable();
+          network_.remove(index);
+          onChanged();
+        } else {
+          networkBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.orbekk.same.Services.MasterState.Builder getNetworkBuilder(
+          int index) {
+        return getNetworkFieldBuilder().getBuilder(index);
+      }
+      public com.orbekk.same.Services.MasterStateOrBuilder getNetworkOrBuilder(
+          int index) {
+        if (networkBuilder_ == null) {
+          return network_.get(index);  } else {
+          return networkBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.orbekk.same.Services.MasterStateOrBuilder> 
+           getNetworkOrBuilderList() {
+        if (networkBuilder_ != null) {
+          return networkBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(network_);
+        }
+      }
+      public com.orbekk.same.Services.MasterState.Builder addNetworkBuilder() {
+        return getNetworkFieldBuilder().addBuilder(
+            com.orbekk.same.Services.MasterState.getDefaultInstance());
+      }
+      public com.orbekk.same.Services.MasterState.Builder addNetworkBuilder(
+          int index) {
+        return getNetworkFieldBuilder().addBuilder(
+            index, com.orbekk.same.Services.MasterState.getDefaultInstance());
+      }
+      public java.util.List<com.orbekk.same.Services.MasterState.Builder> 
+           getNetworkBuilderList() {
+        return getNetworkFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> 
+          getNetworkFieldBuilder() {
+        if (networkBuilder_ == null) {
+          networkBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder>(
+                  network_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          network_ = null;
+        }
+        return networkBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.NetworkDirectory)
+    }
+    
+    static {
+      defaultInstance = new NetworkDirectory(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.NetworkDirectory)
+  }
+  
   public static abstract class Client
       implements com.google.protobuf.Service {
     protected Client() {}
@@ -2718,6 +3269,292 @@ public final class Services {
     }
   }
   
+  public static abstract class Directory
+      implements com.google.protobuf.Service {
+    protected Directory() {}
+    
+    public interface Interface {
+      public abstract void registerNetwork(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.MasterState request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
+      
+      public abstract void getNetworks(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.NetworkDirectory> done);
+      
+    }
+    
+    public static com.google.protobuf.Service newReflectiveService(
+        final Interface impl) {
+      return new Directory() {
+        @java.lang.Override
+        public  void registerNetwork(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.MasterState request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
+          impl.registerNetwork(controller, request, done);
+        }
+        
+        @java.lang.Override
+        public  void getNetworks(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.Empty request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.NetworkDirectory> done) {
+          impl.getNetworks(controller, request, done);
+        }
+        
+      };
+    }
+    
+    public static com.google.protobuf.BlockingService
+        newReflectiveBlockingService(final BlockingInterface impl) {
+      return new com.google.protobuf.BlockingService() {
+        public final com.google.protobuf.Descriptors.ServiceDescriptor
+            getDescriptorForType() {
+          return getDescriptor();
+        }
+        
+        public final com.google.protobuf.Message callBlockingMethod(
+            com.google.protobuf.Descriptors.MethodDescriptor method,
+            com.google.protobuf.RpcController controller,
+            com.google.protobuf.Message request)
+            throws com.google.protobuf.ServiceException {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.callBlockingMethod() given method descriptor for " +
+              "wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return impl.registerNetwork(controller, (com.orbekk.same.Services.MasterState)request);
+            case 1:
+              return impl.getNetworks(controller, (com.orbekk.same.Services.Empty)request);
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getRequestPrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getRequestPrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.MasterState.getDefaultInstance();
+            case 1:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getResponsePrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getResponsePrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
+            case 1:
+              return com.orbekk.same.Services.NetworkDirectory.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+      };
+    }
+    
+    public abstract void registerNetwork(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.MasterState request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
+    
+    public abstract void getNetworks(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.Empty request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.NetworkDirectory> done);
+    
+    public static final
+        com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.getDescriptor().getServices().get(2);
+    }
+    public final com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    
+    public final void callMethod(
+        com.google.protobuf.Descriptors.MethodDescriptor method,
+        com.google.protobuf.RpcController controller,
+        com.google.protobuf.Message request,
+        com.google.protobuf.RpcCallback<
+          com.google.protobuf.Message> done) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.callMethod() given method descriptor for wrong " +
+          "service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          this.registerNetwork(controller, (com.orbekk.same.Services.MasterState)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.Empty>specializeCallback(
+              done));
+          return;
+        case 1:
+          this.getNetworks(controller, (com.orbekk.same.Services.Empty)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.NetworkDirectory>specializeCallback(
+              done));
+          return;
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getRequestPrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getRequestPrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.MasterState.getDefaultInstance();
+        case 1:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getResponsePrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getResponsePrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
+        case 1:
+          return com.orbekk.same.Services.NetworkDirectory.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public static Stub newStub(
+        com.google.protobuf.RpcChannel channel) {
+      return new Stub(channel);
+    }
+    
+    public static final class Stub extends com.orbekk.same.Services.Directory implements Interface {
+      private Stub(com.google.protobuf.RpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.RpcChannel channel;
+      
+      public com.google.protobuf.RpcChannel getChannel() {
+        return channel;
+      }
+      
+      public  void registerNetwork(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.MasterState request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.Empty.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.Empty.class,
+            com.orbekk.same.Services.Empty.getDefaultInstance()));
+      }
+      
+      public  void getNetworks(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.NetworkDirectory> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.NetworkDirectory.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.NetworkDirectory.class,
+            com.orbekk.same.Services.NetworkDirectory.getDefaultInstance()));
+      }
+    }
+    
+    public static BlockingInterface newBlockingStub(
+        com.google.protobuf.BlockingRpcChannel channel) {
+      return new BlockingStub(channel);
+    }
+    
+    public interface BlockingInterface {
+      public com.orbekk.same.Services.Empty registerNetwork(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.MasterState request)
+          throws com.google.protobuf.ServiceException;
+      
+      public com.orbekk.same.Services.NetworkDirectory getNetworks(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException;
+    }
+    
+    private static final class BlockingStub implements BlockingInterface {
+      private BlockingStub(com.google.protobuf.BlockingRpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.BlockingRpcChannel channel;
+      
+      public com.orbekk.same.Services.Empty registerNetwork(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.MasterState request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.Empty) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.Empty.getDefaultInstance());
+      }
+      
+      
+      public com.orbekk.same.Services.NetworkDirectory getNetworks(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.NetworkDirectory) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.NetworkDirectory.getDefaultInstance());
+      }
+      
+    }
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_same_Empty_descriptor;
   private static
@@ -2743,6 +3580,11 @@ public final class Services {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_orbekk_same_ClientState_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_NetworkDirectory_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2758,17 +3600,23 @@ public final class Services {
       "Component\022\n\n\002id\030\001 \002(\t\022\014\n\004data\030\002 \002(\t\022\020\n\010r" +
       "evision\030\003 \002(\003\"J\n\013MasterState\022\022\n\nmaster_u" +
       "rl\030\001 \001(\t\022\021\n\tmaster_id\030\002 \001(\005\022\024\n\014network_n" +
-      "ame\030\003 \001(\t\"\032\n\013ClientState\022\013\n\003url\030\001 \001(\t2\324\001" +
-      "\n\006Client\022>\n\010SetState\022\032.com.orbekk.same.C" +
-      "omponent\032\026.com.orbekk.same.Empty\022F\n\016Mast" +
-      "erTakeover\022\034.com.orbekk.same.MasterState",
-      "\032\026.com.orbekk.same.Empty\022B\n\nMasterDown\022\034" +
-      ".com.orbekk.same.MasterState\032\026.com.orbek" +
-      "k.same.Empty2\260\001\n\006Master\022J\n\022JoinNetworkRe" +
-      "quest\022\034.com.orbekk.same.ClientState\032\026.co" +
-      "m.orbekk.same.Empty\022Z\n\022UpdateStateReques" +
-      "t\022\032.com.orbekk.same.Component\032(.com.orbe" +
-      "kk.same.UpdateComponentResponseB\003\210\001\001"
+      "ame\030\003 \001(\t\"\032\n\013ClientState\022\013\n\003url\030\001 \001(\t\"A\n" +
+      "\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034.com" +
+      ".orbekk.same.MasterState2\324\001\n\006Client\022>\n\010S" +
+      "etState\022\032.com.orbekk.same.Component\032\026.co",
+      "m.orbekk.same.Empty\022F\n\016MasterTakeover\022\034." +
+      "com.orbekk.same.MasterState\032\026.com.orbekk" +
+      ".same.Empty\022B\n\nMasterDown\022\034.com.orbekk.s" +
+      "ame.MasterState\032\026.com.orbekk.same.Empty2" +
+      "\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.com.o" +
+      "rbekk.same.ClientState\032\026.com.orbekk.same" +
+      ".Empty\022Z\n\022UpdateStateRequest\022\032.com.orbek" +
+      "k.same.Component\032(.com.orbekk.same.Updat" +
+      "eComponentResponse2\236\001\n\tDirectory\022G\n\017Regi" +
+      "sterNetwork\022\034.com.orbekk.same.MasterStat",
+      "e\032\026.com.orbekk.same.Empty\022H\n\013GetNetworks" +
+      "\022\026.com.orbekk.same.Empty\032!.com.orbekk.sa" +
+      "me.NetworkDirectoryB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2815,6 +3663,14 @@ public final class Services {
               new java.lang.String[] { "Url", },
               com.orbekk.same.Services.ClientState.class,
               com.orbekk.same.Services.ClientState.Builder.class);
+          internal_static_com_orbekk_same_NetworkDirectory_descriptor =
+            getDescriptor().getMessageTypes().get(5);
+          internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_NetworkDirectory_descriptor,
+              new java.lang.String[] { "Network", },
+              com.orbekk.same.Services.NetworkDirectory.class,
+              com.orbekk.same.Services.NetworkDirectory.Builder.class);
           return null;
         }
       };

@@ -1,8 +1,11 @@
 package com.orbekk.same.benchmark;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 import com.google.protobuf.RpcCallback;
+import com.orbekk.protobuf.NewRpcChannel;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.same.benchmark.Example.Data;
@@ -14,13 +17,17 @@ public class ClientBenchmark {
     
     public static void benchmark(String host, int port, int warmupIterations,
             int iterations) throws InterruptedException {
-        RpcChannel channel = null;
+        NewRpcChannel channel = null;
         try {
-            channel = RpcChannel.create(host, port);
+            channel = NewRpcChannel.create(host, port);
             Example.Service service = Example.Service.newStub(channel);
             ClientBenchmark benchmark = new ClientBenchmark(
                     service, warmupIterations, iterations);
             benchmark.benchmark();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             if (channel != null) {
                 channel.close();
@@ -74,7 +81,7 @@ public class ClientBenchmark {
         String host = args[0];
         int port = Integer.valueOf(args[1]);
         try {
-            benchmark(host, port, 100, 100000);
+            benchmark(host, port, 1000, 5000);
         } catch (InterruptedException e) {
             System.out.println("Benchmark failed.");
         }
