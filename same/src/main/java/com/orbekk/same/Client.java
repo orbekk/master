@@ -113,6 +113,7 @@ public class Client {
                         new State.Component(request.getId(), request.getRevision(),
                                 request.getData()));
             }
+            done.run(Empty.getDefaultInstance());
         }
 
         @Override public void masterTakeover(RpcController controller,
@@ -129,6 +130,7 @@ public class Client {
             Client.this.masterUrl = request.getMasterUrl();
             Client.this.masterId = request.getMasterId();
             connectionState = ConnectionState.STABLE;
+            done.run(Empty.getDefaultInstance());
         }
 
         @Override public void masterDown(RpcController controller, MasterState request,
@@ -141,6 +143,7 @@ public class Client {
             logger.warn("Master down.");
             connectionState = ConnectionState.UNSTABLE;
             tryBecomeMaster(request.getMasterId());
+            done.run(Empty.getDefaultInstance());
         }
     };
     
