@@ -1,0 +1,24 @@
+package com.orbekk.same;
+
+option java_generic_services = true;
+
+message Empty {
+}
+
+message Component {
+    required string id = 1;
+    required string data = 2;
+    required int64 revision = 3;
+}
+
+message MasterState {
+    optional string master_url = 1;
+    optional int32 master_id = 2;
+    optional string network_name = 3;
+}
+
+service Client {
+    rpc SetState (Component) returns (Empty);
+    rpc MasterTakeover (MasterState) returns (Empty);
+    rpc MasterDown (MasterState) returns (Empty);
+}

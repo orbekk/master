@@ -18,12 +18,6 @@ public class MasterTest {
 
     public static class UnreachableClient implements ClientService {
         @Override
-        public void notifyNetwork(String networkName, String masterUrl)
-                throws Exception {
-            throw new Exception("Unreachable client");
-        }
-
-        @Override
         public void setState(String component, String data, long revision)
                 throws Exception {
             throw new Exception("Unreachable client");   

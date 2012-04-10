@@ -8,11 +8,27 @@ public final class Example {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public interface DataOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional string message = 1;
+    boolean hasMessage();
+    String getMessage();
+    
+    // optional int32 arg1 = 2;
+    boolean hasArg1();
+    int getArg1();
+    
+    // optional int32 arg2 = 3;
+    boolean hasArg2();
+    int getArg2();
+  }
   public static final class Data extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements DataOrBuilder {
     // Use Data.newBuilder() to construct.
-    private Data() {
-      initFields();
+    private Data(Builder builder) {
+      super(builder);
     }
     private Data(boolean noInit) {}
     
@@ -35,44 +51,84 @@ public final class Example {
       return com.orbekk.same.benchmark.Example.internal_static_com_orbekk_same_benchmark_Data_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // optional string message = 1;
     public static final int MESSAGE_FIELD_NUMBER = 1;
-    private boolean hasMessage;
-    private java.lang.String message_ = "";
-    public boolean hasMessage() { return hasMessage; }
-    public java.lang.String getMessage() { return message_; }
+    private java.lang.Object message_;
+    public boolean hasMessage() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getMessage() {
+      java.lang.Object ref = message_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          message_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getMessageBytes() {
+      java.lang.Object ref = message_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        message_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // optional int32 arg1 = 2;
     public static final int ARG1_FIELD_NUMBER = 2;
-    private boolean hasArg1;
-    private int arg1_ = 0;
-    public boolean hasArg1() { return hasArg1; }
-    public int getArg1() { return arg1_; }
+    private int arg1_;
+    public boolean hasArg1() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getArg1() {
+      return arg1_;
+    }
     
     // optional int32 arg2 = 3;
     public static final int ARG2_FIELD_NUMBER = 3;
-    private boolean hasArg2;
-    private int arg2_ = 0;
-    public boolean hasArg2() { return hasArg2; }
-    public int getArg2() { return arg2_; }
+    private int arg2_;
+    public boolean hasArg2() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getArg2() {
+      return arg2_;
+    }
     
     private void initFields() {
+      message_ = "";
+      arg1_ = 0;
+      arg2_ = 0;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasMessage()) {
-        output.writeString(1, getMessage());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getMessageBytes());
       }
-      if (hasArg1()) {
-        output.writeInt32(2, getArg1());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, arg1_);
       }
-      if (hasArg2()) {
-        output.writeInt32(3, getArg2());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, arg2_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -83,21 +139,28 @@ public final class Example {
       if (size != -1) return size;
     
       size = 0;
-      if (hasMessage()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getMessage());
+          .computeBytesSize(1, getMessageBytes());
       }
-      if (hasArg1()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, getArg1());
+          .computeInt32Size(2, arg1_);
       }
-      if (hasArg2()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, getArg2());
+          .computeInt32Size(3, arg2_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.orbekk.same.benchmark.Example.Data parseFrom(
@@ -174,34 +237,55 @@ public final class Example {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.orbekk.same.benchmark.Example.Data result;
-      
-      // Construct using com.orbekk.same.benchmark.Example.Data.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.orbekk.same.benchmark.Example.Data();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.benchmark.Example.DataOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.benchmark.Example.internal_static_com_orbekk_same_benchmark_Data_descriptor;
       }
       
-      protected com.orbekk.same.benchmark.Example.Data internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.benchmark.Example.internal_static_com_orbekk_same_benchmark_Data_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.benchmark.Example.Data.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.orbekk.same.benchmark.Example.Data();
+        super.clear();
+        message_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        arg1_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        arg2_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -213,33 +297,43 @@ public final class Example {
         return com.orbekk.same.benchmark.Example.Data.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.orbekk.same.benchmark.Example.Data build() {
-        if (result != null && !isInitialized()) {
+        com.orbekk.same.benchmark.Example.Data result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.orbekk.same.benchmark.Example.Data buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.orbekk.same.benchmark.Example.Data result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.orbekk.same.benchmark.Example.Data buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.orbekk.same.benchmark.Example.Data result = new com.orbekk.same.benchmark.Example.Data(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.orbekk.same.benchmark.Example.Data returnMe = result;
-        result = null;
-        return returnMe;
+        result.message_ = message_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.arg1_ = arg1_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.arg2_ = arg2_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -266,6 +360,10 @@ public final class Example {
         return this;
       }
       
+      public final boolean isInitialized() {
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -278,86 +376,113 @@ public final class Example {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setMessage(input.readString());
+              bitField0_ |= 0x00000001;
+              message_ = input.readBytes();
               break;
             }
             case 16: {
-              setArg1(input.readInt32());
+              bitField0_ |= 0x00000002;
+              arg1_ = input.readInt32();
               break;
             }
             case 24: {
-              setArg2(input.readInt32());
+              bitField0_ |= 0x00000004;
+              arg2_ = input.readInt32();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // optional string message = 1;
+      private java.lang.Object message_ = "";
       public boolean hasMessage() {
-        return result.hasMessage();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getMessage() {
-        return result.getMessage();
+      public String getMessage() {
+        java.lang.Object ref = message_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          message_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setMessage(java.lang.String value) {
+      public Builder setMessage(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasMessage = true;
-        result.message_ = value;
+  bitField0_ |= 0x00000001;
+        message_ = value;
+        onChanged();
         return this;
       }
       public Builder clearMessage() {
-        result.hasMessage = false;
-        result.message_ = getDefaultInstance().getMessage();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        message_ = getDefaultInstance().getMessage();
+        onChanged();
         return this;
+      }
+      void setMessage(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        message_ = value;
+        onChanged();
       }
       
       // optional int32 arg1 = 2;
+      private int arg1_ ;
       public boolean hasArg1() {
-        return result.hasArg1();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public int getArg1() {
-        return result.getArg1();
+        return arg1_;
       }
       public Builder setArg1(int value) {
-        result.hasArg1 = true;
-        result.arg1_ = value;
+        bitField0_ |= 0x00000002;
+        arg1_ = value;
+        onChanged();
         return this;
       }
       public Builder clearArg1() {
-        result.hasArg1 = false;
-        result.arg1_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        arg1_ = 0;
+        onChanged();
         return this;
       }
       
       // optional int32 arg2 = 3;
+      private int arg2_ ;
       public boolean hasArg2() {
-        return result.hasArg2();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public int getArg2() {
-        return result.getArg2();
+        return arg2_;
       }
       public Builder setArg2(int value) {
-        result.hasArg2 = true;
-        result.arg2_ = value;
+        bitField0_ |= 0x00000004;
+        arg2_ = value;
+        onChanged();
         return this;
       }
       public Builder clearArg2() {
-        result.hasArg2 = false;
-        result.arg2_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        arg2_ = 0;
+        onChanged();
         return this;
       }
       
@@ -366,7 +491,6 @@ public final class Example {
     
     static {
       defaultInstance = new Data(true);
-      com.orbekk.same.benchmark.Example.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -388,7 +512,7 @@ public final class Example {
     public static com.google.protobuf.Service newReflectiveService(
         final Interface impl) {
       return new Service() {
-        @Override
+        @java.lang.Override
         public  void methodA(
             com.google.protobuf.RpcController controller,
             com.orbekk.same.benchmark.Example.Data request,
@@ -636,8 +760,6 @@ public final class Example {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }

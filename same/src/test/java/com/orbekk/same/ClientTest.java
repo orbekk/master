@@ -33,7 +33,7 @@ public class ClientTest {
     }
     
     @Test public void connectedUpdateWorks() throws Exception {
-        clientS.masterTakeover("master", null, 1);
+        clientS.masterTakeover("master", "MyNetwork", 1);
         ClientInterface clientI = client.getInterface();
         State.Component component = new State.Component(
                 "TestVariable", 1, "meow");
@@ -47,14 +47,6 @@ public class ClientTest {
         clientS.setState("TestState", "Test data", 100);
         assertEquals(100, state.getRevision("TestState"));
         assertEquals("Test data", state.getDataOf("TestState"));
-    }
-    
-    @Test public void testNetworkListener() throws Exception {
-        NetworkNotificationListener listener =
-                mock(NetworkNotificationListener.class);
-        client.setNetworkListener(listener);
-        clientS.notifyNetwork("MyNetwork", "MasterUrl");
-        verify(listener).notifyNetwork("MyNetwork", "MasterUrl");
     }
     
     @Test public void stateListenerReceivesUpdate() throws Exception {
