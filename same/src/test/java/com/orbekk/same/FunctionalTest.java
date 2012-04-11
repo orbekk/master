@@ -93,6 +93,7 @@ public class FunctionalTest {
         for (Client c : clients) {
             assertThat(c.getConnectionState(), is(ConnectionState.STABLE));
             assertThat(c.masterUrl, is(masterUrl));
+            assertThat(c.masterLocation, is(masterLocation));
         }
     }
     
@@ -184,6 +185,7 @@ public class FunctionalTest {
         client3.setMasterController(controller);
         Variable<String> x1 = vf1.createString("TestMasterFailure");
         masterServiceProxy.setService(null);
+        connections.masterMap0.put(masterLocation, null);
         assertThat(x1.set("Woop, woop").getStatus().getStatusCode(),
                 is(DelayedOperation.Status.ERROR));
         performWork();

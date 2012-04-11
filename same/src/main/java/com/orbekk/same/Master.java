@@ -29,6 +29,7 @@ public class Master {
             String myLocation) {
         State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
+        state.update(".masterLocation", myLocation, 1);
         return new Master(state, connections, broadcaster, myUrl, myLocation);
     }
 
@@ -155,9 +156,11 @@ public class Master {
                         client.masterTakeover(
                                 state.getDataOf(".masterUrl"),
                                 state.getDataOf(".networkName"),
-                                masterId);
+                                masterId,
+                                state.getDataOf(".masterLocation"));
                     } catch (Exception e) {
-                        logger.info("Client {} failed to acknowledge master. Remove.");
+                        logger.info("Client failed to acknowledge master. Remove.",
+                                e);
                         removeParticipant(url);
                     }
                 }
@@ -232,7 +235,8 @@ public class Master {
                 ClientService client = connections.getClient(url);
                 try {
                     client.masterTakeover(myUrl,
-                            state.getDataOf(".networkName"), masterId);
+                            state.getDataOf(".networkName"), masterId,
+                            state.getDataOf(".masterLocation"));
                 } catch (Exception e) {
                     logger.info("Client {} failed to acknowledge new master. " +
                     		"Removing {}", url);

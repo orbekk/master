@@ -24,7 +24,8 @@ public class MasterTest {
         }
 
         @Override
-        public void masterTakeover(String masterUrl, String networkName, int masterId)
+        public void masterTakeover(String masterUrl, String networkName,
+                int masterId, String masterLocation)
                 throws Exception {
             throw new Exception("Unreachable client");
         }
@@ -39,6 +40,7 @@ public class MasterTest {
     public void setUp() {
         String masterLocation = "master:1000";
         state.update(".masterUrl", "http://master/MasterService.json", 1);
+        state.update(".masterLocation", masterLocation, 1);
         master = new Master(state, connections, broadcaster,
                 "http://master/MasterService.json", masterLocation);
         masterS = master.getService();

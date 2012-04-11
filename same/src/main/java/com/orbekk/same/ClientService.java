@@ -10,7 +10,7 @@ public interface ClientService {
      *      than the current master.
      */
     void masterTakeover(String masterUrl, String networkName,
-            int masterId) throws Exception;
+            int masterId, String masterLocation) throws Exception;
     
     /** The master is down, so start a new master election. */
     void masterDown(int masterId) throws Exception;
