@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orbekk.protobuf.SimpleProtobufServer;
-import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.same.http.JettyServerBuilder;
 import com.orbekk.same.http.ServerContainer;
 

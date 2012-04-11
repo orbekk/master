@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
 import com.orbekk.same.http.JettyServerBuilder;
@@ -143,13 +142,13 @@ public class SameController {
         return master;
     }
     
-    public DirectoryService getDirectory() {
-        String directoryUrl = configuration.get("directoryUrl");
-        DirectoryService directory = null;
-        if (directoryUrl != null) {
-            directory = connections.getDirectory(directoryUrl);
+    public Services.Directory getDirectory() {
+        String directoryLocation = configuration.get("directoryLocation");
+        if (directoryLocation != null) {
+            return connections.getDirectory(directoryLocation);
+        } else {
+            return null;
         }
-        return directory;
     }
 
     public VariableFactory createVariableFactory() {

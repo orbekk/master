@@ -17,14 +17,17 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import com.google.protobuf.RpcCallback;
+import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
+import com.orbekk.same.Services;
+import com.orbekk.same.Services.NetworkDirectory;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
 import com.orbekk.same.android.net.Networking;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.discovery.DirectoryService;
 import com.orbekk.util.DelayedOperation;
 
 public class SameService extends Service {
@@ -65,8 +68,7 @@ public class SameService extends Service {
 
     final static int SERVICE_PORT = 15068;
     final static int DISCOVERY_PORT = 15066;
-    final static String DIRECTORY_URL = 
-            "http://flode.pvv.ntnu.no:15072/DirectoryService.json";
+    final static String DIRECTORY_URL = "flode.pvv.ntnu.no:15072";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameController sameController = null;
@@ -195,27 +197,27 @@ public class SameService extends Service {
     }
     
     private void findNetworks() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                logger.info("Looking up networks.");
-                DirectoryService directory = sameController.getDirectory();
-                if (directory == null) {
-                    logger.warn("No discovery service configured.");
+        logger.info("Looking up networks.");
+        Services.Directory directory = sameController.getDirectory();
+        if (directory == null) {
+            logger.warn("No discovery service configured.");
+            return;
+        }
+        final Rpc rpc = new Rpc();
+        RpcCallback<Services.NetworkDirectory> done =
+                new RpcCallback<Services.NetworkDirectory>() {
+            @Override public void run(Services.NetworkDirectory networks) {
+                if (!rpc.isOk()) {
+                    logger.warn("Unable to find networks: {}", rpc.errorText());
                     return;
                 }
-                try {
-                    List<String> networks = directory.getNetworks();
-                    for (int i = 0; i < networks.size(); i += 2) {
-                        String name = networks.get(i);
-                        String url = networks.get(i + 1);
-                        networkListener.notifyNetwork(name,  url);
-                    }
-                } catch (Exception e) {
-                    logger.warn("Unable to contact discovery service.", e);
+                for (Services.MasterState network : networks.getNetworkList()) {
+                    networkListener.notifyNetwork(network.getNetworkName(),
+                            network.getMasterUrl());
                 }
             }
-        }).start();
+        };
+        directory.getNetworks(rpc, Services.Empty.getDefaultInstance(), done);
     }
     
     private void initializeConfiguration() {
@@ -229,24 +231,24 @@ public class SameService extends Service {
         properties.setProperty("enableDiscovery", "true");
         properties.setProperty("discoveryPort", ""+DISCOVERY_PORT);
         properties.setProperty("networkName", "AndroidNetwork");
-        properties.setProperty("directoryUrl", DIRECTORY_URL);
+        properties.setProperty("directoryLocation", DIRECTORY_URL);
         configuration = new Configuration(properties);
     }
     
     /** Create a public network. */
     private void create() {
         sameController.createNetwork(configuration.get("networkName"));
-        try {
-            // SameController should take care of this.
-            sameController.getDirectory().registerNetwork(
-                    configuration.get("networkName"),
-                    sameController.getMaster().getUrl());
-        } catch (Exception e) {
-            Toast.makeText(this, "Unable to register network. " +
-            		"Use manual address to join.",
-                    Toast.LENGTH_LONG).show();
-            logger.warn("Unable to advertise network.", e);
-        }
+//        try {
+//            // SameController should take care of this.
+//            sameController.getDirectory().registerNetwork(
+//                    configuration.get("networkName"),
+//                    sameController.getMaster().getUrl());
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Unable to register network. " +
+//            		"Use manual address to join.",
+//                    Toast.LENGTH_LONG).show();
+//            logger.warn("Unable to advertise network.", e);
+//        }
     }
     
     @Override

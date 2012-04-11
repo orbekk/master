@@ -81,7 +81,7 @@ public class ClientBenchmark {
         String host = args[0];
         int port = Integer.valueOf(args[1]);
         try {
-            benchmark(host, port, 1000, 5000);
+            benchmark(host, port, 2000, 10000);
         } catch (InterruptedException e) {
             System.out.println("Benchmark failed.");
         }
