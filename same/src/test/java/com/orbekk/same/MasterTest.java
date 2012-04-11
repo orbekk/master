@@ -44,6 +44,7 @@ public class MasterTest {
         masterS = master.getService();
         connections.masterMap.put("http://master/MasterService.json",
                 masterS);
+        connections.masterMap0.put("master:1000", master.getNewService());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class MasterTest {
     }
 
     @Test
-    public void clientJoin() {
+    public void clientJoin() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json", null);

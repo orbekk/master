@@ -36,8 +36,8 @@ public class FunctionalTest {
         master = Master.create(connections,
                 broadcaster, masterUrl, "TestMaster", masterLocation);
         masterServiceProxy = new MasterServiceProxy(master.getService());
-        connections.masterMap.put(masterUrl,
-                masterServiceProxy);
+        connections.masterMap.put(masterUrl, masterServiceProxy);
+        connections.masterMap0.put(masterLocation, master.getNewService());
         client1 = newClient("TestClient1", "http://client1/ClientService.json");
         vf1 = new VariableFactory(client1.getInterface());
         client2 = newClient("TestClient2", "http://client2/ClientService.json");

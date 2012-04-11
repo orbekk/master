@@ -11,5 +11,7 @@ public interface ConnectionManager {
     ClientService getClient(String url);
     MasterService getMaster(String url);
     PaxosService getPaxos(String url);
+
+    Services.Master getMaster0(String location);
     Services.Directory getDirectory(String location);
 }

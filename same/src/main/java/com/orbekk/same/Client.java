@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.orbekk.paxos.MasterProposer;
+import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.Services.Empty;
 import com.orbekk.same.Services.MasterState;
 import com.orbekk.same.State.Component;
 import com.orbekk.util.DelayedOperation;
-import com.orbekk.util.WorkQueue;
 
 public class Client {
     public static long MASTER_TAKEOVER_TIMEOUT = 4000l;
@@ -49,8 +49,6 @@ public class Client {
             return new State(state);
         }
 
-        // TODO: Do this asynchronously? Currently this is already achieved
-        // on Android, which makes the Java and Android versions different.
         @Override
         public DelayedOperation set(Component component) {
             DelayedOperation op = new DelayedOperation();
@@ -209,6 +207,12 @@ public class Client {
         return myUrl;
     }
 
+    public Services.ClientState getClientState() {
+        return Services.ClientState.newBuilder()
+                .setUrl(getUrl())
+                .build();
+    }
+    
     public ConnectionState getConnectionState() {
         return connectionState;
     }
@@ -222,16 +226,23 @@ public class Client {
         masterId = 0;
     }
     
-    public void joinNetwork(Services.MasterState masterInfo) {
+    public Rpc joinNetwork(Services.MasterState masterInfo) {
         logger.info("joinNetwork({})", masterInfo);
         connectionState = ConnectionState.UNSTABLE;
-        MasterService master = connections.getMaster(masterInfo.getMasterUrl());
         reset();
-        try {
-            master.joinNetworkRequest(myUrl);
-        } catch (Exception e) {
-            logger.error("Unable to connect to master.", e);
-        }          
+        
+        Services.Master master =
+                connections.getMaster0(masterInfo.getMasterLocation());
+        final Rpc rpc = new Rpc();
+        RpcCallback<Empty> done = new RpcCallback<Empty>() {
+            @Override public void run(Empty unused) {
+                if (!rpc.isOk()) {
+                    logger.warn("Failed to join network.");
+                }
+            }
+        };
+        master.joinNetworkRequest(rpc, getClientState(), done);
+        return rpc;
     }
 
     public ClientInterface getInterface() {
