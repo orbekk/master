@@ -20,6 +20,7 @@ import com.orbekk.util.DelayedOperation;
 public class FunctionalTest {
     Master master;
     String masterUrl = "http://master/MasterService.json";
+    String masterLocation = "master:1";
     Client client1;
     Client client2;
     Client client3;
@@ -33,7 +34,7 @@ public class FunctionalTest {
     
     @Before public void setUp() {
         master = Master.create(connections,
-                broadcaster, masterUrl, "TestMaster");
+                broadcaster, masterUrl, "TestMaster", masterLocation);
         masterServiceProxy = new MasterServiceProxy(master.getService());
         connections.masterMap.put(masterUrl,
                 masterServiceProxy);
@@ -109,8 +110,9 @@ public class FunctionalTest {
     
     @Test public void clientBecomesMaster() {
         String newMasterUrl = "http://newMaster/MasterService.json";
+        String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster");
+                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
         connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {
@@ -133,8 +135,9 @@ public class FunctionalTest {
     
     @Test public void onlyOneNewMaster() {
         String newMasterUrl = "http://newMaster/MasterService.json";
+        String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster");
+                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
         connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {
@@ -161,8 +164,9 @@ public class FunctionalTest {
     
     @Test public void masterFails() {
         String newMasterUrl = "http://newMaster/MasterService.json";
+        String newMasterLocation = "newMaster:2";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster");
+                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
         connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {

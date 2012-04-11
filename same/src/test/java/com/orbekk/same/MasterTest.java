@@ -37,9 +37,10 @@ public class MasterTest {
     
     @Before
     public void setUp() {
+        String masterLocation = "master:1000";
         state.update(".masterUrl", "http://master/MasterService.json", 1);
         master = new Master(state, connections, broadcaster,
-                "http://master/MasterService.json");
+                "http://master/MasterService.json", masterLocation);
         masterS = master.getService();
         connections.masterMap.put("http://master/MasterService.json",
                 masterS);
