@@ -138,11 +138,11 @@ public class SameController {
         masterController.enableMaster(new State(networkName), 1);
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
-        joinNetwork(masterUrl);
+        joinNetwork(master.getMasterInfo());
     }
 
-    public void joinNetwork(String url) {
-        client.joinNetwork(url);
+    public void joinNetwork(Services.MasterState masterInfo) {
+        client.joinNetwork(masterInfo);
     }
 
     public Client getClient() {

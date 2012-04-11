@@ -60,7 +60,7 @@ public class MasterTest {
                 "http://client/ClientService.json", null);
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
-        client.joinNetwork("http://master/MasterService.json");
+        client.joinNetwork(master.getMasterInfo());
         master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
@@ -79,8 +79,8 @@ public class MasterTest {
         ClientService client2S = client2.getService();
         connections.clientMap.put("http://client2/ClientService.json", client2S);
         
-        client1.joinNetwork("http://master/MasterService.json");
-        client2.joinNetwork("http://master/MasterService.json");
+        client1.joinNetwork(master.getMasterInfo());
+        client2.joinNetwork(master.getMasterInfo());
         
         master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
@@ -108,7 +108,7 @@ public class MasterTest {
                 "http://client/ClientService.json", null);
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
-        client.joinNetwork("http://master/MasterService.json");
+        client.joinNetwork(master.getMasterInfo());
         master.performWork();
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         

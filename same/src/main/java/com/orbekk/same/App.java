@@ -8,6 +8,13 @@ import com.orbekk.same.config.Configuration;
 public class App {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private Services.MasterState getMasterInfo(Configuration configuration) {
+        return Services.MasterState.newBuilder()
+                .setMasterUrl(configuration.get(".masterUrl"))
+                .setMasterLocation(configuration.get("masterLocation"))
+                .build();
+    }
+    
     public void run(String[] args) {
         Configuration configuration = Configuration.loadOrDie();
         SameController controller = SameController.create(configuration);
@@ -16,7 +23,7 @@ public class App {
             if ("true".equals(configuration.get("isMaster"))) {
                 controller.createNetwork(configuration.get("networkName"));
             } else {
-                controller.joinNetwork(configuration.get("masterUrl"));
+                controller.joinNetwork(getMasterInfo(configuration));
             }
             controller.join();
         } catch (Exception e) {

@@ -68,7 +68,7 @@ public class FunctionalTest {
     
     void joinClients() {
        for (Client c : clients) {
-           c.joinNetwork(masterUrl);
+           c.joinNetwork(master.getMasterInfo());
        }
        performWork();
     }

@@ -222,10 +222,10 @@ public class Client {
         masterId = 0;
     }
     
-    public void joinNetwork(String masterUrl) {
-        logger.info("joinNetwork({})", masterUrl);
+    public void joinNetwork(Services.MasterState masterInfo) {
+        logger.info("joinNetwork({})", masterInfo);
         connectionState = ConnectionState.UNSTABLE;
-        MasterService master = connections.getMaster(masterUrl);
+        MasterService master = connections.getMaster(masterInfo.getMasterUrl());
         reset();
         try {
             master.joinNetworkRequest(myUrl);

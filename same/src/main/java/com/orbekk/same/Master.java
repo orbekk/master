@@ -53,6 +53,15 @@ public class Master {
         return myUrl;
     }
     
+    public Services.MasterState getMasterInfo() {
+        return Services.MasterState.newBuilder()
+                .setMasterUrl(getUrl())
+                .setMasterLocation(getLocation())
+                .setNetworkName(getNetworkName())
+                .setMasterId(masterId)
+                .build();
+    }
+    
     private Services.Master newMasterImpl = new Services.Master() {
         @Override public void joinNetworkRequest(RpcController controller,
                 ClientState request, RpcCallback<Empty> done) {

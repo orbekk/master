@@ -104,7 +104,7 @@ public class SameService extends Service {
                 case JOIN_NETWORK:
                     logger.info("JOIN_NETWORK");
                     String masterUrl = message.getData().getString("masterUrl");
-                    sameController.getClient().joinNetwork(masterUrl);
+                    sameController.getClient().joinNetwork("fixme");
                     break;
                 case ADD_STATE_RECEIVER:
                     logger.info("ADD_STATE_RECEIVER: {}", message);
