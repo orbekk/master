@@ -1194,6 +1194,10 @@ public final class Services {
     // optional string network_name = 3;
     boolean hasNetworkName();
     String getNetworkName();
+    
+    // optional string master_location = 4;
+    boolean hasMasterLocation();
+    String getMasterLocation();
   }
   public static final class MasterState extends
       com.google.protobuf.GeneratedMessage
@@ -1298,10 +1302,43 @@ public final class Services {
       }
     }
     
+    // optional string master_location = 4;
+    public static final int MASTER_LOCATION_FIELD_NUMBER = 4;
+    private java.lang.Object masterLocation_;
+    public boolean hasMasterLocation() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getMasterLocation() {
+      java.lang.Object ref = masterLocation_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          masterLocation_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getMasterLocationBytes() {
+      java.lang.Object ref = masterLocation_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        masterLocation_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       masterUrl_ = "";
       masterId_ = 0;
       networkName_ = "";
+      masterLocation_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1324,6 +1361,9 @@ public final class Services {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getNetworkNameBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getMasterLocationBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1344,6 +1384,10 @@ public final class Services {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getNetworkNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getMasterLocationBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1475,6 +1519,8 @@ public final class Services {
         bitField0_ = (bitField0_ & ~0x00000002);
         networkName_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        masterLocation_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
@@ -1525,6 +1571,10 @@ public final class Services {
           to_bitField0_ |= 0x00000004;
         }
         result.networkName_ = networkName_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.masterLocation_ = masterLocation_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1549,6 +1599,9 @@ public final class Services {
         }
         if (other.hasNetworkName()) {
           setNetworkName(other.getNetworkName());
+        }
+        if (other.hasMasterLocation()) {
+          setMasterLocation(other.getMasterLocation());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1594,6 +1647,11 @@ public final class Services {
             case 26: {
               bitField0_ |= 0x00000004;
               networkName_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              masterLocation_ = input.readBytes();
               break;
             }
           }
@@ -1692,6 +1750,42 @@ public final class Services {
       void setNetworkName(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000004;
         networkName_ = value;
+        onChanged();
+      }
+      
+      // optional string master_location = 4;
+      private java.lang.Object masterLocation_ = "";
+      public boolean hasMasterLocation() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public String getMasterLocation() {
+        java.lang.Object ref = masterLocation_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          masterLocation_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setMasterLocation(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        masterLocation_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearMasterLocation() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        masterLocation_ = getDefaultInstance().getMasterLocation();
+        onChanged();
+        return this;
+      }
+      void setMasterLocation(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        masterLocation_ = value;
         onChanged();
       }
       
@@ -3598,25 +3692,26 @@ public final class Services {
       ".proto\022\017com.orbekk.same\"\007\n\005Empty\"*\n\027Upda" +
       "teComponentResponse\022\017\n\007success\030\001 \002(\010\"7\n\t" +
       "Component\022\n\n\002id\030\001 \002(\t\022\014\n\004data\030\002 \002(\t\022\020\n\010r" +
-      "evision\030\003 \002(\003\"J\n\013MasterState\022\022\n\nmaster_u" +
+      "evision\030\003 \002(\003\"c\n\013MasterState\022\022\n\nmaster_u" +
       "rl\030\001 \001(\t\022\021\n\tmaster_id\030\002 \001(\005\022\024\n\014network_n" +
-      "ame\030\003 \001(\t\"\032\n\013ClientState\022\013\n\003url\030\001 \001(\t\"A\n" +
-      "\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034.com" +
-      ".orbekk.same.MasterState2\324\001\n\006Client\022>\n\010S" +
-      "etState\022\032.com.orbekk.same.Component\032\026.co",
-      "m.orbekk.same.Empty\022F\n\016MasterTakeover\022\034." +
-      "com.orbekk.same.MasterState\032\026.com.orbekk" +
-      ".same.Empty\022B\n\nMasterDown\022\034.com.orbekk.s" +
-      "ame.MasterState\032\026.com.orbekk.same.Empty2" +
-      "\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.com.o" +
-      "rbekk.same.ClientState\032\026.com.orbekk.same" +
-      ".Empty\022Z\n\022UpdateStateRequest\022\032.com.orbek" +
-      "k.same.Component\032(.com.orbekk.same.Updat" +
-      "eComponentResponse2\236\001\n\tDirectory\022G\n\017Regi" +
-      "sterNetwork\022\034.com.orbekk.same.MasterStat",
-      "e\032\026.com.orbekk.same.Empty\022H\n\013GetNetworks" +
-      "\022\026.com.orbekk.same.Empty\032!.com.orbekk.sa" +
-      "me.NetworkDirectoryB\003\210\001\001"
+      "ame\030\003 \001(\t\022\027\n\017master_location\030\004 \001(\t\"\032\n\013Cl" +
+      "ientState\022\013\n\003url\030\001 \001(\t\"A\n\020NetworkDirecto" +
+      "ry\022-\n\007network\030\001 \003(\0132\034.com.orbekk.same.Ma" +
+      "sterState2\324\001\n\006Client\022>\n\010SetState\022\032.com.o",
+      "rbekk.same.Component\032\026.com.orbekk.same.E" +
+      "mpty\022F\n\016MasterTakeover\022\034.com.orbekk.same" +
+      ".MasterState\032\026.com.orbekk.same.Empty\022B\n\n" +
+      "MasterDown\022\034.com.orbekk.same.MasterState" +
+      "\032\026.com.orbekk.same.Empty2\260\001\n\006Master\022J\n\022J" +
+      "oinNetworkRequest\022\034.com.orbekk.same.Clie" +
+      "ntState\032\026.com.orbekk.same.Empty\022Z\n\022Updat" +
+      "eStateRequest\022\032.com.orbekk.same.Componen" +
+      "t\032(.com.orbekk.same.UpdateComponentRespo" +
+      "nse2\236\001\n\tDirectory\022G\n\017RegisterNetwork\022\034.c",
+      "om.orbekk.same.MasterState\032\026.com.orbekk." +
+      "same.Empty\022H\n\013GetNetworks\022\026.com.orbekk.s" +
+      "ame.Empty\032!.com.orbekk.same.NetworkDirec" +
+      "toryB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3652,7 +3747,7 @@ public final class Services {
           internal_static_com_orbekk_same_MasterState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_MasterState_descriptor,
-              new java.lang.String[] { "MasterUrl", "MasterId", "NetworkName", },
+              new java.lang.String[] { "MasterUrl", "MasterId", "NetworkName", "MasterLocation", },
               com.orbekk.same.Services.MasterState.class,
               com.orbekk.same.Services.MasterState.Builder.class);
           internal_static_com_orbekk_same_ClientState_descriptor =

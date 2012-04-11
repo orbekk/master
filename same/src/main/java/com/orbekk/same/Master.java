@@ -19,23 +19,34 @@ public class Master {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
     private String myUrl;
+    private String myLocation; // Protobuf server location, i.e., myIp:port
     State state;
     private Broadcaster broadcaster;
     private volatile int masterId = 1;
 
     public static Master create(ConnectionManager connections,
-            Broadcaster broadcaster, String myUrl, String networkName) {
+            Broadcaster broadcaster, String myUrl, String networkName,
+            String myLocation) {
         State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
-        return new Master(state, connections, broadcaster, myUrl);
+        return new Master(state, connections, broadcaster, myUrl, myLocation);
     }
 
     Master(State initialState, ConnectionManager connections,
-            Broadcaster broadcaster, String myUrl) {
+            Broadcaster broadcaster, String myUrl, String myLocation) {
         this.state = initialState;
         this.connections = connections;
         this.broadcaster = broadcaster;
         this.myUrl = myUrl;
+        this.myLocation = myLocation;
+    }
+    
+    public String getNetworkName() {
+        return state.getDataOf(".networkName");
+    }
+    
+    public String getLocation() {
+        return myLocation;
     }
 
     public String getUrl() {
@@ -202,6 +213,8 @@ public class Master {
     public void resumeFrom(State lastKnownState, final int masterId) {
         state = lastKnownState;
         state.update(".masterUrl", myUrl, state.getRevision(".masterUrl") + 100);
+        state.update(".masterLocation", myLocation,
+                state.getRevision(".masterLocation") + 100);
         this.masterId = masterId;
         broadcaster.broadcast(state.getList(".participants"),
                 new ServiceOperation() {

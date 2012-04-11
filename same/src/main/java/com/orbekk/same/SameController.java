@@ -33,10 +33,12 @@ public class SameController {
     private MasterController masterController = new MasterController() {
         @Override
         public void enableMaster(State lastKnownState, int masterId) {
+            String myLocation = configuration.get("localIp") + ":" +
+                    configuration.get("pport");
             String masterUrl = configuration.get("baseUrl") +
                     "MasterService.json";
             master = Master.create(connections, serviceBroadcaster,
-                    masterUrl, configuration.get("networkName"));
+                    masterUrl, configuration.get("networkName"), myLocation);
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
             master.start();
@@ -54,6 +56,7 @@ public class SameController {
     
     public static SameController create(Configuration configuration) {
         int port = configuration.getInt("port");
+        int pport = configuration.getInt("pport");
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
         State clientState = new State(".InvalidClientNetwork");
@@ -75,7 +78,7 @@ public class SameController {
             .withService(paxos, PaxosService.class)
             .build();
         
-        SimpleProtobufServer pServer = SimpleProtobufServer.create(port + 1337);
+        SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);
         
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
@@ -136,7 +139,6 @@ public class SameController {
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
         joinNetwork(masterUrl);
-        registerNetwork(networkName, masterUrl);
     }
 
     public void joinNetwork(String url) {
@@ -151,14 +153,15 @@ public class SameController {
         return master;
     }
     
-    public void registerNetwork(String networkName, String masterUrl) {
+    public void registerNetwork(Master master) {
         Services.Directory directory = getDirectory();
         if (directory == null) {
             return;
         }
         Services.MasterState request = Services.MasterState.newBuilder()
-                .setNetworkName(networkName)
-                .setMasterUrl(masterUrl)
+                .setNetworkName(master.getNetworkName())
+                .setMasterUrl(master.getUrl())
+                .setMasterLocation(master.getLocation())
                 .build();
         final Rpc rpc = new Rpc();
         RpcCallback<Services.Empty> done = new RpcCallback<Services.Empty>() {

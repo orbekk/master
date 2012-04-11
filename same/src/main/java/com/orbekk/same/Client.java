@@ -155,6 +155,8 @@ public class Client {
         
         @Override
         public void setState(String component, String data, long revision) throws Exception {
+            logger.info("SetState: {}, {}, {}",
+                    new Object[]{component, data, revision});
             Services.Component request = Services.Component.newBuilder()
                     .setId(component)
                     .setData(data)
