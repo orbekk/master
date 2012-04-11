@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 import com.google.protobuf.RpcCallback;
-import com.orbekk.protobuf.NewRpcChannel;
+import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.same.benchmark.Example.Data;
@@ -17,9 +17,9 @@ public class ClientBenchmark {
     
     public static void benchmark(String host, int port, int warmupIterations,
             int iterations) throws InterruptedException {
-        NewRpcChannel channel = null;
+        RpcChannel channel = null;
         try {
-            channel = NewRpcChannel.create(host, port);
+            channel = RpcChannel.create(host, port);
             Example.Service service = Example.Service.newStub(channel);
             ClientBenchmark benchmark = new ClientBenchmark(
                     service, warmupIterations, iterations);

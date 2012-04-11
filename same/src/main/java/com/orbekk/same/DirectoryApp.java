@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.RpcCallback;
-import com.orbekk.protobuf.NewRpcChannel;
+import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.same.Services.Directory;
@@ -68,9 +68,9 @@ public class DirectoryApp {
     public void run() throws InterruptedException {
         String host = args[0];
         int port = Integer.valueOf(args[1]);
-        NewRpcChannel channel = null;
+        RpcChannel channel = null;
         try {
-            channel = NewRpcChannel.create(host, port);
+            channel = RpcChannel.create(host, port);
         } catch (UnknownHostException e1) {
             e1.printStackTrace();
             System.exit(1);

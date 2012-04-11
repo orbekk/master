@@ -16,19 +16,18 @@ import java.util.concurrent.FutureTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.protobuf.RpcChannel;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.orbekk.net.MyJsonRpcHttpClient;
 import com.orbekk.paxos.PaxosService;
-import com.orbekk.protobuf.NewRpcChannel;
+import com.orbekk.protobuf.RpcChannel;
 
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;
     private int readTimeout;
     private Map<String, MyJsonRpcHttpClient> connectionCache =
             new HashMap<String, MyJsonRpcHttpClient>();
-    private ConcurrentMap<String, Future<NewRpcChannel>> channels =
-            new ConcurrentHashMap<String, Future<NewRpcChannel>>();
+    private ConcurrentMap<String, Future<RpcChannel>> channels =
+            new ConcurrentHashMap<String, Future<RpcChannel>>();
     
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,16 +63,16 @@ public class ConnectionManagerImpl implements ConnectionManager {
         return service;
     }
     
-    private NewRpcChannel getChannel(String location) {
-        Future<NewRpcChannel> channel = channels.get(location);
+    private RpcChannel getChannel(String location) {
+        Future<RpcChannel> channel = channels.get(location);
         if (channel == null) {
             final String hostname = location.split(":")[0];
             final int port = Integer.valueOf(location.split(":")[1]);
-            Callable<NewRpcChannel> channelFactory =
-                    new Callable<NewRpcChannel>() {
-                @Override public NewRpcChannel call() {
+            Callable<RpcChannel> channelFactory =
+                    new Callable<RpcChannel>() {
+                @Override public RpcChannel call() {
                     try {
-                        return NewRpcChannel.create(hostname, port);
+                        return RpcChannel.create(hostname, port);
                     } catch (UnknownHostException e) {
                         logger.error("Could not connect: ", e);
                         return null;
@@ -83,8 +82,8 @@ public class ConnectionManagerImpl implements ConnectionManager {
                     }
                 }
             };
-            FutureTask<NewRpcChannel> task =
-                    new FutureTask<NewRpcChannel>(channelFactory);
+            FutureTask<RpcChannel> task =
+                    new FutureTask<RpcChannel>(channelFactory);
             channel = channels.putIfAbsent(location, task);
             if (channel == null) {
                 task.run();
