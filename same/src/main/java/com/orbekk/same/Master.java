@@ -161,6 +161,10 @@ public class Master {
         updateStateRequestThread.interrupt();
     }
 
+    public Services.Master getNewService() {
+        return newMasterImpl;
+    }
+    
     public MasterService getService() {
         return serviceImpl;
     }

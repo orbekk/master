@@ -7,6 +7,7 @@ import com.google.protobuf.RpcCallback;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.protobuf.Rpc;
+import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.config.Configuration;
 import com.orbekk.same.http.JettyServerBuilder;
 import com.orbekk.same.http.ServerContainer;
@@ -15,6 +16,7 @@ import com.orbekk.same.http.StateServlet;
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ServerContainer server;
+    private SimpleProtobufServer pServer;
     private MasterServiceProxy masterService;
     private Master master;
     private Client client;
@@ -36,6 +38,7 @@ public class SameController {
             master = Master.create(connections, serviceBroadcaster,
                     masterUrl, configuration.get("networkName"));
             master.resumeFrom(lastKnownState, masterId);
+            pServer.registerService(master.getNewService());
             master.start();
             masterService.setService(master.getService());
         }
@@ -71,9 +74,12 @@ public class SameController {
             .withService(master, MasterService.class)
             .withService(paxos, PaxosService.class)
             .build();
+        
+        SimpleProtobufServer pServer = SimpleProtobufServer.create(port + 1337);
+        
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
-                paxos, broadcaster);
+                paxos, broadcaster, pServer);
         return controller;
     }
 
@@ -84,7 +90,8 @@ public class SameController {
             MasterServiceProxy master,
             Client client,
             PaxosServiceImpl paxos,
-            Broadcaster serviceBroadcaster) {
+            Broadcaster serviceBroadcaster,
+            SimpleProtobufServer pServer) {
         this.configuration = configuration;
         this.connections = connections;
         this.server = server;
@@ -92,10 +99,12 @@ public class SameController {
         this.client = client;
         this.paxos = paxos;
         this.serviceBroadcaster = serviceBroadcaster;
+        this.pServer = pServer;
     }
 
     public void start() throws Exception {
         server.start();
+        pServer.start();
         client.setMasterController(masterController);
         client.start();
     }
@@ -107,6 +116,7 @@ public class SameController {
                 master.interrupt();
             }
             server.stop();
+            pServer.interrupt();
         } catch (Exception e) {
             logger.error("Failed to stop webserver", e);
         }
