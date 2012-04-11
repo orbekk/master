@@ -11,6 +11,9 @@ import com.google.protobuf.RpcCallback;
 import com.orbekk.protobuf.NewRpcChannel;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.RpcChannel;
+import com.orbekk.same.Services.Directory;
+import com.orbekk.same.Services.Empty;
+import com.orbekk.same.Services.MasterState;
 import com.orbekk.same.Services.NetworkDirectory;
 
 public class DirectoryApp {
@@ -24,7 +27,45 @@ public class DirectoryApp {
         this.args = args;
     }
     
-    public void run() {
+    private void addTestNetwork(Directory directory) throws InterruptedException {
+        final Rpc rpc = new Rpc();
+        MasterState request = MasterState.newBuilder()
+                .setNetworkName("Test network")
+                .setMasterUrl("invalid:invalid")
+                .build();
+        RpcCallback<Empty> done = new RpcCallback<Empty>() {
+            @Override public void run(Empty unused) {
+            }
+        };
+        directory.registerNetwork(rpc, request, done);
+        rpc.await();
+        if (rpc.isOk()) {
+            System.out.println("Added network.");
+        }
+    }
+    
+    private void listNetworks(Directory directory) throws InterruptedException {
+        final Rpc rpc = new Rpc();
+        RpcCallback<NetworkDirectory> done =
+                new RpcCallback<NetworkDirectory>() {
+            @Override public void run(NetworkDirectory directory) {
+                if (rpc.failed()) {
+                    System.err.println("Failed to get network list.");
+                } else {
+                    System.out.println("Networks:");
+                    for (Services.MasterState network :
+                        directory.getNetworkList()) {
+                        System.out.println(network.getNetworkName() + "\t" +
+                                network.getMasterUrl());
+                    }
+                }
+            }
+        };
+        directory.getNetworks(rpc, Empty.getDefaultInstance(), done);
+        rpc.await();
+    }
+    
+    public void run() throws InterruptedException {
         String host = args[0];
         int port = Integer.valueOf(args[1]);
         NewRpcChannel channel = null;
@@ -38,38 +79,16 @@ public class DirectoryApp {
             System.exit(1);
         }
         Services.Directory directory = Services.Directory.newStub(channel);
-
-        final CountDownLatch finished = new CountDownLatch(1);
-        final Rpc rpc = new Rpc();
-        RpcCallback<NetworkDirectory> callback =
-                new RpcCallback<NetworkDirectory>() {
-            @Override public void run(NetworkDirectory directory) {
-                if (rpc.failed()) {
-                    System.err.println("Failed to get network list.");
-                } else {
-                    System.out.println("Networks:");
-                    for (Services.MasterState network :
-                        directory.getNetworkList()) {
-                        System.out.println(network.getNetworkName() + "\t" +
-                                network.getMasterUrl());
-                    }
-                }
-                finished.countDown();
-            }
-        };
-        directory.getNetworks(rpc, Services.Empty.getDefaultInstance(),
-                callback);
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        System.out.println("Closing channel.");
+        addTestNetwork(directory);
+        listNetworks(directory);
         channel.close();
     }
     
     public static void main(String[] args) {
-        new DirectoryApp(args).run();
+        try {
+            new DirectoryApp(args).run();
+        } catch (InterruptedException e) {
+            throw new AssertionError("Should not be interrupted.");
+        }
     }
 }
