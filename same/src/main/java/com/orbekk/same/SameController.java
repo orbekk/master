@@ -3,13 +3,14 @@ package com.orbekk.same;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.RpcCallback;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
+import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.config.Configuration;
+import com.orbekk.same.http.JettyServerBuilder;
 import com.orbekk.same.http.ServerContainer;
 import com.orbekk.same.http.StateServlet;
-import com.orbekk.same.http.JettyServerBuilder;
-import com.orbekk.same.http.TjwsServerBuilder;
 
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -34,9 +35,6 @@ public class SameController {
                     "MasterService.json";
             master = Master.create(connections, serviceBroadcaster,
                     masterUrl, configuration.get("networkName"));
-            if (lastKnownState == null) {
-                lastKnownState = master.state;
-            }
             master.resumeFrom(lastKnownState, masterId);
             master.start();
             masterService.setService(master.getService());
@@ -124,10 +122,11 @@ public class SameController {
 
     public void createNetwork(String networkName) {
         masterController.disableMaster();
-        masterController.enableMaster(null, 1);
+        masterController.enableMaster(new State(networkName), 1);
         String masterUrl = configuration.get("baseUrl") +
                 "MasterService.json";
         joinNetwork(masterUrl);
+        registerNetwork(networkName, masterUrl);
     }
 
     public void joinNetwork(String url) {
@@ -140,6 +139,26 @@ public class SameController {
 
     public Master getMaster() {
         return master;
+    }
+    
+    public void registerNetwork(String networkName, String masterUrl) {
+        Services.Directory directory = getDirectory();
+        if (directory == null) {
+            return;
+        }
+        Services.MasterState request = Services.MasterState.newBuilder()
+                .setNetworkName(networkName)
+                .setMasterUrl(masterUrl)
+                .build();
+        final Rpc rpc = new Rpc();
+        RpcCallback<Services.Empty> done = new RpcCallback<Services.Empty>() {
+            @Override public void run(Services.Empty unused) {
+                if (!rpc.isOk()) {
+                    logger.warn("Failed to register network: {}", rpc);
+                }
+            }
+        };
+        directory.registerNetwork(rpc, request, done);
     }
     
     public Services.Directory getDirectory() {
