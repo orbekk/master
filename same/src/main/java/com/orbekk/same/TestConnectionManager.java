@@ -21,6 +21,8 @@ public class TestConnectionManager implements ConnectionManager {
             new HashMap<String, Services.Directory>();
     public Map<String, Services.Master> masterMap0 =
             new HashMap<String, Services.Master>();
+    public Map<String, Services.Client> clientMap0 =
+            new HashMap<String, Services.Client>();
 
     public TestConnectionManager() {
     }
@@ -48,5 +50,10 @@ public class TestConnectionManager implements ConnectionManager {
     @Override
     public Master getMaster0(String location) {
         return masterMap0.get(location);
+    }
+
+    @Override
+    public Services.Client getClient0(String location) {
+        return clientMap0.get(location);
     }
 }

@@ -127,6 +127,16 @@ public class ConnectionManagerImpl implements ConnectionManager {
     }
     
     @Override
+    public Services.Client getClient0(String location) {
+        RpcChannel channel = getChannel(location);
+        if (channel != null) {
+            return Services.Client.newStub(channel);
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
     public Services.Directory getDirectory(String location) {
         RpcChannel channel = getChannel(location);
         if (channel != null) {

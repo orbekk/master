@@ -13,5 +13,6 @@ public interface ConnectionManager {
     PaxosService getPaxos(String url);
 
     Services.Master getMaster0(String location);
+    Services.Client getClient0(String location);
     Services.Directory getDirectory(String location);
 }
