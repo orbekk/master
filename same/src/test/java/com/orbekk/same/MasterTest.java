@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MasterTest {
@@ -63,6 +64,7 @@ public class MasterTest {
                 "http://client/ClientService.json", "clientLocation", null);
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
+        connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();
         System.out.println(state);
@@ -72,17 +74,20 @@ public class MasterTest {
     }
 
     @Test
+    @Ignore  // Uses old services. Tested by functional test.
     public void updateStateRequest() throws Exception {
         Client client1 = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", "clientLocation", null);
+                "http://client/ClientService.json", "clientLocation2", null);
         ClientService client1S = client1.getService();
         connections.clientMap.put("http://client/ClientService.json", client1S);
+        connections.clientMap0.put("clientLocation1", client1.getNewService());
         Client client2 = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client2/ClientService.json", "clientLocation", null);
+                "http://client2/ClientService.json", "clientLocation2", null);
         ClientService client2S = client2.getService();
         connections.clientMap.put("http://client2/ClientService.json", client2S);
+        connections.clientMap0.put("clientLocation2", client2.getNewService());
         
         client1.joinNetwork(master.getMasterInfo());
         client2.joinNetwork(master.getMasterInfo());
@@ -111,18 +116,16 @@ public class MasterTest {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
                 "http://client/ClientService.json", "clientLocation", null);
-        ClientService clientS = client.getService();
-        connections.clientMap.put("http://client/ClientService.json", clientS);
+        connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();
-        assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
+        assertTrue(state.getList(".participants0").contains("clientLocation"));
         
-        connections.clientMap.put("http://client/ClientService.json",
-                new UnreachableClient());
+        connections.clientMap0.put("clientLocation", null);
         masterS.updateStateRequest("NewState", "NewStateData", 0);
         master.performWork();
         
-        assertEquals("[]", state.getDataOf(".participants"));
+        assertEquals("[]", state.getDataOf(".participants0"));
     }
 
 }
