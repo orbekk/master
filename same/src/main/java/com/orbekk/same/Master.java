@@ -23,7 +23,7 @@ public class Master {
     State state;
     private Broadcaster broadcaster;
     private volatile int masterId = 1;
-
+    
     public static Master create(ConnectionManager connections,
             Broadcaster broadcaster, String myUrl, String networkName,
             String myLocation) {
@@ -67,6 +67,8 @@ public class Master {
         @Override public void joinNetworkRequest(RpcController controller,
                 ClientState request, RpcCallback<Empty> done) {
             logger.info("joinNetworkRequest({})", request);
+            
+            /** Old participant code. */
             List<String> participants = state.getList(".participants");
             sendFullStateThread.add(request.getUrl());
             if (!participants.contains(request.getUrl())) {
@@ -79,8 +81,13 @@ public class Master {
             } else {
                 logger.warn("Client {} joining: Already part of network");
             }
+            
+            /** New participant code. */
+            addParticipant(request);
+            
             done.run(Empty.getDefaultInstance());
         }
+
 
         @Override public void updateStateRequest(RpcController controller,
                 Services.Component request,
@@ -192,7 +199,19 @@ public class Master {
         return serviceImpl;
     }
 
+    private synchronized void addParticipant(ClientState client) {
+        List<String> participants = state.getList(State.PARTICIPANTS);
+        if (!participants.contains(client.getUrl())) {
+            participants.add(client.getUrl());
+            state.updateFromObject(State.PARTICIPANTS, participants,
+                    state.getRevision(State.PARTICIPANTS) + 1);
+            updateStateRequestThread.add(State.PARTICIPANTS);
+        }
+        
+    }
+
     private synchronized void removeParticipant(String url) {
+        /** TODO: Remove this code. */
         List<String> participants = state.getList(".participants");
         if (participants.contains(url)) {
             logger.info("removeParticipant({})", url);
@@ -200,6 +219,15 @@ public class Master {
             state.updateFromObject(".participants", participants,
                     state.getRevision(".participants") + 1);
             updateStateRequestThread.add(".participants");
+        }
+        
+        List<String> participants0 = state.getList(State.PARTICIPANTS);
+        if (participants0.contains(url)) {
+            logger.info("removeParticipant({})", url);
+            participants0.remove(url);
+            state.updateFromObject(State.PARTICIPANTS, participants0, 
+                    state.getRevision(State.PARTICIPANTS) + 1);
+            updateStateRequestThread.add(State.PARTICIPANTS);
         }
     }
 

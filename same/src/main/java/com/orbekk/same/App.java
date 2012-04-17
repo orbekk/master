@@ -10,7 +10,7 @@ public class App {
 
     private Services.MasterState getMasterInfo(Configuration configuration) {
         return Services.MasterState.newBuilder()
-                .setMasterUrl(configuration.get(".masterUrl"))
+                .setMasterUrl(configuration.get("masterUrl"))
                 .setMasterLocation(configuration.get("masterLocation"))
                 .build();
     }

@@ -25,9 +25,12 @@ public class State {
     private ObjectMapper mapper = new ObjectMapper();
     private Set<String> updatedComponents = new TreeSet<String>();
 
+    public static final String PARTICIPANTS = ".participants0";
+    
     public State(String networkName) {
         update(".networkName", networkName, 1);
         updateFromObject(".participants", new ArrayList<String>(), 1);
+        updateFromObject(PARTICIPANTS, new ArrayList<String>(), 1);
     }
 
     public State(State other) {
