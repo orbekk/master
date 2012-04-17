@@ -30,13 +30,10 @@ public class FunctionalTest {
     List<Client> clients = new ArrayList<Client>();
     TestConnectionManager connections = new TestConnectionManager();
     TestBroadcaster broadcaster = new TestBroadcaster();
-    MasterServiceProxy masterServiceProxy;
     
     @Before public void setUp() {
         master = Master.create(connections,
                 broadcaster, masterUrl, "TestMaster", masterLocation);
-        masterServiceProxy = new MasterServiceProxy(master.getService());
-        connections.masterMap.put(masterUrl, masterServiceProxy);
         connections.masterMap0.put(masterLocation, master.getNewService());
         client1 = newClient("TestClient1", "http://client1/ClientService.json",
                 "client1");
@@ -118,7 +115,6 @@ public class FunctionalTest {
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
                 broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
-        connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {
             @Override
@@ -143,7 +139,6 @@ public class FunctionalTest {
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
                 broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
-        connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {
             boolean firstMaster = true;
@@ -172,7 +167,6 @@ public class FunctionalTest {
         String newMasterLocation = "newMaster:2";
         final Master newMaster = Master.create(connections,
                 broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
-        connections.masterMap.put(newMasterUrl, newMaster.getService());
         joinClients();
         MasterController controller = new MasterController() {
             @Override
@@ -188,7 +182,6 @@ public class FunctionalTest {
         client2.setMasterController(controller);
         client3.setMasterController(controller);
         Variable<String> x1 = vf1.createString("TestMasterFailure");
-        masterServiceProxy.setService(null);
         connections.masterMap0.put(masterLocation, null);
         assertThat(x1.set("Woop, woop").getStatus().getStatusCode(),
                 is(DelayedOperation.Status.ERROR));

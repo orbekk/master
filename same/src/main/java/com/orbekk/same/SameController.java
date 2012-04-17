@@ -42,12 +42,10 @@ public class SameController {
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
             master.start();
-            masterService.setService(master.getService());
         }
 
         @Override
         public void disableMaster() {
-            masterService.setService(null);
             if (master != null) {
                 master.interrupt();
             }
