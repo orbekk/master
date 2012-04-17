@@ -60,7 +60,7 @@ public class MasterTest {
     public void clientJoin() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", null);
+                "http://client/ClientService.json", "clientLocation", null);
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork(master.getMasterInfo());
@@ -73,12 +73,12 @@ public class MasterTest {
     public void updateStateRequest() throws Exception {
         Client client1 = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", null);
+                "http://client/ClientService.json", "clientLocation", null);
         ClientService client1S = client1.getService();
         connections.clientMap.put("http://client/ClientService.json", client1S);
         Client client2 = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client2/ClientService.json", null);
+                "http://client2/ClientService.json", "clientLocation", null);
         ClientService client2S = client2.getService();
         connections.clientMap.put("http://client2/ClientService.json", client2S);
         
@@ -108,7 +108,7 @@ public class MasterTest {
     public void masterRemovesParticipant() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", null);
+                "http://client/ClientService.json", "clientLocation", null);
         ClientService clientS = client.getService();
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork(master.getMasterInfo());

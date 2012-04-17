@@ -83,7 +83,7 @@ public class Master {
             }
             
             /** New participant code. */
-            addParticipant(request);
+            addParticipant(request.getLocation());
             
             done.run(Empty.getDefaultInstance());
         }
@@ -199,10 +199,10 @@ public class Master {
         return serviceImpl;
     }
 
-    private synchronized void addParticipant(ClientState client) {
+    private synchronized void addParticipant(String location) {
         List<String> participants = state.getList(State.PARTICIPANTS);
-        if (!participants.contains(client.getUrl())) {
-            participants.add(client.getUrl());
+        if (!participants.contains(location)) {
+            participants.add(location);
             state.updateFromObject(State.PARTICIPANTS, participants,
                     state.getRevision(State.PARTICIPANTS) + 1);
             updateStateRequestThread.add(State.PARTICIPANTS);

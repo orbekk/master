@@ -57,6 +57,8 @@ public class SameController {
     public static SameController create(Configuration configuration) {
         int port = configuration.getInt("port");
         int pport = configuration.getInt("pport");
+        String myLocation = configuration.get("localIp") + ":" + pport;
+        
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
         State clientState = new State(".InvalidClientNetwork");
@@ -67,7 +69,8 @@ public class SameController {
 
         MasterServiceProxy master = new MasterServiceProxy();
         Client client = new Client(clientState, connections,
-                clientUrl, BroadcasterImpl.getDefaultBroadcastRunner());
+                clientUrl, myLocation,
+                BroadcasterImpl.getDefaultBroadcastRunner());
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));

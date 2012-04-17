@@ -28,6 +28,7 @@ public class Client {
     private final ConnectionManager connections;
     volatile State state;
     private volatile String myUrl;
+    private volatile String myLocation;
     volatile String masterUrl;
     volatile String masterLocation;
     private volatile int masterId = 0;
@@ -206,10 +207,11 @@ public class Client {
     };
 
     public Client(State state, ConnectionManager connections,
-            String myUrl, Broadcaster broadcaster) {
+            String myUrl, String myLocation, Broadcaster broadcaster) {
         this.state = state;
         this.connections = connections;
         this.myUrl = myUrl;
+        this.myLocation = myLocation;
         this.broadcaster = broadcaster;
     }
 
@@ -229,7 +231,8 @@ public class Client {
 
     public Services.ClientState getClientState() {
         return Services.ClientState.newBuilder()
-                .setUrl(getUrl())
+                .setUrl(myUrl)
+                .setLocation(myLocation)
                 .build();
     }
     

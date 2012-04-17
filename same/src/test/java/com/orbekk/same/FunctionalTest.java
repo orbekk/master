@@ -48,7 +48,7 @@ public class FunctionalTest {
     
     Client newClient(String clientName, String clientUrl) {
         Client client = new Client(new State(clientName), connections,
-                clientUrl, broadcaster);
+                clientUrl, "clientLocation", broadcaster);
         connections.clientMap.put(clientUrl, client.getService());
         clients.add(client);
         String paxosUrl = clientUrl.replace("ClientService", "PaxosService");
