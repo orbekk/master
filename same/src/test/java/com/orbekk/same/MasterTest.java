@@ -65,6 +65,8 @@ public class MasterTest {
         connections.clientMap.put("http://client/ClientService.json", clientS);
         client.joinNetwork(master.getMasterInfo());
         master.performWork();
+        System.out.println(state);
+        System.out.println(master.state);
         assertTrue(state.getList(".participants").contains("http://client/ClientService.json"));
         assertEquals(state, client.testGetState());
     }

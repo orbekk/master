@@ -38,18 +38,22 @@ public class FunctionalTest {
         masterServiceProxy = new MasterServiceProxy(master.getService());
         connections.masterMap.put(masterUrl, masterServiceProxy);
         connections.masterMap0.put(masterLocation, master.getNewService());
-        client1 = newClient("TestClient1", "http://client1/ClientService.json");
+        client1 = newClient("TestClient1", "http://client1/ClientService.json",
+                "client1");
         vf1 = new VariableFactory(client1.getInterface());
-        client2 = newClient("TestClient2", "http://client2/ClientService.json");
+        client2 = newClient("TestClient2", "http://client2/ClientService.json",
+                "client2");
         vf2 = new VariableFactory(client2.getInterface());
-        client3 = newClient("TestClient3", "http://client3/ClientService.json");
+        client3 = newClient("TestClient3", "http://client3/ClientService.json",
+                "client3");
         vf3 = new VariableFactory(client3.getInterface());
     }
     
-    Client newClient(String clientName, String clientUrl) {
+    Client newClient(String clientName, String clientUrl, String location) {
         Client client = new Client(new State(clientName), connections,
-                clientUrl, "clientLocation", broadcaster);
+                clientUrl, location, broadcaster);
         connections.clientMap.put(clientUrl, client.getService());
+        connections.clientMap0.put(location, client.getNewService());
         clients.add(client);
         String paxosUrl = clientUrl.replace("ClientService", "PaxosService");
         PaxosService paxos = new PaxosServiceImpl(paxosUrl);
@@ -92,8 +96,8 @@ public class FunctionalTest {
         }
         for (Client c : clients) {
             assertThat(c.getConnectionState(), is(ConnectionState.STABLE));
-            assertThat(c.masterUrl, is(masterUrl));
-            assertThat(c.masterLocation, is(masterLocation));
+            assertThat(c.getMaster().getMasterUrl(), is(masterUrl));
+            assertThat(c.getMaster().getMasterLocation(), is(masterLocation));
         }
     }
     
@@ -130,8 +134,8 @@ public class FunctionalTest {
         client3.setMasterController(controller);
         client1.startMasterElection();
         newMaster.performWork();
-        assertThat(client1.masterUrl, is(newMasterUrl));
-        assertThat(client2.masterUrl, is(newMasterUrl));
+        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
     }
     
     @Test public void onlyOneNewMaster() {
@@ -159,8 +163,8 @@ public class FunctionalTest {
         client3.setMasterController(controller);
         client1.startMasterElection();
         newMaster.performWork();
-        assertThat(client1.masterUrl, is(newMasterUrl));
-        assertThat(client2.masterUrl, is(newMasterUrl));
+        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
     }
     
     @Test public void masterFails() {
@@ -190,7 +194,7 @@ public class FunctionalTest {
                 is(DelayedOperation.Status.ERROR));
         performWork();
         newMaster.performWork();
-        assertThat(client1.masterUrl, is(newMasterUrl));
-        assertThat(client2.masterUrl, is(newMasterUrl));
+        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
     }
 }
