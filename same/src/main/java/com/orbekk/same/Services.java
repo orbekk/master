@@ -1806,6 +1806,10 @@ public final class Services {
     // optional string url = 1;
     boolean hasUrl();
     String getUrl();
+    
+    // optional string location = 2;
+    boolean hasLocation();
+    String getLocation();
   }
   public static final class ClientState extends
       com.google.protobuf.GeneratedMessage
@@ -1868,8 +1872,41 @@ public final class Services {
       }
     }
     
+    // optional string location = 2;
+    public static final int LOCATION_FIELD_NUMBER = 2;
+    private java.lang.Object location_;
+    public boolean hasLocation() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getLocation() {
+      java.lang.Object ref = location_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          location_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getLocationBytes() {
+      java.lang.Object ref = location_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        location_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       url_ = "";
+      location_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1886,6 +1923,9 @@ public final class Services {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(1, getUrlBytes());
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getLocationBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1898,6 +1938,10 @@ public final class Services {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, getUrlBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getLocationBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2025,6 +2069,8 @@ public final class Services {
         super.clear();
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
+        location_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
@@ -2067,6 +2113,10 @@ public final class Services {
           to_bitField0_ |= 0x00000001;
         }
         result.url_ = url_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.location_ = location_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2085,6 +2135,9 @@ public final class Services {
         if (other == com.orbekk.same.Services.ClientState.getDefaultInstance()) return this;
         if (other.hasUrl()) {
           setUrl(other.getUrl());
+        }
+        if (other.hasLocation()) {
+          setLocation(other.getLocation());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2120,6 +2173,11 @@ public final class Services {
             case 10: {
               bitField0_ |= 0x00000001;
               url_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              location_ = input.readBytes();
               break;
             }
           }
@@ -2161,6 +2219,42 @@ public final class Services {
       void setUrl(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000001;
         url_ = value;
+        onChanged();
+      }
+      
+      // optional string location = 2;
+      private java.lang.Object location_ = "";
+      public boolean hasLocation() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getLocation() {
+        java.lang.Object ref = location_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          location_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setLocation(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        location_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLocation() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        location_ = getDefaultInstance().getLocation();
+        onChanged();
+        return this;
+      }
+      void setLocation(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        location_ = value;
         onChanged();
       }
       
@@ -3694,24 +3788,24 @@ public final class Services {
       "Component\022\n\n\002id\030\001 \002(\t\022\014\n\004data\030\002 \002(\t\022\020\n\010r" +
       "evision\030\003 \002(\003\"c\n\013MasterState\022\022\n\nmaster_u" +
       "rl\030\001 \001(\t\022\021\n\tmaster_id\030\002 \001(\005\022\024\n\014network_n" +
-      "ame\030\003 \001(\t\022\027\n\017master_location\030\004 \001(\t\"\032\n\013Cl" +
-      "ientState\022\013\n\003url\030\001 \001(\t\"A\n\020NetworkDirecto" +
-      "ry\022-\n\007network\030\001 \003(\0132\034.com.orbekk.same.Ma" +
-      "sterState2\324\001\n\006Client\022>\n\010SetState\022\032.com.o",
-      "rbekk.same.Component\032\026.com.orbekk.same.E" +
-      "mpty\022F\n\016MasterTakeover\022\034.com.orbekk.same" +
-      ".MasterState\032\026.com.orbekk.same.Empty\022B\n\n" +
-      "MasterDown\022\034.com.orbekk.same.MasterState" +
-      "\032\026.com.orbekk.same.Empty2\260\001\n\006Master\022J\n\022J" +
-      "oinNetworkRequest\022\034.com.orbekk.same.Clie" +
-      "ntState\032\026.com.orbekk.same.Empty\022Z\n\022Updat" +
-      "eStateRequest\022\032.com.orbekk.same.Componen" +
-      "t\032(.com.orbekk.same.UpdateComponentRespo" +
-      "nse2\236\001\n\tDirectory\022G\n\017RegisterNetwork\022\034.c",
-      "om.orbekk.same.MasterState\032\026.com.orbekk." +
-      "same.Empty\022H\n\013GetNetworks\022\026.com.orbekk.s" +
-      "ame.Empty\032!.com.orbekk.same.NetworkDirec" +
-      "toryB\003\210\001\001"
+      "ame\030\003 \001(\t\022\027\n\017master_location\030\004 \001(\t\",\n\013Cl" +
+      "ientState\022\013\n\003url\030\001 \001(\t\022\020\n\010location\030\002 \001(\t" +
+      "\"A\n\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034." +
+      "com.orbekk.same.MasterState2\324\001\n\006Client\022>",
+      "\n\010SetState\022\032.com.orbekk.same.Component\032\026" +
+      ".com.orbekk.same.Empty\022F\n\016MasterTakeover" +
+      "\022\034.com.orbekk.same.MasterState\032\026.com.orb" +
+      "ekk.same.Empty\022B\n\nMasterDown\022\034.com.orbek" +
+      "k.same.MasterState\032\026.com.orbekk.same.Emp" +
+      "ty2\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.co" +
+      "m.orbekk.same.ClientState\032\026.com.orbekk.s" +
+      "ame.Empty\022Z\n\022UpdateStateRequest\022\032.com.or" +
+      "bekk.same.Component\032(.com.orbekk.same.Up" +
+      "dateComponentResponse2\236\001\n\tDirectory\022G\n\017R",
+      "egisterNetwork\022\034.com.orbekk.same.MasterS" +
+      "tate\032\026.com.orbekk.same.Empty\022H\n\013GetNetwo" +
+      "rks\022\026.com.orbekk.same.Empty\032!.com.orbekk" +
+      ".same.NetworkDirectoryB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3755,7 +3849,7 @@ public final class Services {
           internal_static_com_orbekk_same_ClientState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_ClientState_descriptor,
-              new java.lang.String[] { "Url", },
+              new java.lang.String[] { "Url", "Location", },
               com.orbekk.same.Services.ClientState.class,
               com.orbekk.same.Services.ClientState.Builder.class);
           internal_static_com_orbekk_same_NetworkDirectory_descriptor =

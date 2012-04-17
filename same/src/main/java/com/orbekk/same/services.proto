@@ -25,6 +25,7 @@ message MasterState {
 
 message ClientState {
     optional string url = 1;
+    optional string location = 2;
 }
 
 message NetworkDirectory {
