@@ -131,8 +131,8 @@ public class FunctionalTest {
         client3.setMasterController(controller);
         client1.startMasterElection();
         newMaster.performWork();
-        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
-        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client1.getMaster().getMasterLocation(), is(newMasterLocation));
+        assertThat(client2.getMaster().getMasterLocation(), is(newMasterLocation));
     }
     
     @Test public void onlyOneNewMaster() {

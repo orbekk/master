@@ -13,13 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.ConnectionManagerImpl;
 import com.orbekk.same.Services.ClientState;
-import com.orbekk.same.http.JettyServerBuilder;
-import com.orbekk.same.http.JettyServerContainer;
-import com.orbekk.same.http.RpcServlet;
 
 public class PaxosServiceFunctionalTest {
     ConnectionManagerImpl connections = new ConnectionManagerImpl(500, 500);
@@ -63,18 +59,6 @@ public class PaxosServiceFunctionalTest {
         servers.add(server);
         String location = "localhost:" + server.getPort();
         paxosUrls.add(location);
-    }
-    
-    public List<String> setupPaxos(JettyServerBuilder builder, int instances) {
-        List<String> tempUrls = new ArrayList<String>();
-        for (int i = 1; i <= instances; i++) {
-            JsonRpcServer jsonServer = new JsonRpcServer(
-                    new PaxosServiceImpl("P" + i + ": "), PaxosService.class);
-            String serviceId = "/PaxosService" + i + ".json";
-            builder.withServlet(new RpcServlet(jsonServer), serviceId);
-            tempUrls.add(serviceId);
-        }
-        return tempUrls;
     }
     
     public void addUrls(List<String> services) {

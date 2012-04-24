@@ -225,24 +225,6 @@ public class Master {
         }
     }
     
-    private void broadcastNewComponents(List<String> destinations,
-            final List<State.Component> components) {
-        broadcaster.broadcast(destinations, new ServiceOperation() {
-            @Override public void run(String url) {
-                ClientService client = connections.getClient(url);
-                try {
-                    for (Component c : components) {
-                        client.setState(c.getName(), c.getData(),
-                                c.getRevision());
-                    }
-                } catch (Exception e) {
-                    logger.info("Client {} failed to receive state update.", url);
-                    removeParticipant(url);
-                }
-            }
-        });
-    }
-
     /** This master should take over from an earlier master. */
     public void resumeFrom(State lastKnownState, final int masterId) {
         state = lastKnownState;
@@ -250,21 +232,22 @@ public class Master {
         state.update(".masterLocation", myLocation,
                 state.getRevision(".masterLocation") + 100);
         this.masterId = masterId;
-        broadcaster.broadcast(state.getList(".participants"),
-                new ServiceOperation() {
-            @Override
-            public void run(String url) {
-                ClientService client = connections.getClient(url);
-                try {
-                    client.masterTakeover(myUrl,
-                            state.getDataOf(".networkName"), masterId,
-                            state.getDataOf(".masterLocation"));
-                } catch (Exception e) {
-                    logger.info("Client {} failed to acknowledge new master. " +
-                    		"Removing {}", url);
-                    removeParticipant(url);
+        
+        for (final String location : state.getList(State.PARTICIPANTS)) {
+            Services.Client client = connections.getClient0(location);
+            final Rpc rpc = new Rpc();
+            RpcCallback<Empty> done = new RpcCallback<Empty>() {
+                @Override public void run(Empty unused) {
+                    if (!rpc.isOk()) {
+                        removeParticipant(location);
+                    }
                 }
+            };
+            if (client == null) {
+                removeParticipant(location);
+                continue;
             }
-        });
+            client.masterTakeover(rpc, getMasterInfo(), done);
+        }
     }
 }
