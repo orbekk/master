@@ -41,7 +41,7 @@ public class DirectoryServiceImpl extends Services.Directory {
     @Override
     public void registerNetwork(RpcController controller, MasterState request,
             RpcCallback<Empty> done) {
-        registerNetwork(request.getNetworkName(), request.getMasterUrl());
+        registerNetwork(request.getNetworkName(), request.getMasterLocation());
         done.run(Empty.getDefaultInstance());
     }
 
