@@ -14,7 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.ConnectionManagerImpl;
+import com.orbekk.same.Services.ClientState;
 import com.orbekk.same.http.JettyServerBuilder;
 import com.orbekk.same.http.JettyServerContainer;
 import com.orbekk.same.http.RpcServlet;
@@ -22,9 +24,12 @@ import com.orbekk.same.http.RpcServlet;
 public class PaxosServiceFunctionalTest {
     ConnectionManagerImpl connections = new ConnectionManagerImpl(500, 500);
     List<String> paxosUrls = new ArrayList<String>();
-    JettyServerContainer server;
+    List<SimpleProtobufServer> servers = new ArrayList<SimpleProtobufServer>();
     String myUrl;
     int successfulProposals = 0;
+    ClientState client1 = ClientState.newBuilder()
+            .setLocation("client1Location")
+            .build();
     
     Runnable sleepForever = new Runnable() {
         @Override public synchronized void run() {
@@ -39,18 +44,25 @@ public class PaxosServiceFunctionalTest {
     
     @Before
     public void setUp() throws Exception {
-        JettyServerBuilder builder = new JettyServerBuilder(0);
-        List<String> tempUrls = setupPaxos(builder, 10);
-        server = builder.build();
-        server.start();
-        myUrl = "http://localhost:" + server.getPort();
-        addUrls(tempUrls);
-        System.out.println(paxosUrls);
+        for (int i = 0; i < 11; i++) {
+            setupPaxos(i);
+        }
     }
     
     @After
     public void tearDown() throws Exception {
-        server.stop();
+        for (SimpleProtobufServer server : servers) {
+            server.interrupt();
+        }
+    }
+    
+    public void setupPaxos(int i) {
+        SimpleProtobufServer server = SimpleProtobufServer.create(0);
+        server.registerService(new PaxosServiceImpl("P: " + i + ": ").getService());
+        server.start();
+        servers.add(server);
+        String location = "localhost:" + server.getPort();
+        paxosUrls.add(location);
     }
     
     public List<String> setupPaxos(JettyServerBuilder builder, int instances) {
@@ -72,23 +84,23 @@ public class PaxosServiceFunctionalTest {
     }
 
     @Test
-    public void testMasterElection() {
-        MasterProposer m1 = new MasterProposer("http://client1", paxosUrls,
+    public void testMasterElection() throws InterruptedException {
+        MasterProposer m1 = new MasterProposer(client1, paxosUrls,
                 connections);
         assertTrue(m1.propose(1));
     }
     
     @Test
     public void testMasterElectionTask() throws InterruptedException, ExecutionException {
-        MasterProposer m1 = new MasterProposer("http://client1", paxosUrls,
+        MasterProposer m1 = new MasterProposer(client1, paxosUrls,
                 connections);
         Future<Integer> result = m1.startProposalTask(1, null);
         assertEquals(new Integer(1), result.get());
     }
     
     @Test
-    public void cancelledElection() {
-        MasterProposer m1 = new MasterProposer("http://client1", paxosUrls,
+    public void cancelledElection() throws InterruptedException {
+        MasterProposer m1 = new MasterProposer(client1, paxosUrls,
                 connections);
         assertTrue(m1.propose(1));
 
@@ -99,9 +111,10 @@ public class PaxosServiceFunctionalTest {
 
     @Test
     public void testOnlyOneCompletes() throws InterruptedException, ExecutionException {
-        MasterProposer m1 = new MasterProposer("http://OnlyOneCompletes1", paxosUrls,
+        MasterProposer m1 = new MasterProposer(client1, paxosUrls,
                 connections);
-        MasterProposer m2 = new MasterProposer("http://OnlyOneCompletes2", paxosUrls,
+        ClientState client2 = ClientState.newBuilder().setLocation("client2").build();
+        MasterProposer m2 = new MasterProposer(client2, paxosUrls,
                 connections);
         final Future<Integer> result1 = m1.startProposalTask(1, sleepForever);
         final Future<Integer> result2 = m2.startProposalTask(1, sleepForever);
@@ -158,11 +171,17 @@ public class PaxosServiceFunctionalTest {
             final int j = i;
             masterProposers.add(new Thread() {
                 @Override public void run() {
-                    MasterProposer client =
-                            new MasterProposer("http:/client" + j, paxosUrls,
+                    ClientState client = ClientState.newBuilder()
+                            .setLocation("client" + j)
+                            .build();
+                    MasterProposer proposer =
+                            new MasterProposer(client, paxosUrls,
                                     connections);
-                    if (client.proposeRetry(1)) {
-                        incrementSuccessfulProposals(); 
+                    try {
+                        if (proposer.proposeRetry(1)) {
+                            incrementSuccessfulProposals(); 
+                        }
+                    } catch (InterruptedException e) {
                     }
                 }
             });

@@ -15,4 +15,5 @@ public interface ConnectionManager {
     Services.Master getMaster0(String location);
     Services.Client getClient0(String location);
     Services.Directory getDirectory(String location);
+    Services.Paxos getPaxos0(String location);
 }

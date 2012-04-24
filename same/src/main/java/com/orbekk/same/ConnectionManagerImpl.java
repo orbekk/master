@@ -145,4 +145,14 @@ public class ConnectionManagerImpl implements ConnectionManager {
             return null;
         }
     }
+    
+    @Override
+    public Services.Paxos getPaxos0(String location) {
+        RpcChannel channel = getChannel(location);
+        if (channel != null) {
+            return Services.Paxos.newStub(channel);
+        } else {
+            return null;
+        }
+    }
 }

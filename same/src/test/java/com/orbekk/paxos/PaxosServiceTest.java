@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PaxosServiceTest {
@@ -61,9 +62,10 @@ public class PaxosServiceTest {
     }
 
     @Test
+    @Ignore
     public void integrationTest() {
-        MasterProposer proposer = new MasterProposer("client1", paxosUrls(),
-                connections);
-        assertTrue(proposer.propose(1));
+//        MasterProposer proposer = new MasterProposer("client1", paxosUrls(),
+//                connections);
+//        assertTrue(proposer.propose(1));
     }
 }

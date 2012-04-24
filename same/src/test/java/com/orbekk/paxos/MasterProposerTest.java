@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.orbekk.same.Services.ClientState;
 import com.orbekk.same.TestConnectionManager;
 
 import static org.junit.Assert.*;
@@ -13,6 +14,9 @@ import static org.mockito.Mockito.*;
 
 public class MasterProposerTest {
     TestConnectionManager connections = new TestConnectionManager();
+    ClientState client = ClientState.newBuilder()
+            .setLocation("client1Location")
+            .build();
     PaxosService p1 = mock(PaxosService.class);
     PaxosService p2 = mock(PaxosService.class);
     PaxosService p3 = mock(PaxosService.class);
@@ -34,7 +38,7 @@ public class MasterProposerTest {
         when(p1.acceptRequest("client1", 1)).thenReturn(1);
         
         MasterProposer c1 = new MasterProposer(
-                "client1",
+                client,
                 paxosUrls(),
                 connections);
         assertTrue(c1.propose(1));
@@ -46,7 +50,7 @@ public class MasterProposerTest {
         when(p1.acceptRequest("client1", 1)).thenReturn(-1);
         
         MasterProposer c1 = new MasterProposer(
-                "client1",
+                client,
                 paxosUrls(),
                 connections);
         assertFalse(c1.propose(1));
