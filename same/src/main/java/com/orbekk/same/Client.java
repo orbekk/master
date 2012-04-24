@@ -159,45 +159,6 @@ public class Client {
         }
     };
     
-    private ClientService serviceImpl = new ClientService() {
-        RpcCallback<Empty> noOp = new RpcCallback<Empty>() {
-            @Override public void run(Empty unused) {
-            }
-        };
-        
-        @Override
-        public void setState(String component, String data, long revision) throws Exception {
-            logger.info("SetState: {}, {}, {}",
-                    new Object[]{component, data, revision});
-            Services.Component request = Services.Component.newBuilder()
-                    .setId(component)
-                    .setData(data)
-                    .setRevision(revision)
-                    .build();
-            newServiceImpl.setState(null, request, noOp);
-        }
-
-        @Override
-        public synchronized void masterTakeover(String masterUrl, String networkName, 
-                int masterId, String masterLocation) throws Exception {
-            Services.MasterState request = Services.MasterState.newBuilder()
-                    .setMasterUrl(masterUrl)
-                    .setNetworkName(networkName)
-                    .setMasterId(masterId)
-                    .setMasterLocation(masterLocation)
-                    .build();
-            newServiceImpl.masterTakeover(null, request, noOp);
-        }
-
-        @Override
-        public void masterDown(int masterId) throws Exception {
-            Services.MasterState request = masterInfo.toBuilder()
-                    .setMasterId(masterId)
-                    .build();
-            newServiceImpl.masterDown(null, request, noOp);
-        }
-    };
-
     public Client(State state, ConnectionManager connections,
             String myUrl, String myLocation) {
         this.state = state;
@@ -275,10 +236,6 @@ public class Client {
         return state;
     }
 
-    public ClientService getService() {
-        return serviceImpl;
-    }
-    
     public Services.Client getNewService() {
         return newServiceImpl;
     }

@@ -10,20 +10,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <repositories>
-    <repository>
-      <id>jsonrpc3j-webdav-maven-repo</id>
-      <name>jsonrpc4j maven repository</name>
-      <url>http://jsonrpc4j.googlecode.com/svn/maven/repo/</url>
-      <layout>default</layout>
-    </repository>
-  </repositories>
   <dependencies>
-    <dependency>
-      <groupId>com.googlecode</groupId>
-      <artifactId>jsonrpc4j</artifactId>
-      <version>0.18</version>
-    </dependency>
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
@@ -50,36 +37,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.6.4</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.portlet</groupId>
-      <artifactId>portlet-api</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlet</artifactId>
-      <version>8.0.0.M3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>8.0.0.M3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>tjws</artifactId>
-      <version>2.3.1.GA</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>

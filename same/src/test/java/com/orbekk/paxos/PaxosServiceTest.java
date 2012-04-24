@@ -29,11 +29,11 @@ public class PaxosServiceTest {
     @Before
     public void setUp() {
         Collections.addAll(servers, p1, p2, p3, p4, p5);    
-        connections.paxosMap.put("p1", p1);
-        connections.paxosMap.put("p2", p2);
-        connections.paxosMap.put("p3", p3);
-        connections.paxosMap.put("p4", p4);
-        connections.paxosMap.put("p5", p5);
+        connections.paxosMap0.put("p1", p1.getService());
+        connections.paxosMap0.put("p2", p2.getService());
+        connections.paxosMap0.put("p3", p3.getService());
+        connections.paxosMap0.put("p4", p4.getService());
+        connections.paxosMap0.put("p5", p5.getService());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class PaxosServiceTest {
     }
 
     public List<String> paxosUrls() {
-        return new ArrayList<String>(connections.paxosMap.keySet());
+        return new ArrayList<String>(connections.paxosMap0.keySet());
     }
 
     @Test

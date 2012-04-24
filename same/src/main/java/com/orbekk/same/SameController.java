@@ -9,15 +9,10 @@ import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.config.Configuration;
-import com.orbekk.same.http.JettyServerBuilder;
-import com.orbekk.same.http.ServerContainer;
-import com.orbekk.same.http.StateServlet;
 
 public class SameController {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private ServerContainer server;
     private SimpleProtobufServer pServer;
-    private MasterServiceProxy masterService;
     private Master master;
     private Client client;
     private PaxosServiceImpl paxos;
@@ -65,24 +60,15 @@ public class SameController {
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
 
-        MasterServiceProxy master = new MasterServiceProxy();
         Client client = new Client(clientState, connections,
                 clientUrl, myLocation);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
-        StateServlet stateServlet = new StateServlet(client.getInterface(),
-                new VariableFactory(client.getInterface()));
-        ServerContainer server = new JettyServerBuilder(port)
-            .withServlet(stateServlet, "/_/state")
-            .withService(client.getService(), ClientService.class)
-            .withService(master, MasterService.class)
-            .withService(paxos, PaxosService.class)
-            .build();
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);
         pServer.registerService(client.getNewService());
         
         SameController controller = new SameController(
-                configuration, connections, server, master, client,
+                configuration, connections, client,
                 paxos, broadcaster, pServer);
         return controller;
     }
@@ -90,16 +76,12 @@ public class SameController {
     public SameController(
             Configuration configuration,
             ConnectionManager connections,
-            ServerContainer server,
-            MasterServiceProxy master,
             Client client,
             PaxosServiceImpl paxos,
             Broadcaster serviceBroadcaster,
             SimpleProtobufServer pServer) {
         this.configuration = configuration;
         this.connections = connections;
-        this.server = server;
-        this.masterService = master;
         this.client = client;
         this.paxos = paxos;
         this.serviceBroadcaster = serviceBroadcaster;
@@ -107,7 +89,6 @@ public class SameController {
     }
 
     public void start() throws Exception {
-        server.start();
         pServer.start();
         client.setMasterController(masterController);
         client.start();
@@ -119,7 +100,6 @@ public class SameController {
             if (master != null) {
                 master.interrupt();
             }
-            server.stop();
             pServer.interrupt();
         } catch (Exception e) {
             logger.error("Failed to stop webserver", e);
@@ -127,7 +107,6 @@ public class SameController {
     }
 
     public void join() {
-        server.join();
         client.interrupt();
         if (master != null) {
             master.interrupt();

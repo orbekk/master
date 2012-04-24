@@ -15,26 +15,6 @@ public class MasterTest {
     private TestConnectionManager connections = new TestConnectionManager();
     private TestBroadcaster broadcaster = new TestBroadcaster();
     private Master master;
-
-    public static class UnreachableClient implements ClientService {
-        @Override
-        public void setState(String component, String data, long revision)
-                throws Exception {
-            throw new Exception("Unreachable client");   
-        }
-
-        @Override
-        public void masterTakeover(String masterUrl, String networkName,
-                int masterId, String masterLocation)
-                throws Exception {
-            throw new Exception("Unreachable client");
-        }
-
-        @Override
-        public void masterDown(int masterId) throws Exception {
-            throw new Exception("Unreachable client");
-        }
-    }
     
     @Before
     public void setUp() {

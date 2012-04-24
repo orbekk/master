@@ -12,12 +12,6 @@ import com.orbekk.same.Services.Paxos;
  * This class is used in test.
  */
 public class TestConnectionManager implements ConnectionManager {
-    public Map<String, ClientService> clientMap =
-            new HashMap<String, ClientService>();
-    public Map<String, MasterService> masterMap =
-            new HashMap<String, MasterService>();
-    public Map<String, PaxosService> paxosMap =
-            new HashMap<String, PaxosService>();
     public Map<String, Services.Directory> directoryMap =
             new HashMap<String, Services.Directory>();
     public Map<String, Services.Master> masterMap0 =
@@ -28,21 +22,6 @@ public class TestConnectionManager implements ConnectionManager {
             new HashMap<String, Services.Paxos>();
 
     public TestConnectionManager() {
-    }
-
-    @Override
-    public ClientService getClient(String url) {
-        return clientMap.get(url);
-    }
-
-    @Override
-    public MasterService getMaster(String url) {
-        return masterMap.get(url);
-    }
-
-    @Override
-    public PaxosService getPaxos(String url) {
-        return paxosMap.get(url);
     }
 
     @Override

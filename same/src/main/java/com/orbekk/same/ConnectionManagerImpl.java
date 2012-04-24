@@ -17,15 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.jsonrpc4j.ProxyUtil;
-import com.orbekk.net.MyJsonRpcHttpClient;
 import com.orbekk.paxos.PaxosService;
 import com.orbekk.protobuf.RpcChannel;
 
 public class ConnectionManagerImpl implements ConnectionManager {
     private int connectionTimeout;
     private int readTimeout;
-    private Map<String, MyJsonRpcHttpClient> connectionCache =
-            new HashMap<String, MyJsonRpcHttpClient>();
     private ConcurrentMap<String, Future<RpcChannel>> channels =
             new ConcurrentHashMap<String, Future<RpcChannel>>();
     
@@ -40,29 +37,6 @@ public class ConnectionManagerImpl implements ConnectionManager {
         this.readTimeout = readTimeout;
     }
 
-    private MyJsonRpcHttpClient getConnection(String url)
-            throws MalformedURLException {
-        if (!connectionCache.containsKey(url)) {
-            connectionCache.put(url, new MyJsonRpcHttpClient(new URL(url),
-                    connectionTimeout, readTimeout));
-        }
-        return connectionCache.get(url);
-    }
-
-    private <T>T getClassProxy(String url, Class<T> clazz) {
-        T service = null;
-        try {
-            MyJsonRpcHttpClient client = getConnection(url);
-            service = ProxyUtil.createProxy(
-                    this.getClass().getClassLoader(),
-                    clazz,
-                    client);
-        } catch (MalformedURLException e) {
-            logger.warn("Unable to create client for {}, {}", url, e);
-        }
-        return service;
-    }
-    
     private RpcChannel getChannel(String location) {
         Future<RpcChannel> channel = channels.get(location);
         if (channel == null) {
@@ -101,21 +75,6 @@ public class ConnectionManagerImpl implements ConnectionManager {
         }
     }
 
-    @Override
-    public ClientService getClient(String url) {
-        return getClassProxy(url, ClientService.class);
-    }
-
-    @Override
-    public MasterService getMaster(String url) {
-        return getClassProxy(url, MasterService.class);
-    }
-
-    @Override
-    public PaxosService getPaxos(String url) {
-        return getClassProxy(url, PaxosService.class);
-    }
-    
     @Override
     public Services.Master getMaster0(String location) {
         RpcChannel channel = getChannel(location);
