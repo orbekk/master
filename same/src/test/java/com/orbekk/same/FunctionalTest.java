@@ -29,11 +29,10 @@ public class FunctionalTest {
     VariableFactory vf3;
     List<Client> clients = new ArrayList<Client>();
     TestConnectionManager connections = new TestConnectionManager();
-    TestBroadcaster broadcaster = new TestBroadcaster();
     
     @Before public void setUp() {
         master = Master.create(connections,
-                broadcaster, masterUrl, "TestMaster", masterLocation);
+                masterUrl, "TestMaster", masterLocation);
         connections.masterMap0.put(masterLocation, master.getNewService());
         client1 = newClient("TestClient1", "http://client1/ClientService.json",
                 "client1");
@@ -113,7 +112,7 @@ public class FunctionalTest {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
+                newMasterUrl, "TestMaster", newMasterLocation);
         joinClients();
         MasterController controller = new MasterController() {
             @Override
@@ -137,7 +136,7 @@ public class FunctionalTest {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
+                newMasterUrl, "TestMaster", newMasterLocation);
         joinClients();
         MasterController controller = new MasterController() {
             boolean firstMaster = true;
@@ -165,7 +164,7 @@ public class FunctionalTest {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:2";
         final Master newMaster = Master.create(connections,
-                broadcaster, newMasterUrl, "TestMaster", newMasterLocation);
+                newMasterUrl, "TestMaster", newMasterLocation);
         joinClients();
         MasterController controller = new MasterController() {
             @Override

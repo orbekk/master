@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.RpcCallback;
-import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.SimpleProtobufServer;
@@ -18,7 +17,6 @@ public class SameController {
     private PaxosServiceImpl paxos;
     private Configuration configuration;
     private ConnectionManager connections;
-    private Broadcaster serviceBroadcaster;
 
     /**
      * Timeout for remote operations in milliseconds.
@@ -32,7 +30,7 @@ public class SameController {
                     configuration.get("pport");
             String masterUrl = configuration.get("baseUrl") +
                     "MasterService.json";
-            master = Master.create(connections, serviceBroadcaster,
+            master = Master.create(connections,
                     masterUrl, configuration.get("networkName"), myLocation);
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
@@ -48,14 +46,12 @@ public class SameController {
     };
     
     public static SameController create(Configuration configuration) {
-        int port = configuration.getInt("port");
         int pport = configuration.getInt("pport");
         String myLocation = configuration.get("localIp") + ":" + pport;
         
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
         State clientState = new State(".InvalidClientNetwork");
-        Broadcaster broadcaster = BroadcasterImpl.getDefaultBroadcastRunner();
         String baseUrl = String.format("http://%s:%s/",
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
@@ -66,10 +62,11 @@ public class SameController {
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);
         pServer.registerService(client.getNewService());
+        pServer.registerService(paxos.getService());
         
         SameController controller = new SameController(
                 configuration, connections, client,
-                paxos, broadcaster, pServer);
+                paxos, pServer);
         return controller;
     }
 
@@ -78,13 +75,11 @@ public class SameController {
             ConnectionManager connections,
             Client client,
             PaxosServiceImpl paxos,
-            Broadcaster serviceBroadcaster,
             SimpleProtobufServer pServer) {
         this.configuration = configuration;
         this.connections = connections;
         this.client = client;
         this.paxos = paxos;
-        this.serviceBroadcaster = serviceBroadcaster;
         this.pServer = pServer;
     }
 
@@ -116,8 +111,6 @@ public class SameController {
     public void createNetwork(String networkName) {
         masterController.disableMaster();
         masterController.enableMaster(new State(networkName), 1);
-        String masterUrl = configuration.get("baseUrl") +
-                "MasterService.json";
         joinNetwork(master.getMasterInfo());
     }
 

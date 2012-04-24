@@ -13,7 +13,6 @@ import org.junit.Test;
 public class MasterTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
-    private TestBroadcaster broadcaster = new TestBroadcaster();
     private Master master;
     
     @Before
@@ -21,7 +20,7 @@ public class MasterTest {
         String masterLocation = "master:1000";
         state.update(".masterUrl", "http://master/MasterService.json", 1);
         state.update(".masterLocation", masterLocation, 1);
-        master = new Master(state, connections, broadcaster,
+        master = new Master(state, connections,
                 "http://master/MasterService.json", masterLocation);
         connections.masterMap0.put("master:1000", master.getNewService());
     }

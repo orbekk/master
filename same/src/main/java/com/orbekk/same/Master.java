@@ -22,7 +22,6 @@ public class Master {
     private String myUrl;
     private String myLocation; // Protobuf server location, i.e., myIp:port
     State state;
-    private Broadcaster broadcaster;
     private volatile int masterId = 1;
     
     class RemoveParticipantIfFailsCallback<T> implements RpcCallback<T> {
@@ -46,19 +45,18 @@ public class Master {
     }
     
     public static Master create(ConnectionManager connections,
-            Broadcaster broadcaster, String myUrl, String networkName,
+            String myUrl, String networkName,
             String myLocation) {
         State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
         state.update(".masterLocation", myLocation, 1);
-        return new Master(state, connections, broadcaster, myUrl, myLocation);
+        return new Master(state, connections, myUrl, myLocation);
     }
 
     Master(State initialState, ConnectionManager connections,
-            Broadcaster broadcaster, String myUrl, String myLocation) {
+            String myUrl, String myLocation) {
         this.state = initialState;
         this.connections = connections;
-        this.broadcaster = broadcaster;
         this.myUrl = myUrl;
         this.myLocation = myLocation;
     }
