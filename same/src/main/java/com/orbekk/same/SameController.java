@@ -79,6 +79,7 @@ public class SameController {
             .build();
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);
+        pServer.registerService(client.getNewService());
         
         SameController controller = new SameController(
                 configuration, connections, server, master, client,
@@ -153,6 +154,10 @@ public class SameController {
         return master;
     }
     
+    public void registerCurrentNetwork() {
+        registerNetwork(master);
+    }
+    
     public void registerNetwork(Master master) {
         Services.Directory directory = getDirectory();
         if (directory == null) {
@@ -160,7 +165,6 @@ public class SameController {
         }
         Services.MasterState request = Services.MasterState.newBuilder()
                 .setNetworkName(master.getNetworkName())
-                .setMasterUrl(master.getUrl())
                 .setMasterLocation(master.getLocation())
                 .build();
         final Rpc rpc = new Rpc();

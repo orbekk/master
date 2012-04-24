@@ -31,7 +31,7 @@ public class DirectoryApp {
         final Rpc rpc = new Rpc();
         MasterState request = MasterState.newBuilder()
                 .setNetworkName("Test network")
-                .setMasterUrl("invalid:invalid")
+                .setMasterLocation("invalid:invalid")
                 .build();
         RpcCallback<Empty> done = new RpcCallback<Empty>() {
             @Override public void run(Empty unused) {

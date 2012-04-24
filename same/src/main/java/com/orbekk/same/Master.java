@@ -93,7 +93,6 @@ public class Master {
             done.run(Empty.getDefaultInstance());
         }
 
-
         @Override public void updateStateRequest(RpcController controller,
                 Services.Component request,
                 RpcCallback<Services.UpdateComponentResponse> done) {
