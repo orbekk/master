@@ -51,7 +51,7 @@ public class DirectoryServiceImpl extends Services.Directory {
         NetworkDirectory.Builder directory = NetworkDirectory.newBuilder();
         for (NetworkEntry e : networkList) {
             directory.addNetwork(MasterState.newBuilder()
-                    .setMasterUrl(e.masterUrl)
+                    .setMasterLocation(e.masterUrl)
                     .setNetworkName(e.networkName)
                     .build());
         }
