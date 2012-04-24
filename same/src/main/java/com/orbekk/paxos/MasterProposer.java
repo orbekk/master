@@ -66,7 +66,7 @@ public class MasterProposer extends Thread {
         
         private void checkDone() {
             if (done.getCount() > 0) {
-                if (numPromises.get() >= numRequests / 2) {
+                if (numPromises.get() > numRequests / 2) {
                     result.set(proposalNumber);
                     done.countDown();
                 } else if (numResponses.get() >= numRequests) {
