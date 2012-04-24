@@ -46,10 +46,15 @@ Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
 ### Next release
+* Add timeouts to outgoing RPCs. (Actually a protobuf-simple-rpc feature)
+* Master takeover works again.
+* Possibly an unique session key per client.
+
+### 0.4
 * Use protocol buffer services based on [protobuf-simple-rpc](https://github.com/orbekk/protobuf-simple-rpc).
-* Removes HTTP based services.
 * Advertise new master. => New clients can join the network.
 * Kill SameService if SameController fails. (E.g. when binding Jetty).
+* Known issue: Master takeover doesn't work anymore.
 
 ### 0.3
 * Tag: 0.3
