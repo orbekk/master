@@ -51,6 +51,7 @@ be working fairly well, a commit is tagged as the release version.
 * Possibly an unique session key per client.
 
 ### 0.4
+* Tag: 0.4.
 * Use protocol buffer services based on [protobuf-simple-rpc](https://github.com/orbekk/protobuf-simple-rpc).
 * Advertise new master. => New clients can join the network.
 * Kill SameService if SameController fails. (E.g. when binding Jetty).
