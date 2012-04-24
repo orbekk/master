@@ -308,7 +308,7 @@ public class Client {
     
     private void tryBecomeMaster(int failedMasterId) {
         List<String> paxosUrls = getPaxosUrlsNoMaster();
-        MasterProposer proposer = new MasterProposer(getUrl(), paxosUrls,
+        MasterProposer proposer = new MasterProposer(getClientState(), paxosUrls,
                 connections);
         if (masterController == null) {
             logger.warn("Could not become master: No master controller.");
