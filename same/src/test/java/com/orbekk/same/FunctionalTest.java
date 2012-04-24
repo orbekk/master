@@ -53,8 +53,9 @@ public class FunctionalTest {
         connections.clientMap0.put(location, client.getNewService());
         clients.add(client);
         String paxosUrl = clientUrl.replace("ClientService", "PaxosService");
-        PaxosService paxos = new PaxosServiceImpl(paxosUrl);
+        PaxosServiceImpl paxos = new PaxosServiceImpl(paxosUrl);
         connections.paxosMap.put(paxosUrl, paxos);
+        connections.paxosMap0.put(location, paxos.getService());
         return client;
     }
     
@@ -86,10 +87,10 @@ public class FunctionalTest {
     @Test public void testJoin() {
         joinClients();
         for (State s : getStates()) {
-            List<String> participants = s.getList(".participants");
-            assertThat(participants, hasItem("http://client1/ClientService.json"));
-            assertThat(participants, hasItem("http://client2/ClientService.json"));
-            assertThat(participants, hasItem("http://client3/ClientService.json"));
+            List<String> participants = s.getList(State.PARTICIPANTS);
+            assertThat(participants, hasItem("client1"));
+            assertThat(participants, hasItem("client2"));
+            assertThat(participants, hasItem("client3"));
         }
         for (Client c : clients) {
             assertThat(c.getConnectionState(), is(ConnectionState.STABLE));

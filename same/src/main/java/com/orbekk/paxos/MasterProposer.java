@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.runner.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +93,10 @@ public class MasterProposer extends Thread {
         for (String location : paxosLocations) {
             Rpc rpc = new Rpc();
             Services.Paxos paxos = connections.getPaxos0(location);
+            if (paxos == null) {
+                handler.run(null);
+                continue;
+            }
             PaxosRequest request = PaxosRequest.newBuilder()
                     .setClient(client)
                     .setProposalNumber(proposalNumber)

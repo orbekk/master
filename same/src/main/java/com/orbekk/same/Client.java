@@ -151,15 +151,15 @@ public class Client {
 
         @Override public void masterDown(RpcController controller, MasterState request,
                 RpcCallback<Empty> done) {
+            logger.warn("Master down({})", request);
             if (request.getMasterId() < masterInfo.getMasterId()) {
                 logger.info("Master {} is down, but current master is {}. Ignoring.",
                         request.getMasterId(), masterInfo.getMasterId());
                 return;
             }
-            logger.warn("Master down.");
             connectionState = ConnectionState.UNSTABLE;
-            tryBecomeMaster(request.getMasterId());
             done.run(Empty.getDefaultInstance());
+            tryBecomeMaster(request);
         }
     };
     
@@ -292,22 +292,9 @@ public class Client {
         return newServiceImpl;
     }
     
-    private List<String> getPaxosUrlsNoMaster() {
-        List<String> paxosUrls = new ArrayList<String>();
-        for (String participant : state.getList(".participants")) {
-            String masterPaxos = state.getDataOf(".masterUrl")
-                    .replace("MasterService", "PaxosService");
-            String paxos = participant.replace("ClientService", "PaxosService");
-            if (!paxos.equals(masterPaxos)) {
-                paxosUrls.add(participant.replace("ClientService", "PaxosService"));
-            }
-        }
-        logger.info("Paxos urls: {}", paxosUrls);
-        return paxosUrls;
-    }
-    
-    private void tryBecomeMaster(int failedMasterId) {
-        List<String> paxosUrls = getPaxosUrlsNoMaster();
+    private void tryBecomeMaster(MasterState failedMaster) {
+        List<String> paxosUrls = state.getList(State.PARTICIPANTS);
+        paxosUrls.remove(failedMaster.getMasterLocation());
         MasterProposer proposer = new MasterProposer(getClientState(), paxosUrls,
                 connections);
         if (masterController == null) {
@@ -323,7 +310,7 @@ public class Client {
             }
         };
         synchronized (this) {
-            if (failedMasterId < masterInfo.getMasterId()) {
+            if (failedMaster.getMasterId() < masterInfo.getMasterId()) {
                 logger.info("Master election aborted. Master already chosen.");
                 return;
             }
@@ -335,6 +322,7 @@ public class Client {
             result = currentMasterProposal.get();
         } catch (InterruptedException e) {
         } catch (ExecutionException e) {
+            logger.error("Error electing master: ", e);
         } catch (CancellationException e) {
         }
         if (!currentMasterProposal.isCancelled() && result != null) {
