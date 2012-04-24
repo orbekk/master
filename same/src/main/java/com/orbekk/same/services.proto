@@ -32,6 +32,15 @@ message NetworkDirectory {
     repeated MasterState network = 1;
 }
 
+message PaxosRequest {
+	optional ClientState client = 1;
+	optional int32 proposalNumber = 2;
+}
+
+message PaxosResponse {
+	optional int32 result = 1;
+}
+
 service Client {
     rpc SetState (Component) returns (Empty);
     rpc MasterTakeover (MasterState) returns (Empty);
@@ -46,4 +55,9 @@ service Master {
 service Directory {
     rpc RegisterNetwork (MasterState) returns (Empty);
     rpc GetNetworks (Empty) returns (NetworkDirectory);
+}
+
+service Paxos {
+	rpc Propose (PaxosRequest) returns (PaxosResponse);
+	rpc AcceptRequest (PaxosRequest) returns (PaxosResponse);
 }

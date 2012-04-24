@@ -2820,6 +2820,825 @@ public final class Services {
     // @@protoc_insertion_point(class_scope:com.orbekk.same.NetworkDirectory)
   }
   
+  public interface PaxosRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional .com.orbekk.same.ClientState client = 1;
+    boolean hasClient();
+    com.orbekk.same.Services.ClientState getClient();
+    com.orbekk.same.Services.ClientStateOrBuilder getClientOrBuilder();
+    
+    // optional int32 proposalNumber = 2;
+    boolean hasProposalNumber();
+    int getProposalNumber();
+  }
+  public static final class PaxosRequest extends
+      com.google.protobuf.GeneratedMessage
+      implements PaxosRequestOrBuilder {
+    // Use PaxosRequest.newBuilder() to construct.
+    private PaxosRequest(Builder builder) {
+      super(builder);
+    }
+    private PaxosRequest(boolean noInit) {}
+    
+    private static final PaxosRequest defaultInstance;
+    public static PaxosRequest getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PaxosRequest getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosRequest_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // optional .com.orbekk.same.ClientState client = 1;
+    public static final int CLIENT_FIELD_NUMBER = 1;
+    private com.orbekk.same.Services.ClientState client_;
+    public boolean hasClient() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.orbekk.same.Services.ClientState getClient() {
+      return client_;
+    }
+    public com.orbekk.same.Services.ClientStateOrBuilder getClientOrBuilder() {
+      return client_;
+    }
+    
+    // optional int32 proposalNumber = 2;
+    public static final int PROPOSALNUMBER_FIELD_NUMBER = 2;
+    private int proposalNumber_;
+    public boolean hasProposalNumber() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getProposalNumber() {
+      return proposalNumber_;
+    }
+    
+    private void initFields() {
+      client_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+      proposalNumber_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, client_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, proposalNumber_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, client_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, proposalNumber_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.PaxosRequest prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.PaxosRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosRequest_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.PaxosRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getClientFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        if (clientBuilder_ == null) {
+          client_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+        } else {
+          clientBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        proposalNumber_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.PaxosRequest.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.PaxosRequest getDefaultInstanceForType() {
+        return com.orbekk.same.Services.PaxosRequest.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.PaxosRequest build() {
+        com.orbekk.same.Services.PaxosRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.PaxosRequest buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.PaxosRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.PaxosRequest buildPartial() {
+        com.orbekk.same.Services.PaxosRequest result = new com.orbekk.same.Services.PaxosRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (clientBuilder_ == null) {
+          result.client_ = client_;
+        } else {
+          result.client_ = clientBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.proposalNumber_ = proposalNumber_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.PaxosRequest) {
+          return mergeFrom((com.orbekk.same.Services.PaxosRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.PaxosRequest other) {
+        if (other == com.orbekk.same.Services.PaxosRequest.getDefaultInstance()) return this;
+        if (other.hasClient()) {
+          mergeClient(other.getClient());
+        }
+        if (other.hasProposalNumber()) {
+          setProposalNumber(other.getProposalNumber());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.orbekk.same.Services.ClientState.Builder subBuilder = com.orbekk.same.Services.ClientState.newBuilder();
+              if (hasClient()) {
+                subBuilder.mergeFrom(getClient());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setClient(subBuilder.buildPartial());
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              proposalNumber_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional .com.orbekk.same.ClientState client = 1;
+      private com.orbekk.same.Services.ClientState client_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder> clientBuilder_;
+      public boolean hasClient() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public com.orbekk.same.Services.ClientState getClient() {
+        if (clientBuilder_ == null) {
+          return client_;
+        } else {
+          return clientBuilder_.getMessage();
+        }
+      }
+      public Builder setClient(com.orbekk.same.Services.ClientState value) {
+        if (clientBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          client_ = value;
+          onChanged();
+        } else {
+          clientBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder setClient(
+          com.orbekk.same.Services.ClientState.Builder builderForValue) {
+        if (clientBuilder_ == null) {
+          client_ = builderForValue.build();
+          onChanged();
+        } else {
+          clientBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder mergeClient(com.orbekk.same.Services.ClientState value) {
+        if (clientBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              client_ != com.orbekk.same.Services.ClientState.getDefaultInstance()) {
+            client_ =
+              com.orbekk.same.Services.ClientState.newBuilder(client_).mergeFrom(value).buildPartial();
+          } else {
+            client_ = value;
+          }
+          onChanged();
+        } else {
+          clientBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder clearClient() {
+        if (clientBuilder_ == null) {
+          client_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+          onChanged();
+        } else {
+          clientBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      public com.orbekk.same.Services.ClientState.Builder getClientBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getClientFieldBuilder().getBuilder();
+      }
+      public com.orbekk.same.Services.ClientStateOrBuilder getClientOrBuilder() {
+        if (clientBuilder_ != null) {
+          return clientBuilder_.getMessageOrBuilder();
+        } else {
+          return client_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder> 
+          getClientFieldBuilder() {
+        if (clientBuilder_ == null) {
+          clientBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder>(
+                  client_,
+                  getParentForChildren(),
+                  isClean());
+          client_ = null;
+        }
+        return clientBuilder_;
+      }
+      
+      // optional int32 proposalNumber = 2;
+      private int proposalNumber_ ;
+      public boolean hasProposalNumber() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getProposalNumber() {
+        return proposalNumber_;
+      }
+      public Builder setProposalNumber(int value) {
+        bitField0_ |= 0x00000002;
+        proposalNumber_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearProposalNumber() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        proposalNumber_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.PaxosRequest)
+    }
+    
+    static {
+      defaultInstance = new PaxosRequest(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.PaxosRequest)
+  }
+  
+  public interface PaxosResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional int32 result = 1;
+    boolean hasResult();
+    int getResult();
+  }
+  public static final class PaxosResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements PaxosResponseOrBuilder {
+    // Use PaxosResponse.newBuilder() to construct.
+    private PaxosResponse(Builder builder) {
+      super(builder);
+    }
+    private PaxosResponse(boolean noInit) {}
+    
+    private static final PaxosResponse defaultInstance;
+    public static PaxosResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PaxosResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // optional int32 result = 1;
+    public static final int RESULT_FIELD_NUMBER = 1;
+    private int result_;
+    public boolean hasResult() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getResult() {
+      return result_;
+    }
+    
+    private void initFields() {
+      result_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, result_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, result_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.PaxosResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.PaxosResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.PaxosResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.PaxosResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        result_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.PaxosResponse.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.PaxosResponse getDefaultInstanceForType() {
+        return com.orbekk.same.Services.PaxosResponse.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.PaxosResponse build() {
+        com.orbekk.same.Services.PaxosResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.PaxosResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.PaxosResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.PaxosResponse buildPartial() {
+        com.orbekk.same.Services.PaxosResponse result = new com.orbekk.same.Services.PaxosResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.result_ = result_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.PaxosResponse) {
+          return mergeFrom((com.orbekk.same.Services.PaxosResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.PaxosResponse other) {
+        if (other == com.orbekk.same.Services.PaxosResponse.getDefaultInstance()) return this;
+        if (other.hasResult()) {
+          setResult(other.getResult());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              result_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional int32 result = 1;
+      private int result_ ;
+      public boolean hasResult() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getResult() {
+        return result_;
+      }
+      public Builder setResult(int value) {
+        bitField0_ |= 0x00000001;
+        result_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearResult() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        result_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.PaxosResponse)
+    }
+    
+    static {
+      defaultInstance = new PaxosResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.PaxosResponse)
+  }
+  
   public static abstract class Client
       implements com.google.protobuf.Service {
     protected Client() {}
@@ -3743,6 +4562,292 @@ public final class Services {
     }
   }
   
+  public static abstract class Paxos
+      implements com.google.protobuf.Service {
+    protected Paxos() {}
+    
+    public interface Interface {
+      public abstract void propose(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done);
+      
+      public abstract void acceptRequest(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done);
+      
+    }
+    
+    public static com.google.protobuf.Service newReflectiveService(
+        final Interface impl) {
+      return new Paxos() {
+        @java.lang.Override
+        public  void propose(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.PaxosRequest request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done) {
+          impl.propose(controller, request, done);
+        }
+        
+        @java.lang.Override
+        public  void acceptRequest(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.PaxosRequest request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done) {
+          impl.acceptRequest(controller, request, done);
+        }
+        
+      };
+    }
+    
+    public static com.google.protobuf.BlockingService
+        newReflectiveBlockingService(final BlockingInterface impl) {
+      return new com.google.protobuf.BlockingService() {
+        public final com.google.protobuf.Descriptors.ServiceDescriptor
+            getDescriptorForType() {
+          return getDescriptor();
+        }
+        
+        public final com.google.protobuf.Message callBlockingMethod(
+            com.google.protobuf.Descriptors.MethodDescriptor method,
+            com.google.protobuf.RpcController controller,
+            com.google.protobuf.Message request)
+            throws com.google.protobuf.ServiceException {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.callBlockingMethod() given method descriptor for " +
+              "wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return impl.propose(controller, (com.orbekk.same.Services.PaxosRequest)request);
+            case 1:
+              return impl.acceptRequest(controller, (com.orbekk.same.Services.PaxosRequest)request);
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getRequestPrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getRequestPrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.PaxosRequest.getDefaultInstance();
+            case 1:
+              return com.orbekk.same.Services.PaxosRequest.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getResponsePrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getResponsePrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.PaxosResponse.getDefaultInstance();
+            case 1:
+              return com.orbekk.same.Services.PaxosResponse.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+      };
+    }
+    
+    public abstract void propose(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.PaxosRequest request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done);
+    
+    public abstract void acceptRequest(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.PaxosRequest request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done);
+    
+    public static final
+        com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.getDescriptor().getServices().get(3);
+    }
+    public final com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    
+    public final void callMethod(
+        com.google.protobuf.Descriptors.MethodDescriptor method,
+        com.google.protobuf.RpcController controller,
+        com.google.protobuf.Message request,
+        com.google.protobuf.RpcCallback<
+          com.google.protobuf.Message> done) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.callMethod() given method descriptor for wrong " +
+          "service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          this.propose(controller, (com.orbekk.same.Services.PaxosRequest)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.PaxosResponse>specializeCallback(
+              done));
+          return;
+        case 1:
+          this.acceptRequest(controller, (com.orbekk.same.Services.PaxosRequest)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.PaxosResponse>specializeCallback(
+              done));
+          return;
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getRequestPrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getRequestPrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.PaxosRequest.getDefaultInstance();
+        case 1:
+          return com.orbekk.same.Services.PaxosRequest.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getResponsePrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getResponsePrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.PaxosResponse.getDefaultInstance();
+        case 1:
+          return com.orbekk.same.Services.PaxosResponse.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public static Stub newStub(
+        com.google.protobuf.RpcChannel channel) {
+      return new Stub(channel);
+    }
+    
+    public static final class Stub extends com.orbekk.same.Services.Paxos implements Interface {
+      private Stub(com.google.protobuf.RpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.RpcChannel channel;
+      
+      public com.google.protobuf.RpcChannel getChannel() {
+        return channel;
+      }
+      
+      public  void propose(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.PaxosResponse.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.PaxosResponse.class,
+            com.orbekk.same.Services.PaxosResponse.getDefaultInstance()));
+      }
+      
+      public  void acceptRequest(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.PaxosResponse> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.PaxosResponse.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.PaxosResponse.class,
+            com.orbekk.same.Services.PaxosResponse.getDefaultInstance()));
+      }
+    }
+    
+    public static BlockingInterface newBlockingStub(
+        com.google.protobuf.BlockingRpcChannel channel) {
+      return new BlockingStub(channel);
+    }
+    
+    public interface BlockingInterface {
+      public com.orbekk.same.Services.PaxosResponse propose(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request)
+          throws com.google.protobuf.ServiceException;
+      
+      public com.orbekk.same.Services.PaxosResponse acceptRequest(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request)
+          throws com.google.protobuf.ServiceException;
+    }
+    
+    private static final class BlockingStub implements BlockingInterface {
+      private BlockingStub(com.google.protobuf.BlockingRpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.BlockingRpcChannel channel;
+      
+      public com.orbekk.same.Services.PaxosResponse propose(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.PaxosResponse) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.PaxosResponse.getDefaultInstance());
+      }
+      
+      
+      public com.orbekk.same.Services.PaxosResponse acceptRequest(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.PaxosRequest request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.PaxosResponse) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.PaxosResponse.getDefaultInstance());
+      }
+      
+    }
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_same_Empty_descriptor;
   private static
@@ -3773,6 +4878,16 @@ public final class Services {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_PaxosRequest_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_PaxosResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3791,21 +4906,28 @@ public final class Services {
       "ame\030\003 \001(\t\022\027\n\017master_location\030\004 \001(\t\",\n\013Cl" +
       "ientState\022\013\n\003url\030\001 \001(\t\022\020\n\010location\030\002 \001(\t" +
       "\"A\n\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034." +
-      "com.orbekk.same.MasterState2\324\001\n\006Client\022>",
-      "\n\010SetState\022\032.com.orbekk.same.Component\032\026" +
-      ".com.orbekk.same.Empty\022F\n\016MasterTakeover" +
-      "\022\034.com.orbekk.same.MasterState\032\026.com.orb" +
-      "ekk.same.Empty\022B\n\nMasterDown\022\034.com.orbek" +
-      "k.same.MasterState\032\026.com.orbekk.same.Emp" +
-      "ty2\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.co" +
-      "m.orbekk.same.ClientState\032\026.com.orbekk.s" +
-      "ame.Empty\022Z\n\022UpdateStateRequest\022\032.com.or" +
-      "bekk.same.Component\032(.com.orbekk.same.Up" +
-      "dateComponentResponse2\236\001\n\tDirectory\022G\n\017R",
-      "egisterNetwork\022\034.com.orbekk.same.MasterS" +
-      "tate\032\026.com.orbekk.same.Empty\022H\n\013GetNetwo" +
-      "rks\022\026.com.orbekk.same.Empty\032!.com.orbekk" +
-      ".same.NetworkDirectoryB\003\210\001\001"
+      "com.orbekk.same.MasterState\"T\n\014PaxosRequ",
+      "est\022,\n\006client\030\001 \001(\0132\034.com.orbekk.same.Cl" +
+      "ientState\022\026\n\016proposalNumber\030\002 \001(\005\"\037\n\rPax" +
+      "osResponse\022\016\n\006result\030\001 \001(\0052\324\001\n\006Client\022>\n" +
+      "\010SetState\022\032.com.orbekk.same.Component\032\026." +
+      "com.orbekk.same.Empty\022F\n\016MasterTakeover\022" +
+      "\034.com.orbekk.same.MasterState\032\026.com.orbe" +
+      "kk.same.Empty\022B\n\nMasterDown\022\034.com.orbekk" +
+      ".same.MasterState\032\026.com.orbekk.same.Empt" +
+      "y2\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.com" +
+      ".orbekk.same.ClientState\032\026.com.orbekk.sa",
+      "me.Empty\022Z\n\022UpdateStateRequest\022\032.com.orb" +
+      "ekk.same.Component\032(.com.orbekk.same.Upd" +
+      "ateComponentResponse2\236\001\n\tDirectory\022G\n\017Re" +
+      "gisterNetwork\022\034.com.orbekk.same.MasterSt" +
+      "ate\032\026.com.orbekk.same.Empty\022H\n\013GetNetwor" +
+      "ks\022\026.com.orbekk.same.Empty\032!.com.orbekk." +
+      "same.NetworkDirectory2\241\001\n\005Paxos\022H\n\007Propo" +
+      "se\022\035.com.orbekk.same.PaxosRequest\032\036.com." +
+      "orbekk.same.PaxosResponse\022N\n\rAcceptReque" +
+      "st\022\035.com.orbekk.same.PaxosRequest\032\036.com.",
+      "orbekk.same.PaxosResponseB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3860,6 +4982,22 @@ public final class Services {
               new java.lang.String[] { "Network", },
               com.orbekk.same.Services.NetworkDirectory.class,
               com.orbekk.same.Services.NetworkDirectory.Builder.class);
+          internal_static_com_orbekk_same_PaxosRequest_descriptor =
+            getDescriptor().getMessageTypes().get(6);
+          internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_PaxosRequest_descriptor,
+              new java.lang.String[] { "Client", "ProposalNumber", },
+              com.orbekk.same.Services.PaxosRequest.class,
+              com.orbekk.same.Services.PaxosRequest.Builder.class);
+          internal_static_com_orbekk_same_PaxosResponse_descriptor =
+            getDescriptor().getMessageTypes().get(7);
+          internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_PaxosResponse_descriptor,
+              new java.lang.String[] { "Result", },
+              com.orbekk.same.Services.PaxosResponse.class,
+              com.orbekk.same.Services.PaxosResponse.Builder.class);
           return null;
         }
       };
