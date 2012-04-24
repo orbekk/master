@@ -50,7 +50,7 @@ public class MasterTest {
     public void clientJoin() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", "clientLocation", null);
+                "http://client/ClientService.json", "clientLocation");
         connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();

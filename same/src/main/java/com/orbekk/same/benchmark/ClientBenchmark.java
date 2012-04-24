@@ -7,7 +7,6 @@ import java.util.concurrent.CountDownLatch;
 import com.google.protobuf.RpcCallback;
 import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.protobuf.Rpc;
-import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.same.benchmark.Example.Data;
 
 public class ClientBenchmark {

@@ -67,8 +67,7 @@ public class SameController {
 
         MasterServiceProxy master = new MasterServiceProxy();
         Client client = new Client(clientState, connections,
-                clientUrl, myLocation,
-                BroadcasterImpl.getDefaultBroadcastRunner());
+                clientUrl, myLocation);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         StateServlet stateServlet = new StateServlet(client.getInterface(),
                 new VariableFactory(client.getInterface()));

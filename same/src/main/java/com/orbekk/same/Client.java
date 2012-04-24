@@ -1,7 +1,5 @@
 package com.orbekk.same;
 
-import static com.orbekk.same.StackTraceUtil.throwableToString;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -30,13 +28,11 @@ public class Client {
     private volatile String myUrl;
     private volatile String myLocation;
     private volatile MasterController masterController = null;
-    private final Broadcaster broadcaster;
     private volatile Future<Integer> currentMasterProposal = null;
     private volatile MasterState masterInfo;
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
-    private NetworkNotificationListener networkListener;
 
     public class ClientInterfaceImpl implements ClientInterface {
         private ClientInterfaceImpl() {
@@ -203,12 +199,11 @@ public class Client {
     };
 
     public Client(State state, ConnectionManager connections,
-            String myUrl, String myLocation, Broadcaster broadcaster) {
+            String myUrl, String myLocation) {
         this.state = state;
         this.connections = connections;
         this.myUrl = myUrl;
         this.myLocation = myLocation;
-        this.broadcaster = broadcaster;
     }
 
     public void start() {
@@ -278,10 +273,6 @@ public class Client {
 
     State testGetState() {
         return state;
-    }
-
-    public void setNetworkListener(NetworkNotificationListener listener) {
-        this.networkListener = listener;
     }
 
     public ClientService getService() {

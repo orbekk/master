@@ -48,7 +48,7 @@ public class FunctionalTest {
     
     Client newClient(String clientName, String clientUrl, String location) {
         Client client = new Client(new State(clientName), connections,
-                clientUrl, location, broadcaster);
+                clientUrl, location);
         connections.clientMap.put(clientUrl, client.getService());
         connections.clientMap0.put(location, client.getNewService());
         clients.add(client);
