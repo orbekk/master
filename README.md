@@ -46,6 +46,8 @@ Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
 ### Next release
+* Use protocol buffer services based on [protobuf-simple-rpc](https://github.com/orbekk/protobuf-simple-rpc).
+* Removes HTTP based services.
 * Advertise new master. => New clients can join the network.
 * Kill SameService if SameController fails. (E.g. when binding Jetty).
 
