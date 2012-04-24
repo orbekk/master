@@ -22,6 +22,7 @@ import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.NetworkNotificationListener;
 import com.orbekk.same.SameController;
 import com.orbekk.same.Services;
+import com.orbekk.same.Services.MasterState;
 import com.orbekk.same.Services.NetworkDirectory;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
@@ -66,6 +67,7 @@ public class SameService extends Service {
     public final static String NETWORK_URLS =
             "com.orbekk.same.SameService.action.NETWORK_URLS";
 
+    final static int PPORT = 15070;
     final static int SERVICE_PORT = 15068;
     final static int DISCOVERY_PORT = 15066;
     final static String DIRECTORY_URL = "flode.pvv.ntnu.no:15072";
@@ -103,8 +105,10 @@ public class SameService extends Service {
                     break;
                 case JOIN_NETWORK:
                     logger.info("JOIN_NETWORK");
-                    String masterUrl = message.getData().getString("masterUrl");
-                    sameController.getClient().joinNetwork("fixme");
+                    String masterUrl = message.getData().getString("masterLocation");
+                    MasterState master = MasterState.newBuilder()
+                            .setMasterLocation(masterUrl).build();
+                    sameController.getClient().joinNetwork(master);
                     break;
                 case ADD_STATE_RECEIVER:
                     logger.info("ADD_STATE_RECEIVER: {}", message);
@@ -213,7 +217,7 @@ public class SameService extends Service {
                 }
                 for (Services.MasterState network : networks.getNetworkList()) {
                     networkListener.notifyNetwork(network.getNetworkName(),
-                            network.getMasterUrl());
+                            network.getMasterLocation());
                 }
             }
         };
@@ -226,6 +230,7 @@ public class SameService extends Service {
                 .getWlanAddress().getHostAddress();
         String baseUrl = "http://" + localIp + ":" + SERVICE_PORT + "/";
         properties.setProperty("port", ""+SERVICE_PORT);
+        properties.setProperty("pport", ""+PPORT);
         properties.setProperty("localIp", localIp);
         properties.setProperty("baseUrl", baseUrl);
         properties.setProperty("enableDiscovery", "true");
@@ -238,17 +243,7 @@ public class SameService extends Service {
     /** Create a public network. */
     private void create() {
         sameController.createNetwork(configuration.get("networkName"));
-//        try {
-//            // SameController should take care of this.
-//            sameController.getDirectory().registerNetwork(
-//                    configuration.get("networkName"),
-//                    sameController.getMaster().getUrl());
-//        } catch (Exception e) {
-//            Toast.makeText(this, "Unable to register network. " +
-//            		"Use manual address to join.",
-//                    Toast.LENGTH_LONG).show();
-//            logger.warn("Unable to advertise network.", e);
-//        }
+        sameController.registerCurrentNetwork();
     }
     
     @Override
@@ -277,7 +272,6 @@ public class SameService extends Service {
             sameController = SameController.create(configuration);
             try {
                 sameController.start();
-                sameController.getClient().setNetworkListener(networkListener);
                 sameController.getClient().getInterface()
                     .addStateListener(stateListener);
                 findNetworks();

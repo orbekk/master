@@ -88,24 +88,17 @@ public class SameControllerActivity extends Activity {
     }
     
     public void joinNetworkUrl(View unused) {
-        String masterUrl = "";
         Intent intent = new Intent(this, SameService.class);
         intent.setAction("join");
         EditText t = (EditText)findViewById(R.id.master_service_url);
-        masterUrl = t.getText().toString();
-        if (!masterUrl.startsWith("http://")) {
-            masterUrl = "http://" + masterUrl;
-        }
-        if (!masterUrl.endsWith("/MasterService.json")) {
-            masterUrl += "/MasterService.json";
-        }
+        String masterUrl = t.getText().toString();
         joinNetwork(masterUrl);
     }
     
     private void joinNetwork(String masterUrl) {
         logger.info("joinNetwork({})", masterUrl);
         Message message = Message.obtain(null, SameService.JOIN_NETWORK);
-        message.getData().putString("masterUrl", masterUrl);
+        message.getData().putString("masterLocation", masterUrl);
         try {
             sameService.send(message);
         } catch (RemoteException e) {
