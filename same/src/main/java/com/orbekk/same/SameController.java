@@ -13,13 +13,13 @@ import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.config.Configuration;
 
 public class SameController {
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    private SimpleProtobufServer pServer;
-    private Master master;
-    private Client client;
-    private PaxosServiceImpl paxos;
-    private Configuration configuration;
-    private ConnectionManager connections;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final SimpleProtobufServer pServer;
+    private volatile Master master;
+    private final Client client;
+    private final PaxosServiceImpl paxos;
+    private final Configuration configuration;
+    private final ConnectionManager connections;
     private final RpcFactory rpcf;
 
     /**
@@ -40,6 +40,7 @@ public class SameController {
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
             master.start();
+            registerNetwork(master);
         }
 
         @Override
