@@ -147,7 +147,7 @@ public class FunctionalTest {
         client1.setMasterController(controller);
         client2.setMasterController(controller);
         client3.setMasterController(controller);
-        client1.startMasterElection();
+        client1.startMasterElection(master.getMasterInfo());
         awaitExecution();
         newMaster.performWork();
         assertThat(client1.getMaster().getMasterLocation(), is(newMasterLocation));
@@ -176,7 +176,7 @@ public class FunctionalTest {
         client1.setMasterController(controller);
         client2.setMasterController(controller);
         client3.setMasterController(controller);
-        client1.startMasterElection();
+        client1.startMasterElection(master.getMasterInfo());
         awaitExecution();
         newMaster.performWork();
         assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));

@@ -33,6 +33,7 @@ public class Client {
     private volatile MasterState masterInfo;
     private final RpcFactory rpcf;
     private final ExecutorService executor;
+    private final ClientInterface clientInterface = new ClientInterfaceImpl();
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -50,6 +51,8 @@ public class Client {
 
         @Override
         public DelayedOperation set(Component component) {
+            // Callbacks need to report the correct master.
+            final MasterState currentMasterInfo = masterInfo;
             final DelayedOperation op = new DelayedOperation();
             if (connectionState != ConnectionState.STABLE) {
                 op.complete(DelayedOperation.Status.createError(
@@ -62,7 +65,7 @@ public class Client {
             if (master == null) {
                 op.complete(DelayedOperation.Status.createError(
                         "Not connected to master."));
-                startMasterElection();
+                startMasterElection(currentMasterInfo);
                 return op;
             }
             final Rpc rpc = rpcf.create();
@@ -75,7 +78,7 @@ public class Client {
                         		"request: {}", rpc.errorText());
                         op.complete(DelayedOperation.Status.createError(
                                 "Error contacting master. Try again later."));
-                        startMasterElection();
+                        startMasterElection(currentMasterInfo);
                     } else {
                         if (response.getSuccess()) {
                             op.complete(DelayedOperation.Status.createOk());
@@ -110,8 +113,6 @@ public class Client {
             return Client.this.getConnectionState();
         }
     }
-
-    private ClientInterface clientInterface = new ClientInterfaceImpl();
 
     private Services.Client newServiceImpl = new Services.Client() {
         @Override public void setState(RpcController controller,
@@ -305,9 +306,8 @@ public class Client {
         }
     }
     
-    public void startMasterElection() {
+    public void startMasterElection(MasterState failedMaster) {
         List<String> participants = state.getList(State.PARTICIPANTS);
-        final MasterState failedMaster = masterInfo;
         
         RpcCallback<Empty> done = new RpcCallback<Empty>() {
             @Override public void run(Empty unused) {
