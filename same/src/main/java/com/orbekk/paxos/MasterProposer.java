@@ -81,6 +81,8 @@ public class MasterProposer extends Thread {
         
         public int getResult() throws InterruptedException {
             done.await();
+            logger.info("ResponseHandler: {} / {} successes.",
+                    numPromises.get(), numRequests);
             return result.get();
         }
     }
@@ -117,6 +119,8 @@ public class MasterProposer extends Thread {
                     .setProposalNumber(proposalNumber)
                     .build();
             paxos.acceptRequest(rpc, request, handler);
+            rpc.await();
+            logger.info("Rpc result from paxos.acceptRequest: " + rpc.errorText());
         }
         return handler.getResult();
     }
@@ -139,6 +143,7 @@ public class MasterProposer extends Thread {
     
     Integer proposeRetry(int proposalNumber, Runnable retryAction)
             throws InterruptedException {
+        logger.info("Paxos services: {}.", paxosLocations);
         assert proposalNumber > 0;
         int nextProposal = proposalNumber;
         int result = nextProposal - 1;
@@ -148,7 +153,8 @@ public class MasterProposer extends Thread {
             if (result == nextProposal) {
                 result = internalAcceptRequest(nextProposal);
             }
-            logger.info("Proposed value {}, result {}", nextProposal, result);
+            logger.info("Proposed value {}, result {}.",
+                    nextProposal, result);
             if (result < 0) {
                 nextProposal = -result + 1;
                 if (retryAction != null) {

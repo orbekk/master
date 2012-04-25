@@ -1,10 +1,8 @@
 package com.orbekk.same;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +10,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.orbekk.paxos.PaxosService;
 import com.orbekk.paxos.PaxosServiceImpl;
+import com.orbekk.protobuf.Rpc;
 import com.orbekk.util.DelayedOperation;
 
 /** A functional test that runs with a master and several clients. */
@@ -29,7 +27,13 @@ public class FunctionalTest {
     VariableFactory vf3;
     List<Client> clients = new ArrayList<Client>();
     TestConnectionManager connections = new TestConnectionManager();
-    RpcFactory rpcf = new RpcFactory(5000);
+    RpcFactory rpcf = new RpcFactory(5000) {
+        @Override public Rpc create() {
+            Rpc rpc = super.create();
+            rpc.complete();
+            return rpc;
+        };
+    };
     
     @Before public void setUp() {
         master = Master.create(connections,

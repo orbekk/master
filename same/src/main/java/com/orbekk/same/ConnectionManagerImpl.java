@@ -16,7 +16,6 @@ import java.util.concurrent.FutureTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orbekk.paxos.PaxosService;
 import com.orbekk.protobuf.RpcChannel;
 
 public class ConnectionManagerImpl implements ConnectionManager {

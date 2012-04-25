@@ -3,7 +3,6 @@ package com.orbekk.same;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.orbekk.paxos.PaxosService;
 import com.orbekk.same.Services.Directory;
 import com.orbekk.same.Services.Master;
 import com.orbekk.same.Services.Paxos;

@@ -70,7 +70,7 @@ public class Client {
                 public void run(Services.UpdateComponentResponse response) {
                     if (!rpc.isOk()) {
                         logger.warn("Master failed to respond to update " +
-                        		"request: {}", rpc);
+                        		"request: {}", rpc.errorText());
                         op.complete(DelayedOperation.Status.createError(
                                 "Error contacting master. Try again later."));
                         startMasterElection();

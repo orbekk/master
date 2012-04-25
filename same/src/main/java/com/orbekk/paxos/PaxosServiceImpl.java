@@ -12,7 +12,7 @@ import com.orbekk.same.Services.PaxosResponse;
 /**
  * This class better be thread-safe.
  */
-public class PaxosServiceImpl implements PaxosService {
+public class PaxosServiceImpl {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private int highestPromise = 0;
     private int highestAcceptedValue = 0;
@@ -23,6 +23,8 @@ public class PaxosServiceImpl implements PaxosService {
         @Override
         public void propose(RpcController controller, PaxosRequest request,
                 RpcCallback<PaxosResponse> done) {
+            logger.info("propose({}). Highest promise: {}, Highest accepted: {}",
+                    new Object[]{request, highestPromise, highestAcceptedValue});
             String clientUrl = request.getClient().getLocation();
             int proposalNumber = request.getProposalNumber();
             int response = 
@@ -36,6 +38,8 @@ public class PaxosServiceImpl implements PaxosService {
         @Override
         public void acceptRequest(RpcController controller,
                 PaxosRequest request, RpcCallback<PaxosResponse> done) {
+            logger.info("acceptRequest({}). Highest promise: {}, Highest accepted: {}",
+                    new Object[]{request, highestPromise, highestAcceptedValue});
             String clientUrl = request.getClient().getLocation();
             int proposalNumber = request.getProposalNumber();
             int response = 
@@ -56,8 +60,7 @@ public class PaxosServiceImpl implements PaxosService {
         return service;
     }
 
-    @Override
-    public synchronized int propose(String clientUrl,
+    private synchronized int propose(String clientUrl,
             int proposalNumber) {
         if (proposalNumber > highestPromise) {
             logger.info(tag + "propose({}, {}) = accepted",
@@ -73,8 +76,7 @@ public class PaxosServiceImpl implements PaxosService {
         }
     }
 
-    @Override
-    public synchronized int acceptRequest(String clientUrl,
+    private synchronized int acceptRequest(String clientUrl,
             int proposalNumber) {
         if (proposalNumber == highestPromise) {
             logger.info(tag + "acceptRequest({}, {}) = accepted",
