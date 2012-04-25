@@ -208,6 +208,7 @@ public class SameService extends Service {
             return;
         }
         final Rpc rpc = new Rpc();
+        rpc.setTimeout(10000);
         RpcCallback<Services.NetworkDirectory> done =
                 new RpcCallback<Services.NetworkDirectory>() {
             @Override public void run(Services.NetworkDirectory networks) {
