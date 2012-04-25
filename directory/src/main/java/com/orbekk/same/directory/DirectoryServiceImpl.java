@@ -48,6 +48,7 @@ public class DirectoryServiceImpl extends Services.Directory {
     @Override
     public void getNetworks(RpcController controller, Empty request,
             RpcCallback<NetworkDirectory> done) {
+        cleanNetworkList();
         NetworkDirectory.Builder directory = NetworkDirectory.newBuilder();
         for (NetworkEntry e : networkList) {
             directory.addNetwork(MasterState.newBuilder()
