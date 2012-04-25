@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.google.protobuf.RpcCallback;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.ConnectionManager;
+import com.orbekk.same.RpcFactory;
 import com.orbekk.same.Services;
 import com.orbekk.same.Services.ClientState;
 import com.orbekk.same.Services.PaxosRequest;
@@ -23,12 +24,14 @@ public class MasterProposer extends Thread {
     private final ClientState client;
     private final List<String> paxosLocations;
     private final ConnectionManager connections;
+    private final RpcFactory rpcf;
     
     public MasterProposer(ClientState client, List<String> paxosLocations,
-            ConnectionManager connections) {
+            ConnectionManager connections, RpcFactory rpcf) {
         this.client = client;
         this.paxosLocations = paxosLocations;
         this.connections = connections;
+        this.rpcf = rpcf;
     }
     
     private class ResponseHandler implements RpcCallback<PaxosResponse> {
@@ -87,7 +90,7 @@ public class MasterProposer extends Thread {
         ResponseHandler handler = new ResponseHandler(proposalNumber,
                 paxosLocations.size());
         for (String location : paxosLocations) {
-            Rpc rpc = new Rpc();
+            Rpc rpc = rpcf.create();
             Services.Paxos paxos = connections.getPaxos0(location);
             if (paxos == null) {
                 handler.run(null);
@@ -107,7 +110,7 @@ public class MasterProposer extends Thread {
         ResponseHandler handler = new ResponseHandler(proposalNumber,
                 paxosLocations.size());
         for (String location : paxosLocations) {
-            Rpc rpc = new Rpc();
+            Rpc rpc = rpcf.create();
             Services.Paxos paxos = connections.getPaxos0(location);
             PaxosRequest request = PaxosRequest.newBuilder()
                     .setClient(client)

@@ -30,6 +30,7 @@ public class Client {
     private volatile MasterController masterController = null;
     private volatile Future<Integer> currentMasterProposal = null;
     private volatile MasterState masterInfo;
+    private final RpcFactory rpcf;
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -62,7 +63,7 @@ public class Client {
                 startMasterElection();
                 return op;
             }
-            final Rpc rpc = new Rpc();
+            final Rpc rpc = rpcf.create();
             RpcCallback<Services.UpdateComponentResponse> done =
                     new RpcCallback<Services.UpdateComponentResponse>() {
                 @Override
@@ -160,11 +161,12 @@ public class Client {
     };
     
     public Client(State state, ConnectionManager connections,
-            String myUrl, String myLocation) {
+            String myUrl, String myLocation, RpcFactory rpcf) {
         this.state = state;
         this.connections = connections;
         this.myUrl = myUrl;
         this.myLocation = myLocation;
+        this.rpcf = rpcf;
     }
 
     public void start() {
@@ -212,7 +214,7 @@ public class Client {
         
         Services.Master master =
                 connections.getMaster0(masterInfo.getMasterLocation());
-        final Rpc rpc = new Rpc();
+        final Rpc rpc = rpcf.create();
         RpcCallback<Empty> done = new RpcCallback<Empty>() {
             @Override public void run(Empty unused) {
                 if (!rpc.isOk()) {
@@ -244,7 +246,7 @@ public class Client {
         List<String> paxosUrls = state.getList(State.PARTICIPANTS);
         paxosUrls.remove(failedMaster.getMasterLocation());
         MasterProposer proposer = new MasterProposer(getClientState(), paxosUrls,
-                connections);
+                connections, rpcf);
         if (masterController == null) {
             logger.warn("Could not become master: No master controller.");
             return;
@@ -297,7 +299,7 @@ public class Client {
         };
         
         for (String location : participants) {
-            Rpc rpc = new Rpc();
+            Rpc rpc = rpcf.create();
             Services.Client client = connections.getClient0(location);
             if (client != null) {
                 client.masterDown(rpc, failedMaster, done);

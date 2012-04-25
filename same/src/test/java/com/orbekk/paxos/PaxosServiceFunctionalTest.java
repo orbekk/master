@@ -15,12 +15,14 @@ import org.junit.Test;
 
 import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.ConnectionManagerImpl;
+import com.orbekk.same.RpcFactory;
 import com.orbekk.same.Services.ClientState;
 
 public class PaxosServiceFunctionalTest {
     ConnectionManagerImpl connections = new ConnectionManagerImpl(500, 500);
     List<String> paxosUrls = new ArrayList<String>();
     List<SimpleProtobufServer> servers = new ArrayList<SimpleProtobufServer>();
+    RpcFactory rpcf = new RpcFactory(5000);
     String myUrl;
     int successfulProposals = 0;
     ClientState client1 = ClientState.newBuilder()
@@ -70,14 +72,14 @@ public class PaxosServiceFunctionalTest {
     @Test
     public void testMasterElection() throws InterruptedException {
         MasterProposer m1 = new MasterProposer(client1, paxosUrls,
-                connections);
+                connections, rpcf);
         assertTrue(m1.propose(1));
     }
     
     @Test
     public void testMasterElectionTask() throws InterruptedException, ExecutionException {
         MasterProposer m1 = new MasterProposer(client1, paxosUrls,
-                connections);
+                connections, rpcf);
         Future<Integer> result = m1.startProposalTask(1, null);
         assertEquals(new Integer(1), result.get());
     }
@@ -85,7 +87,7 @@ public class PaxosServiceFunctionalTest {
     @Test
     public void cancelledElection() throws InterruptedException {
         MasterProposer m1 = new MasterProposer(client1, paxosUrls,
-                connections);
+                connections, rpcf);
         assertTrue(m1.propose(1));
 
         Future<Integer> result = m1.startProposalTask(1, sleepForever);
@@ -96,10 +98,10 @@ public class PaxosServiceFunctionalTest {
     @Test
     public void testOnlyOneCompletes() throws InterruptedException, ExecutionException {
         MasterProposer m1 = new MasterProposer(client1, paxosUrls,
-                connections);
+                connections, rpcf);
         ClientState client2 = ClientState.newBuilder().setLocation("client2").build();
         MasterProposer m2 = new MasterProposer(client2, paxosUrls,
-                connections);
+                connections, rpcf);
         final Future<Integer> result1 = m1.startProposalTask(1, sleepForever);
         final Future<Integer> result2 = m2.startProposalTask(1, sleepForever);
         
@@ -160,7 +162,7 @@ public class PaxosServiceFunctionalTest {
                             .build();
                     MasterProposer proposer =
                             new MasterProposer(client, paxosUrls,
-                                    connections);
+                                    connections, rpcf);
                     try {
                         if (proposer.proposeRetry(1)) {
                             incrementSuccessfulProposals(); 

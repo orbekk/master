@@ -23,6 +23,7 @@ public class Master {
     private String myLocation; // Protobuf server location, i.e., myIp:port
     State state;
     private volatile int masterId = 1;
+    private final RpcFactory rpcf;
     
     class RemoveParticipantIfFailsCallback<T> implements RpcCallback<T> {
         private final String participantLocation;
@@ -46,19 +47,20 @@ public class Master {
     
     public static Master create(ConnectionManager connections,
             String myUrl, String networkName,
-            String myLocation) {
+            String myLocation, RpcFactory rpcf) {
         State state = new State(networkName);
         state.update(".masterUrl", myUrl, 1);
         state.update(".masterLocation", myLocation, 1);
-        return new Master(state, connections, myUrl, myLocation);
+        return new Master(state, connections, myUrl, myLocation, rpcf);
     }
 
     Master(State initialState, ConnectionManager connections,
-            String myUrl, String myLocation) {
+            String myUrl, String myLocation, RpcFactory rpcf) {
         this.state = initialState;
         this.connections = connections;
         this.myUrl = myUrl;
         this.myLocation = myLocation;
+        this.rpcf = rpcf;
     }
     
     public String getNetworkName() {
@@ -131,7 +133,7 @@ public class Master {
 
         for (Component component : components) {
             Services.Component componentProto = componentToProto(component);
-            Rpc rpc = new Rpc();
+            Rpc rpc = rpcf.create();
             RpcCallback<Empty> done =
                     new RemoveParticipantIfFailsCallback<Empty>(clientLocation,
                             rpc);
@@ -152,7 +154,7 @@ public class Master {
                 }
                 
                 { // Send masterTakeover().
-                    Rpc rpc = new Rpc();
+                    Rpc rpc = rpcf.create();
                     RpcCallback<Empty> done =
                             new RemoveParticipantIfFailsCallback<Empty>(
                                     clientLocation, rpc);
@@ -232,7 +234,7 @@ public class Master {
         
         for (final String location : state.getList(State.PARTICIPANTS)) {
             Services.Client client = connections.getClient0(location);
-            final Rpc rpc = new Rpc();
+            final Rpc rpc = rpcf.create();
             RpcCallback<Empty> done = new RpcCallback<Empty>() {
                 @Override public void run(Empty unused) {
                     if (!rpc.isOk()) {

@@ -17,6 +17,7 @@ public class SameController {
     private PaxosServiceImpl paxos;
     private Configuration configuration;
     private ConnectionManager connections;
+    private final RpcFactory rpcf;
 
     /**
      * Timeout for remote operations in milliseconds.
@@ -31,7 +32,8 @@ public class SameController {
             String masterUrl = configuration.get("baseUrl") +
                     "MasterService.json";
             master = Master.create(connections,
-                    masterUrl, configuration.get("networkName"), myLocation);
+                    masterUrl, configuration.get("networkName"), myLocation,
+                    rpcf);
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
             master.start();
@@ -51,13 +53,15 @@ public class SameController {
         
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
+        RpcFactory rpcf = new RpcFactory(timeout);
+        
         State clientState = new State(".InvalidClientNetwork");
         String baseUrl = String.format("http://%s:%s/",
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
 
         Client client = new Client(clientState, connections,
-                clientUrl, myLocation);
+                clientUrl, myLocation, rpcf);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);
@@ -66,7 +70,7 @@ public class SameController {
         
         SameController controller = new SameController(
                 configuration, connections, client,
-                paxos, pServer);
+                paxos, pServer, rpcf);
         return controller;
     }
 
@@ -75,12 +79,14 @@ public class SameController {
             ConnectionManager connections,
             Client client,
             PaxosServiceImpl paxos,
-            SimpleProtobufServer pServer) {
+            SimpleProtobufServer pServer,
+            RpcFactory rpcf) {
         this.configuration = configuration;
         this.connections = connections;
         this.client = client;
         this.paxos = paxos;
         this.pServer = pServer;
+        this.rpcf = rpcf;
     }
 
     public void start() throws Exception {
@@ -139,7 +145,7 @@ public class SameController {
                 .setNetworkName(master.getNetworkName())
                 .setMasterLocation(master.getLocation())
                 .build();
-        final Rpc rpc = new Rpc();
+        final Rpc rpc = rpcf.create();
         RpcCallback<Services.Empty> done = new RpcCallback<Services.Empty>() {
             @Override public void run(Services.Empty unused) {
                 if (!rpc.isOk()) {

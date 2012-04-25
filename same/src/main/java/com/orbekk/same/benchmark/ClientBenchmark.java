@@ -5,23 +5,26 @@ import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 import com.google.protobuf.RpcCallback;
-import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.protobuf.Rpc;
+import com.orbekk.protobuf.RpcChannel;
+import com.orbekk.same.RpcFactory;
 import com.orbekk.same.benchmark.Example.Data;
 
 public class ClientBenchmark {
     private final Example.Service service;
     private final int warmupIterations;
     private final int iterations;
+    private final RpcFactory rpcf;
     
     public static void benchmark(String host, int port, int warmupIterations,
             int iterations) throws InterruptedException {
         RpcChannel channel = null;
         try {
             channel = RpcChannel.create(host, port);
+            RpcFactory rpcf = new RpcFactory(5000);
             Example.Service service = Example.Service.newStub(channel);
             ClientBenchmark benchmark = new ClientBenchmark(
-                    service, warmupIterations, iterations);
+                    service, warmupIterations, iterations, rpcf);
             benchmark.benchmark();
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -35,10 +38,11 @@ public class ClientBenchmark {
     }
     
     public ClientBenchmark(Example.Service service,
-            int warmupIterations, int iterations) {
+            int warmupIterations, int iterations, RpcFactory rpcf) {
         this.service = service;
         this.warmupIterations = warmupIterations;
         this.iterations = iterations;
+        this.rpcf = rpcf;
     }
     
     private void runBenchmark(int iterations) throws InterruptedException {
@@ -48,7 +52,7 @@ public class ClientBenchmark {
         for (int i = 0; i < iterations; i++) {
             Example.Data request = Example.Data.newBuilder()
                     .setArg1(i).build();
-            Rpc rpc = new Rpc();
+            Rpc rpc = rpcf.create();
             service.methodA(rpc, request, new RpcCallback<Example.Data>() {
                 @Override
                 public void run(Data ignored) {

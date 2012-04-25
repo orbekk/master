@@ -14,6 +14,7 @@ public class MasterTest {
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private Master master;
+    private RpcFactory rpcf = new RpcFactory(5000);
     
     @Before
     public void setUp() {
@@ -21,7 +22,7 @@ public class MasterTest {
         state.update(".masterUrl", "http://master/MasterService.json", 1);
         state.update(".masterLocation", masterLocation, 1);
         master = new Master(state, connections,
-                "http://master/MasterService.json", masterLocation);
+                "http://master/MasterService.json", masterLocation, rpcf);
         connections.masterMap0.put("master:1000", master.getNewService());
     }
 
@@ -29,7 +30,7 @@ public class MasterTest {
     public void clientJoin() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", "clientLocation");
+                "http://client/ClientService.json", "clientLocation", rpcf);
         connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();
