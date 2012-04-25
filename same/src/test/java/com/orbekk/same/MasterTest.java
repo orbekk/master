@@ -1,16 +1,17 @@
 package com.orbekk.same;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class MasterTest {
+    private ExecutorService executor = Executors.newCachedThreadPool();
     private State state = new State("TestNetwork");
     private TestConnectionManager connections = new TestConnectionManager();
     private Master master;
@@ -30,7 +31,8 @@ public class MasterTest {
     public void clientJoin() throws Exception {
         Client client = new Client(
                 new State("ClientNetwork"), connections,
-                "http://client/ClientService.json", "clientLocation", rpcf);
+                "http://client/ClientService.json", "clientLocation", rpcf,
+                executor);
         connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();

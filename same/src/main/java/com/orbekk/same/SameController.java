@@ -1,5 +1,8 @@
 package com.orbekk.same;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +63,9 @@ public class SameController {
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
 
+        ExecutorService clientExecutor = Executors.newCachedThreadPool();
         Client client = new Client(clientState, connections,
-                clientUrl, myLocation, rpcf);
+                clientUrl, myLocation, rpcf, clientExecutor);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);

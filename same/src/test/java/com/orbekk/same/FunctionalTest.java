@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +19,7 @@ import com.orbekk.util.DelayedOperation;
 
 /** A functional test that runs with a master and several clients. */
 public class FunctionalTest {
+    ExecutorService executor = Executors.newSingleThreadExecutor();
     Master master;
     String masterUrl = "http://master/MasterService.json";
     String masterLocation = "master:1";
@@ -35,6 +39,18 @@ public class FunctionalTest {
         };
     };
     
+    /** Works with a single thread executor. */ 
+    public void awaitExecution() throws InterruptedException {
+        final CountDownLatch finished = new CountDownLatch(1);
+        Runnable sendFinished = new Runnable() {
+            @Override public void run() {
+                finished.countDown();
+            }
+        };
+        executor.execute(sendFinished);
+        finished.await();
+    }
+    
     @Before public void setUp() {
         master = Master.create(connections,
                 masterUrl, "TestMaster", masterLocation, rpcf);
@@ -52,7 +68,7 @@ public class FunctionalTest {
     
     Client newClient(String clientName, String clientUrl, String location) {
         Client client = new Client(new State(clientName), connections,
-                clientUrl, location, rpcf);
+                clientUrl, location, rpcf, executor);
         connections.clientMap0.put(location, client.getNewService());
         clients.add(client);
         String paxosUrl = clientUrl.replace("ClientService", "PaxosService");
@@ -113,7 +129,7 @@ public class FunctionalTest {
         assertThat(x2.get(), is("TestValue1"));
     }
     
-    @Test public void clientBecomesMaster() {
+    @Test public void clientBecomesMaster() throws Exception {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
@@ -132,12 +148,13 @@ public class FunctionalTest {
         client2.setMasterController(controller);
         client3.setMasterController(controller);
         client1.startMasterElection();
+        awaitExecution();
         newMaster.performWork();
         assertThat(client1.getMaster().getMasterLocation(), is(newMasterLocation));
         assertThat(client2.getMaster().getMasterLocation(), is(newMasterLocation));
     }
     
-    @Test public void onlyOneNewMaster() {
+    @Test public void onlyOneNewMaster() throws Exception {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
@@ -160,12 +177,13 @@ public class FunctionalTest {
         client2.setMasterController(controller);
         client3.setMasterController(controller);
         client1.startMasterElection();
+        awaitExecution();
         newMaster.performWork();
         assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
         assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
     }
     
-    @Test public void masterFails() {
+    @Test public void masterFails() throws Exception {
         String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:2";
         final Master newMaster = Master.create(connections,
@@ -188,6 +206,7 @@ public class FunctionalTest {
         connections.masterMap0.put(masterLocation, null);
         assertThat(x1.set("Woop, woop").getStatus().getStatusCode(),
                 is(DelayedOperation.Status.ERROR));
+        awaitExecution();
         performWork();
         newMaster.performWork();
         assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
