@@ -34,7 +34,7 @@ public class MasterProposer extends Thread {
         this.rpcf = rpcf;
     }
     
-    private static class ResponseHandler implements RpcCallback<PaxosResponse> {
+    private class ResponseHandler implements RpcCallback<PaxosResponse> {
         final int proposalNumber;
         final int numRequests;
         final AtomicInteger bestPromise = new AtomicInteger();
@@ -50,7 +50,6 @@ public class MasterProposer extends Thread {
         }
         
         @Override public void run(PaxosResponse response) {
-            numResponses.incrementAndGet();
             if (response != null) {
                 int result = response.getResult();
                 if (result == proposalNumber) {
@@ -63,18 +62,17 @@ public class MasterProposer extends Thread {
                     updated = bestPromise.compareAndSet(oldVal, update);
                 }
             }
+            numResponses.incrementAndGet();
             checkDone();
         }
         
         private void checkDone() {
-            if (done.getCount() > 0) {
-                if (numPromises.get() > numRequests / 2) {
-                    result.set(proposalNumber);
-                    done.countDown();
-                } else if (numResponses.get() >= numRequests) {
-                    result.set(bestPromise.get());
-                    done.countDown();
-                }
+            if (numPromises.get() > numRequests / 2) {
+                result.set(proposalNumber);
+                done.countDown();
+            } else if (numResponses.get() >= numRequests) {
+                result.set(bestPromise.get());
+                done.countDown();
             }
         }
         
