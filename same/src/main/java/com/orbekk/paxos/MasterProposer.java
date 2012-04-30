@@ -34,14 +34,14 @@ public class MasterProposer extends Thread {
         this.rpcf = rpcf;
     }
     
-    private class ResponseHandler implements RpcCallback<PaxosResponse> {
+    private static class ResponseHandler implements RpcCallback<PaxosResponse> {
         final int proposalNumber;
         final int numRequests;
-        AtomicInteger bestPromise = new AtomicInteger();
-        AtomicInteger numPromises = new AtomicInteger(0);
-        AtomicInteger numResponses = new AtomicInteger(0);
-        AtomicInteger result = new AtomicInteger();
-        CountDownLatch done = new CountDownLatch(1);
+        final AtomicInteger bestPromise = new AtomicInteger();
+        final AtomicInteger numPromises = new AtomicInteger(0);
+        final AtomicInteger numResponses = new AtomicInteger(0);
+        final AtomicInteger result = new AtomicInteger();
+        final CountDownLatch done = new CountDownLatch(1);
         
         public ResponseHandler(int proposalNumber, int numRequests) {
             this.proposalNumber = proposalNumber;
@@ -56,12 +56,11 @@ public class MasterProposer extends Thread {
                 if (result == proposalNumber) {
                     numPromises.incrementAndGet();
                 }
-                while (true) {
+                boolean updated = false;
+                while (!updated) {
                     int oldVal = bestPromise.get();
                     int update = Math.min(oldVal, result);
-                    if (bestPromise.compareAndSet(oldVal, update)) {
-                        break;
-                    }
+                    updated = bestPromise.compareAndSet(oldVal, update);
                 }
             }
             checkDone();
