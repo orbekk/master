@@ -46,7 +46,9 @@ public class SameController {
         @Override
         public void disableMaster() {
             if (master != null) {
+                pServer.removeService(master.getNewService());
                 master.interrupt();
+                master = null;
             }
         }
     };
@@ -172,5 +174,9 @@ public class SameController {
 
     public VariableFactory createVariableFactory() {
         return new VariableFactory(client.getInterface());
+    }
+    
+    public void killMaster() {
+        masterController.disableMaster();
     }
 }
