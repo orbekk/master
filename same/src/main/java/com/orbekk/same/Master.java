@@ -248,5 +248,7 @@ public class Master {
             }
             client.masterTakeover(rpc, getMasterInfo(), done);
         }
+        updateStateRequestThread.add(".masterUrl");
+        updateStateRequestThread .add(".masterLocation");
     }
 }
