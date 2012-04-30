@@ -40,7 +40,7 @@ public class SameService extends Service {
     public final static int JOIN_NETWORK = 4;
     public final static int ADD_STATE_RECEIVER = 5;
     public final static int REMOVE_STATE_RECEIVER = 6;
-    
+
     /**
      * arg1: Operation number.
      * bundle: A Bundle created with ComponentBundle
@@ -58,6 +58,8 @@ public class SameService extends Service {
      * obj: Status message.
      */
     public final static int OPERATION_STATUS_CALLBACK = 9;
+
+    public final static int KILL_MASTER = 10;
     
     // TODO: Remove these and use messengers instead of broadcast intents.
     public final static String AVAILABLE_NETWORKS_UPDATE =
@@ -137,6 +139,9 @@ public class SameService extends Service {
                     operationStatusCallback(op, id, message.replyTo);
                     logger.info("Callback sent.");
                     break;
+                case KILL_MASTER:
+                    logger.info("Kill master.");
+                    sameController.killMaster();
                 default:
                     super.handleMessage(message);
             }

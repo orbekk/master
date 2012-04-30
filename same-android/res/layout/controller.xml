@@ -7,12 +7,6 @@
     android:focusableInTouchMode="true"
     android:id="@+id/container_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Commands"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +35,13 @@
         android:layout_height="wrap_content"
         android:onClick="joinNetworkUrl"
         android:text="Join" />
-
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="killMaster"
+        android:text="Kill master" />
+    
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

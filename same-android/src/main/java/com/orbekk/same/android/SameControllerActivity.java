@@ -63,8 +63,7 @@ public class SameControllerActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String networkName = networkNames.get(position);
-            int networkIndex = networkNames.indexOf(networkName);
-            String masterUrl = networkUrls.get(networkIndex);
+            String masterUrl = networkUrls.get(position);
             joinNetwork(masterUrl);      
         }
     };
@@ -83,6 +82,16 @@ public class SameControllerActivity extends Activity {
             sameService.send(message);
         } catch (RemoteException e) {
             logger.error("Failed to create network", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void killMaster(View unused) {
+        Message message = Message.obtain(null, SameService.KILL_MASTER);
+        try {
+            sameService.send(message);
+        } catch (RemoteException e) {
+            logger.error("Failed to kill master", e);
             throw new RuntimeException(e);
         }
     }
