@@ -35,11 +35,31 @@ public class ConnectionManagerImpl implements ConnectionManager {
         this.readTimeout = readTimeout;
     }
 
+    private boolean isValidLocation(String location) {
+        String[] args = location.split(":");
+        if (args.length != 2) {
+            logger.error("Invalid location: " + location);
+            return false;
+        }
+        try {
+            Integer.valueOf(args[1]);
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid location: " + location);
+            return false;
+        }
+        return true;
+    }
+    
     private RpcChannel getChannel(String location) {
         Future<RpcChannel> channel = channels.get(location);
         if (channel == null) {
-            final String hostname = location.split(":")[0];
-            final int port = Integer.valueOf(location.split(":")[1]);
+            if (!isValidLocation(location)) {
+                return null;
+            }
+            String[] args = location.split(":");
+            final String hostname = args[0];
+            final int port = Integer.valueOf(args[1]);
+            
             Callable<RpcChannel> channelFactory =
                     new Callable<RpcChannel>() {
                 @Override public RpcChannel call() {
