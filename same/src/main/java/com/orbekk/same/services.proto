@@ -9,6 +9,20 @@ message UpdateComponentResponse {
     required bool success = 1;
 }
 
+// Next tag: 9
+message SystemStatus {
+	repeated string extra_info = 7;
+	
+	optional MasterState master_status = 1;
+	repeated Component master_state_component = 2;
+	repeated string extra_master_info = 3;
+	
+	optional ClientState client_status = 4;
+	optional MasterState client_master_status = 8;
+	repeated Component client_state_component = 5;
+	repeated string extra_client_info = 6;
+}
+
 message Component {
     required string id = 1;
     required string data = 2;
@@ -60,4 +74,8 @@ service Directory {
 service Paxos {
 	rpc Propose (PaxosRequest) returns (PaxosResponse);
 	rpc AcceptRequest (PaxosRequest) returns (PaxosResponse);
+}
+
+service SystemService {
+	rpc GetSystemStatus (Empty) returns (SystemStatus);
 }

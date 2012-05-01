@@ -1,5 +1,7 @@
 package com.orbekk.same;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -7,9 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.protobuf.SimpleProtobufServer;
+import com.orbekk.same.Services.Empty;
+import com.orbekk.same.Services.MasterState;
+import com.orbekk.same.Services.SystemStatus;
 import com.orbekk.same.config.Configuration;
 
 public class SameController {
@@ -26,6 +32,49 @@ public class SameController {
      * Timeout for remote operations in milliseconds.
      */
     private static final int timeout = 10000;
+
+    private class SystemServiceImpl extends Services.SystemService {
+        private List<Services.Component> componentsToPb(List<State.Component> components) {
+            List<Services.Component> results = new ArrayList<Services.Component>();
+            for (State.Component c : components) {
+                results.add(Services.Component.newBuilder()
+                                .setId(c.getName())
+                                .setRevision(c.getRevision())
+                                .setData(c.getData())
+                                .build());
+            }
+            return results;
+        }
+        
+        private void addMasterInfo(SystemStatus.Builder response) {
+            Master currentMaster = master;
+            if (currentMaster != null) {
+                response.setMasterStatus(currentMaster.getMasterInfo());
+                State masterState = new State(currentMaster.state);
+                response.addAllMasterStateComponent(
+                        componentsToPb(masterState.getComponents()));
+            }
+        }
+        
+        public void addClientInfo(SystemStatus.Builder response) {
+            response.setClientStatus(client.getClientState());
+            if (client.getMaster() != null) {
+                response.setClientMasterStatus(client.getMaster());
+            }
+            State clientState = new State(client.state);
+            response.addAllClientStateComponent(
+                    componentsToPb(clientState.getComponents()));
+        }
+        
+        @Override
+        public void getSystemStatus(RpcController rpc, Empty request,
+                RpcCallback<SystemStatus> done) {
+            SystemStatus.Builder response = SystemStatus.newBuilder();
+            addMasterInfo(response);
+            addClientInfo(response);
+            done.run(response.build());
+        }
+    }
 
     private MasterController masterController = new MasterController() {
         @Override
@@ -93,6 +142,8 @@ public class SameController {
         SameController controller = new SameController(
                 configuration, connections, client,
                 paxos, pServer, rpcf);
+        
+        pServer.registerService(controller.new SystemServiceImpl());
         return controller;
     }
 

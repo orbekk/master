@@ -630,6 +630,1619 @@ public final class Services {
     // @@protoc_insertion_point(class_scope:com.orbekk.same.UpdateComponentResponse)
   }
   
+  public interface SystemStatusOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // repeated string extra_info = 7;
+    java.util.List<String> getExtraInfoList();
+    int getExtraInfoCount();
+    String getExtraInfo(int index);
+    
+    // optional .com.orbekk.same.MasterState master_status = 1;
+    boolean hasMasterStatus();
+    com.orbekk.same.Services.MasterState getMasterStatus();
+    com.orbekk.same.Services.MasterStateOrBuilder getMasterStatusOrBuilder();
+    
+    // repeated .com.orbekk.same.Component master_state_component = 2;
+    java.util.List<com.orbekk.same.Services.Component> 
+        getMasterStateComponentList();
+    com.orbekk.same.Services.Component getMasterStateComponent(int index);
+    int getMasterStateComponentCount();
+    java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getMasterStateComponentOrBuilderList();
+    com.orbekk.same.Services.ComponentOrBuilder getMasterStateComponentOrBuilder(
+        int index);
+    
+    // repeated string extra_master_info = 3;
+    java.util.List<String> getExtraMasterInfoList();
+    int getExtraMasterInfoCount();
+    String getExtraMasterInfo(int index);
+    
+    // optional .com.orbekk.same.ClientState client_status = 4;
+    boolean hasClientStatus();
+    com.orbekk.same.Services.ClientState getClientStatus();
+    com.orbekk.same.Services.ClientStateOrBuilder getClientStatusOrBuilder();
+    
+    // optional .com.orbekk.same.MasterState client_master_status = 8;
+    boolean hasClientMasterStatus();
+    com.orbekk.same.Services.MasterState getClientMasterStatus();
+    com.orbekk.same.Services.MasterStateOrBuilder getClientMasterStatusOrBuilder();
+    
+    // repeated .com.orbekk.same.Component client_state_component = 5;
+    java.util.List<com.orbekk.same.Services.Component> 
+        getClientStateComponentList();
+    com.orbekk.same.Services.Component getClientStateComponent(int index);
+    int getClientStateComponentCount();
+    java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getClientStateComponentOrBuilderList();
+    com.orbekk.same.Services.ComponentOrBuilder getClientStateComponentOrBuilder(
+        int index);
+    
+    // repeated string extra_client_info = 6;
+    java.util.List<String> getExtraClientInfoList();
+    int getExtraClientInfoCount();
+    String getExtraClientInfo(int index);
+  }
+  public static final class SystemStatus extends
+      com.google.protobuf.GeneratedMessage
+      implements SystemStatusOrBuilder {
+    // Use SystemStatus.newBuilder() to construct.
+    private SystemStatus(Builder builder) {
+      super(builder);
+    }
+    private SystemStatus(boolean noInit) {}
+    
+    private static final SystemStatus defaultInstance;
+    public static SystemStatus getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public SystemStatus getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_SystemStatus_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_SystemStatus_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // repeated string extra_info = 7;
+    public static final int EXTRA_INFO_FIELD_NUMBER = 7;
+    private com.google.protobuf.LazyStringList extraInfo_;
+    public java.util.List<String>
+        getExtraInfoList() {
+      return extraInfo_;
+    }
+    public int getExtraInfoCount() {
+      return extraInfo_.size();
+    }
+    public String getExtraInfo(int index) {
+      return extraInfo_.get(index);
+    }
+    
+    // optional .com.orbekk.same.MasterState master_status = 1;
+    public static final int MASTER_STATUS_FIELD_NUMBER = 1;
+    private com.orbekk.same.Services.MasterState masterStatus_;
+    public boolean hasMasterStatus() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.orbekk.same.Services.MasterState getMasterStatus() {
+      return masterStatus_;
+    }
+    public com.orbekk.same.Services.MasterStateOrBuilder getMasterStatusOrBuilder() {
+      return masterStatus_;
+    }
+    
+    // repeated .com.orbekk.same.Component master_state_component = 2;
+    public static final int MASTER_STATE_COMPONENT_FIELD_NUMBER = 2;
+    private java.util.List<com.orbekk.same.Services.Component> masterStateComponent_;
+    public java.util.List<com.orbekk.same.Services.Component> getMasterStateComponentList() {
+      return masterStateComponent_;
+    }
+    public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getMasterStateComponentOrBuilderList() {
+      return masterStateComponent_;
+    }
+    public int getMasterStateComponentCount() {
+      return masterStateComponent_.size();
+    }
+    public com.orbekk.same.Services.Component getMasterStateComponent(int index) {
+      return masterStateComponent_.get(index);
+    }
+    public com.orbekk.same.Services.ComponentOrBuilder getMasterStateComponentOrBuilder(
+        int index) {
+      return masterStateComponent_.get(index);
+    }
+    
+    // repeated string extra_master_info = 3;
+    public static final int EXTRA_MASTER_INFO_FIELD_NUMBER = 3;
+    private com.google.protobuf.LazyStringList extraMasterInfo_;
+    public java.util.List<String>
+        getExtraMasterInfoList() {
+      return extraMasterInfo_;
+    }
+    public int getExtraMasterInfoCount() {
+      return extraMasterInfo_.size();
+    }
+    public String getExtraMasterInfo(int index) {
+      return extraMasterInfo_.get(index);
+    }
+    
+    // optional .com.orbekk.same.ClientState client_status = 4;
+    public static final int CLIENT_STATUS_FIELD_NUMBER = 4;
+    private com.orbekk.same.Services.ClientState clientStatus_;
+    public boolean hasClientStatus() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.orbekk.same.Services.ClientState getClientStatus() {
+      return clientStatus_;
+    }
+    public com.orbekk.same.Services.ClientStateOrBuilder getClientStatusOrBuilder() {
+      return clientStatus_;
+    }
+    
+    // optional .com.orbekk.same.MasterState client_master_status = 8;
+    public static final int CLIENT_MASTER_STATUS_FIELD_NUMBER = 8;
+    private com.orbekk.same.Services.MasterState clientMasterStatus_;
+    public boolean hasClientMasterStatus() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.orbekk.same.Services.MasterState getClientMasterStatus() {
+      return clientMasterStatus_;
+    }
+    public com.orbekk.same.Services.MasterStateOrBuilder getClientMasterStatusOrBuilder() {
+      return clientMasterStatus_;
+    }
+    
+    // repeated .com.orbekk.same.Component client_state_component = 5;
+    public static final int CLIENT_STATE_COMPONENT_FIELD_NUMBER = 5;
+    private java.util.List<com.orbekk.same.Services.Component> clientStateComponent_;
+    public java.util.List<com.orbekk.same.Services.Component> getClientStateComponentList() {
+      return clientStateComponent_;
+    }
+    public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getClientStateComponentOrBuilderList() {
+      return clientStateComponent_;
+    }
+    public int getClientStateComponentCount() {
+      return clientStateComponent_.size();
+    }
+    public com.orbekk.same.Services.Component getClientStateComponent(int index) {
+      return clientStateComponent_.get(index);
+    }
+    public com.orbekk.same.Services.ComponentOrBuilder getClientStateComponentOrBuilder(
+        int index) {
+      return clientStateComponent_.get(index);
+    }
+    
+    // repeated string extra_client_info = 6;
+    public static final int EXTRA_CLIENT_INFO_FIELD_NUMBER = 6;
+    private com.google.protobuf.LazyStringList extraClientInfo_;
+    public java.util.List<String>
+        getExtraClientInfoList() {
+      return extraClientInfo_;
+    }
+    public int getExtraClientInfoCount() {
+      return extraClientInfo_.size();
+    }
+    public String getExtraClientInfo(int index) {
+      return extraClientInfo_.get(index);
+    }
+    
+    private void initFields() {
+      extraInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      masterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+      masterStateComponent_ = java.util.Collections.emptyList();
+      extraMasterInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      clientStatus_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+      clientMasterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+      clientStateComponent_ = java.util.Collections.emptyList();
+      extraClientInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      for (int i = 0; i < getMasterStateComponentCount(); i++) {
+        if (!getMasterStateComponent(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getClientStateComponentCount(); i++) {
+        if (!getClientStateComponent(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, masterStatus_);
+      }
+      for (int i = 0; i < masterStateComponent_.size(); i++) {
+        output.writeMessage(2, masterStateComponent_.get(i));
+      }
+      for (int i = 0; i < extraMasterInfo_.size(); i++) {
+        output.writeBytes(3, extraMasterInfo_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(4, clientStatus_);
+      }
+      for (int i = 0; i < clientStateComponent_.size(); i++) {
+        output.writeMessage(5, clientStateComponent_.get(i));
+      }
+      for (int i = 0; i < extraClientInfo_.size(); i++) {
+        output.writeBytes(6, extraClientInfo_.getByteString(i));
+      }
+      for (int i = 0; i < extraInfo_.size(); i++) {
+        output.writeBytes(7, extraInfo_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(8, clientMasterStatus_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, masterStatus_);
+      }
+      for (int i = 0; i < masterStateComponent_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, masterStateComponent_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < extraMasterInfo_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(extraMasterInfo_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getExtraMasterInfoList().size();
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, clientStatus_);
+      }
+      for (int i = 0; i < clientStateComponent_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, clientStateComponent_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < extraClientInfo_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(extraClientInfo_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getExtraClientInfoList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < extraInfo_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(extraInfo_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getExtraInfoList().size();
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, clientMasterStatus_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.SystemStatus parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.SystemStatus parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.SystemStatus prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.SystemStatusOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_SystemStatus_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_SystemStatus_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.SystemStatus.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getMasterStatusFieldBuilder();
+          getMasterStateComponentFieldBuilder();
+          getClientStatusFieldBuilder();
+          getClientMasterStatusFieldBuilder();
+          getClientStateComponentFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        extraInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (masterStatusBuilder_ == null) {
+          masterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+        } else {
+          masterStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (masterStateComponentBuilder_ == null) {
+          masterStateComponent_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          masterStateComponentBuilder_.clear();
+        }
+        extraMasterInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (clientStatusBuilder_ == null) {
+          clientStatus_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+        } else {
+          clientStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (clientMasterStatusBuilder_ == null) {
+          clientMasterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+        } else {
+          clientMasterStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        if (clientStateComponentBuilder_ == null) {
+          clientStateComponent_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000040);
+        } else {
+          clientStateComponentBuilder_.clear();
+        }
+        extraClientInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.SystemStatus.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.SystemStatus getDefaultInstanceForType() {
+        return com.orbekk.same.Services.SystemStatus.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.SystemStatus build() {
+        com.orbekk.same.Services.SystemStatus result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.SystemStatus buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.SystemStatus result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.SystemStatus buildPartial() {
+        com.orbekk.same.Services.SystemStatus result = new com.orbekk.same.Services.SystemStatus(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          extraInfo_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              extraInfo_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.extraInfo_ = extraInfo_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (masterStatusBuilder_ == null) {
+          result.masterStatus_ = masterStatus_;
+        } else {
+          result.masterStatus_ = masterStatusBuilder_.build();
+        }
+        if (masterStateComponentBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            masterStateComponent_ = java.util.Collections.unmodifiableList(masterStateComponent_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.masterStateComponent_ = masterStateComponent_;
+        } else {
+          result.masterStateComponent_ = masterStateComponentBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          extraMasterInfo_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              extraMasterInfo_);
+          bitField0_ = (bitField0_ & ~0x00000008);
+        }
+        result.extraMasterInfo_ = extraMasterInfo_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (clientStatusBuilder_ == null) {
+          result.clientStatus_ = clientStatus_;
+        } else {
+          result.clientStatus_ = clientStatusBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (clientMasterStatusBuilder_ == null) {
+          result.clientMasterStatus_ = clientMasterStatus_;
+        } else {
+          result.clientMasterStatus_ = clientMasterStatusBuilder_.build();
+        }
+        if (clientStateComponentBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040)) {
+            clientStateComponent_ = java.util.Collections.unmodifiableList(clientStateComponent_);
+            bitField0_ = (bitField0_ & ~0x00000040);
+          }
+          result.clientStateComponent_ = clientStateComponent_;
+        } else {
+          result.clientStateComponent_ = clientStateComponentBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          extraClientInfo_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              extraClientInfo_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.extraClientInfo_ = extraClientInfo_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.SystemStatus) {
+          return mergeFrom((com.orbekk.same.Services.SystemStatus)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.SystemStatus other) {
+        if (other == com.orbekk.same.Services.SystemStatus.getDefaultInstance()) return this;
+        if (!other.extraInfo_.isEmpty()) {
+          if (extraInfo_.isEmpty()) {
+            extraInfo_ = other.extraInfo_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureExtraInfoIsMutable();
+            extraInfo_.addAll(other.extraInfo_);
+          }
+          onChanged();
+        }
+        if (other.hasMasterStatus()) {
+          mergeMasterStatus(other.getMasterStatus());
+        }
+        if (masterStateComponentBuilder_ == null) {
+          if (!other.masterStateComponent_.isEmpty()) {
+            if (masterStateComponent_.isEmpty()) {
+              masterStateComponent_ = other.masterStateComponent_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureMasterStateComponentIsMutable();
+              masterStateComponent_.addAll(other.masterStateComponent_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.masterStateComponent_.isEmpty()) {
+            if (masterStateComponentBuilder_.isEmpty()) {
+              masterStateComponentBuilder_.dispose();
+              masterStateComponentBuilder_ = null;
+              masterStateComponent_ = other.masterStateComponent_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              masterStateComponentBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getMasterStateComponentFieldBuilder() : null;
+            } else {
+              masterStateComponentBuilder_.addAllMessages(other.masterStateComponent_);
+            }
+          }
+        }
+        if (!other.extraMasterInfo_.isEmpty()) {
+          if (extraMasterInfo_.isEmpty()) {
+            extraMasterInfo_ = other.extraMasterInfo_;
+            bitField0_ = (bitField0_ & ~0x00000008);
+          } else {
+            ensureExtraMasterInfoIsMutable();
+            extraMasterInfo_.addAll(other.extraMasterInfo_);
+          }
+          onChanged();
+        }
+        if (other.hasClientStatus()) {
+          mergeClientStatus(other.getClientStatus());
+        }
+        if (other.hasClientMasterStatus()) {
+          mergeClientMasterStatus(other.getClientMasterStatus());
+        }
+        if (clientStateComponentBuilder_ == null) {
+          if (!other.clientStateComponent_.isEmpty()) {
+            if (clientStateComponent_.isEmpty()) {
+              clientStateComponent_ = other.clientStateComponent_;
+              bitField0_ = (bitField0_ & ~0x00000040);
+            } else {
+              ensureClientStateComponentIsMutable();
+              clientStateComponent_.addAll(other.clientStateComponent_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.clientStateComponent_.isEmpty()) {
+            if (clientStateComponentBuilder_.isEmpty()) {
+              clientStateComponentBuilder_.dispose();
+              clientStateComponentBuilder_ = null;
+              clientStateComponent_ = other.clientStateComponent_;
+              bitField0_ = (bitField0_ & ~0x00000040);
+              clientStateComponentBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getClientStateComponentFieldBuilder() : null;
+            } else {
+              clientStateComponentBuilder_.addAllMessages(other.clientStateComponent_);
+            }
+          }
+        }
+        if (!other.extraClientInfo_.isEmpty()) {
+          if (extraClientInfo_.isEmpty()) {
+            extraClientInfo_ = other.extraClientInfo_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureExtraClientInfoIsMutable();
+            extraClientInfo_.addAll(other.extraClientInfo_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        for (int i = 0; i < getMasterStateComponentCount(); i++) {
+          if (!getMasterStateComponent(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getClientStateComponentCount(); i++) {
+          if (!getClientStateComponent(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.orbekk.same.Services.MasterState.Builder subBuilder = com.orbekk.same.Services.MasterState.newBuilder();
+              if (hasMasterStatus()) {
+                subBuilder.mergeFrom(getMasterStatus());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setMasterStatus(subBuilder.buildPartial());
+              break;
+            }
+            case 18: {
+              com.orbekk.same.Services.Component.Builder subBuilder = com.orbekk.same.Services.Component.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addMasterStateComponent(subBuilder.buildPartial());
+              break;
+            }
+            case 26: {
+              ensureExtraMasterInfoIsMutable();
+              extraMasterInfo_.add(input.readBytes());
+              break;
+            }
+            case 34: {
+              com.orbekk.same.Services.ClientState.Builder subBuilder = com.orbekk.same.Services.ClientState.newBuilder();
+              if (hasClientStatus()) {
+                subBuilder.mergeFrom(getClientStatus());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setClientStatus(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              com.orbekk.same.Services.Component.Builder subBuilder = com.orbekk.same.Services.Component.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addClientStateComponent(subBuilder.buildPartial());
+              break;
+            }
+            case 50: {
+              ensureExtraClientInfoIsMutable();
+              extraClientInfo_.add(input.readBytes());
+              break;
+            }
+            case 58: {
+              ensureExtraInfoIsMutable();
+              extraInfo_.add(input.readBytes());
+              break;
+            }
+            case 66: {
+              com.orbekk.same.Services.MasterState.Builder subBuilder = com.orbekk.same.Services.MasterState.newBuilder();
+              if (hasClientMasterStatus()) {
+                subBuilder.mergeFrom(getClientMasterStatus());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setClientMasterStatus(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // repeated string extra_info = 7;
+      private com.google.protobuf.LazyStringList extraInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureExtraInfoIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          extraInfo_ = new com.google.protobuf.LazyStringArrayList(extraInfo_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      public java.util.List<String>
+          getExtraInfoList() {
+        return java.util.Collections.unmodifiableList(extraInfo_);
+      }
+      public int getExtraInfoCount() {
+        return extraInfo_.size();
+      }
+      public String getExtraInfo(int index) {
+        return extraInfo_.get(index);
+      }
+      public Builder setExtraInfo(
+          int index, String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraInfoIsMutable();
+        extraInfo_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addExtraInfo(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraInfoIsMutable();
+        extraInfo_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllExtraInfo(
+          java.lang.Iterable<String> values) {
+        ensureExtraInfoIsMutable();
+        super.addAll(values, extraInfo_);
+        onChanged();
+        return this;
+      }
+      public Builder clearExtraInfo() {
+        extraInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      void addExtraInfo(com.google.protobuf.ByteString value) {
+        ensureExtraInfoIsMutable();
+        extraInfo_.add(value);
+        onChanged();
+      }
+      
+      // optional .com.orbekk.same.MasterState master_status = 1;
+      private com.orbekk.same.Services.MasterState masterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> masterStatusBuilder_;
+      public boolean hasMasterStatus() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public com.orbekk.same.Services.MasterState getMasterStatus() {
+        if (masterStatusBuilder_ == null) {
+          return masterStatus_;
+        } else {
+          return masterStatusBuilder_.getMessage();
+        }
+      }
+      public Builder setMasterStatus(com.orbekk.same.Services.MasterState value) {
+        if (masterStatusBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          masterStatus_ = value;
+          onChanged();
+        } else {
+          masterStatusBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      public Builder setMasterStatus(
+          com.orbekk.same.Services.MasterState.Builder builderForValue) {
+        if (masterStatusBuilder_ == null) {
+          masterStatus_ = builderForValue.build();
+          onChanged();
+        } else {
+          masterStatusBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      public Builder mergeMasterStatus(com.orbekk.same.Services.MasterState value) {
+        if (masterStatusBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              masterStatus_ != com.orbekk.same.Services.MasterState.getDefaultInstance()) {
+            masterStatus_ =
+              com.orbekk.same.Services.MasterState.newBuilder(masterStatus_).mergeFrom(value).buildPartial();
+          } else {
+            masterStatus_ = value;
+          }
+          onChanged();
+        } else {
+          masterStatusBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      public Builder clearMasterStatus() {
+        if (masterStatusBuilder_ == null) {
+          masterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+          onChanged();
+        } else {
+          masterStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      public com.orbekk.same.Services.MasterState.Builder getMasterStatusBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getMasterStatusFieldBuilder().getBuilder();
+      }
+      public com.orbekk.same.Services.MasterStateOrBuilder getMasterStatusOrBuilder() {
+        if (masterStatusBuilder_ != null) {
+          return masterStatusBuilder_.getMessageOrBuilder();
+        } else {
+          return masterStatus_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> 
+          getMasterStatusFieldBuilder() {
+        if (masterStatusBuilder_ == null) {
+          masterStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder>(
+                  masterStatus_,
+                  getParentForChildren(),
+                  isClean());
+          masterStatus_ = null;
+        }
+        return masterStatusBuilder_;
+      }
+      
+      // repeated .com.orbekk.same.Component master_state_component = 2;
+      private java.util.List<com.orbekk.same.Services.Component> masterStateComponent_ =
+        java.util.Collections.emptyList();
+      private void ensureMasterStateComponentIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          masterStateComponent_ = new java.util.ArrayList<com.orbekk.same.Services.Component>(masterStateComponent_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> masterStateComponentBuilder_;
+      
+      public java.util.List<com.orbekk.same.Services.Component> getMasterStateComponentList() {
+        if (masterStateComponentBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(masterStateComponent_);
+        } else {
+          return masterStateComponentBuilder_.getMessageList();
+        }
+      }
+      public int getMasterStateComponentCount() {
+        if (masterStateComponentBuilder_ == null) {
+          return masterStateComponent_.size();
+        } else {
+          return masterStateComponentBuilder_.getCount();
+        }
+      }
+      public com.orbekk.same.Services.Component getMasterStateComponent(int index) {
+        if (masterStateComponentBuilder_ == null) {
+          return masterStateComponent_.get(index);
+        } else {
+          return masterStateComponentBuilder_.getMessage(index);
+        }
+      }
+      public Builder setMasterStateComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (masterStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.set(index, value);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setMasterStateComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (masterStateComponentBuilder_ == null) {
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addMasterStateComponent(com.orbekk.same.Services.Component value) {
+        if (masterStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.add(value);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addMasterStateComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (masterStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.add(index, value);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addMasterStateComponent(
+          com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (masterStateComponentBuilder_ == null) {
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.add(builderForValue.build());
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addMasterStateComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (masterStateComponentBuilder_ == null) {
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllMasterStateComponent(
+          java.lang.Iterable<? extends com.orbekk.same.Services.Component> values) {
+        if (masterStateComponentBuilder_ == null) {
+          ensureMasterStateComponentIsMutable();
+          super.addAll(values, masterStateComponent_);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearMasterStateComponent() {
+        if (masterStateComponentBuilder_ == null) {
+          masterStateComponent_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeMasterStateComponent(int index) {
+        if (masterStateComponentBuilder_ == null) {
+          ensureMasterStateComponentIsMutable();
+          masterStateComponent_.remove(index);
+          onChanged();
+        } else {
+          masterStateComponentBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.orbekk.same.Services.Component.Builder getMasterStateComponentBuilder(
+          int index) {
+        return getMasterStateComponentFieldBuilder().getBuilder(index);
+      }
+      public com.orbekk.same.Services.ComponentOrBuilder getMasterStateComponentOrBuilder(
+          int index) {
+        if (masterStateComponentBuilder_ == null) {
+          return masterStateComponent_.get(index);  } else {
+          return masterStateComponentBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+           getMasterStateComponentOrBuilderList() {
+        if (masterStateComponentBuilder_ != null) {
+          return masterStateComponentBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(masterStateComponent_);
+        }
+      }
+      public com.orbekk.same.Services.Component.Builder addMasterStateComponentBuilder() {
+        return getMasterStateComponentFieldBuilder().addBuilder(
+            com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public com.orbekk.same.Services.Component.Builder addMasterStateComponentBuilder(
+          int index) {
+        return getMasterStateComponentFieldBuilder().addBuilder(
+            index, com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public java.util.List<com.orbekk.same.Services.Component.Builder> 
+           getMasterStateComponentBuilderList() {
+        return getMasterStateComponentFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> 
+          getMasterStateComponentFieldBuilder() {
+        if (masterStateComponentBuilder_ == null) {
+          masterStateComponentBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder>(
+                  masterStateComponent_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          masterStateComponent_ = null;
+        }
+        return masterStateComponentBuilder_;
+      }
+      
+      // repeated string extra_master_info = 3;
+      private com.google.protobuf.LazyStringList extraMasterInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureExtraMasterInfoIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          extraMasterInfo_ = new com.google.protobuf.LazyStringArrayList(extraMasterInfo_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+      public java.util.List<String>
+          getExtraMasterInfoList() {
+        return java.util.Collections.unmodifiableList(extraMasterInfo_);
+      }
+      public int getExtraMasterInfoCount() {
+        return extraMasterInfo_.size();
+      }
+      public String getExtraMasterInfo(int index) {
+        return extraMasterInfo_.get(index);
+      }
+      public Builder setExtraMasterInfo(
+          int index, String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraMasterInfoIsMutable();
+        extraMasterInfo_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addExtraMasterInfo(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraMasterInfoIsMutable();
+        extraMasterInfo_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllExtraMasterInfo(
+          java.lang.Iterable<String> values) {
+        ensureExtraMasterInfoIsMutable();
+        super.addAll(values, extraMasterInfo_);
+        onChanged();
+        return this;
+      }
+      public Builder clearExtraMasterInfo() {
+        extraMasterInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      void addExtraMasterInfo(com.google.protobuf.ByteString value) {
+        ensureExtraMasterInfoIsMutable();
+        extraMasterInfo_.add(value);
+        onChanged();
+      }
+      
+      // optional .com.orbekk.same.ClientState client_status = 4;
+      private com.orbekk.same.Services.ClientState clientStatus_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder> clientStatusBuilder_;
+      public boolean hasClientStatus() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public com.orbekk.same.Services.ClientState getClientStatus() {
+        if (clientStatusBuilder_ == null) {
+          return clientStatus_;
+        } else {
+          return clientStatusBuilder_.getMessage();
+        }
+      }
+      public Builder setClientStatus(com.orbekk.same.Services.ClientState value) {
+        if (clientStatusBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          clientStatus_ = value;
+          onChanged();
+        } else {
+          clientStatusBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder setClientStatus(
+          com.orbekk.same.Services.ClientState.Builder builderForValue) {
+        if (clientStatusBuilder_ == null) {
+          clientStatus_ = builderForValue.build();
+          onChanged();
+        } else {
+          clientStatusBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder mergeClientStatus(com.orbekk.same.Services.ClientState value) {
+        if (clientStatusBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              clientStatus_ != com.orbekk.same.Services.ClientState.getDefaultInstance()) {
+            clientStatus_ =
+              com.orbekk.same.Services.ClientState.newBuilder(clientStatus_).mergeFrom(value).buildPartial();
+          } else {
+            clientStatus_ = value;
+          }
+          onChanged();
+        } else {
+          clientStatusBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder clearClientStatus() {
+        if (clientStatusBuilder_ == null) {
+          clientStatus_ = com.orbekk.same.Services.ClientState.getDefaultInstance();
+          onChanged();
+        } else {
+          clientStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      public com.orbekk.same.Services.ClientState.Builder getClientStatusBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getClientStatusFieldBuilder().getBuilder();
+      }
+      public com.orbekk.same.Services.ClientStateOrBuilder getClientStatusOrBuilder() {
+        if (clientStatusBuilder_ != null) {
+          return clientStatusBuilder_.getMessageOrBuilder();
+        } else {
+          return clientStatus_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder> 
+          getClientStatusFieldBuilder() {
+        if (clientStatusBuilder_ == null) {
+          clientStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orbekk.same.Services.ClientState, com.orbekk.same.Services.ClientState.Builder, com.orbekk.same.Services.ClientStateOrBuilder>(
+                  clientStatus_,
+                  getParentForChildren(),
+                  isClean());
+          clientStatus_ = null;
+        }
+        return clientStatusBuilder_;
+      }
+      
+      // optional .com.orbekk.same.MasterState client_master_status = 8;
+      private com.orbekk.same.Services.MasterState clientMasterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> clientMasterStatusBuilder_;
+      public boolean hasClientMasterStatus() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public com.orbekk.same.Services.MasterState getClientMasterStatus() {
+        if (clientMasterStatusBuilder_ == null) {
+          return clientMasterStatus_;
+        } else {
+          return clientMasterStatusBuilder_.getMessage();
+        }
+      }
+      public Builder setClientMasterStatus(com.orbekk.same.Services.MasterState value) {
+        if (clientMasterStatusBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          clientMasterStatus_ = value;
+          onChanged();
+        } else {
+          clientMasterStatusBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder setClientMasterStatus(
+          com.orbekk.same.Services.MasterState.Builder builderForValue) {
+        if (clientMasterStatusBuilder_ == null) {
+          clientMasterStatus_ = builderForValue.build();
+          onChanged();
+        } else {
+          clientMasterStatusBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder mergeClientMasterStatus(com.orbekk.same.Services.MasterState value) {
+        if (clientMasterStatusBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              clientMasterStatus_ != com.orbekk.same.Services.MasterState.getDefaultInstance()) {
+            clientMasterStatus_ =
+              com.orbekk.same.Services.MasterState.newBuilder(clientMasterStatus_).mergeFrom(value).buildPartial();
+          } else {
+            clientMasterStatus_ = value;
+          }
+          onChanged();
+        } else {
+          clientMasterStatusBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder clearClientMasterStatus() {
+        if (clientMasterStatusBuilder_ == null) {
+          clientMasterStatus_ = com.orbekk.same.Services.MasterState.getDefaultInstance();
+          onChanged();
+        } else {
+          clientMasterStatusBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      public com.orbekk.same.Services.MasterState.Builder getClientMasterStatusBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getClientMasterStatusFieldBuilder().getBuilder();
+      }
+      public com.orbekk.same.Services.MasterStateOrBuilder getClientMasterStatusOrBuilder() {
+        if (clientMasterStatusBuilder_ != null) {
+          return clientMasterStatusBuilder_.getMessageOrBuilder();
+        } else {
+          return clientMasterStatus_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder> 
+          getClientMasterStatusFieldBuilder() {
+        if (clientMasterStatusBuilder_ == null) {
+          clientMasterStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orbekk.same.Services.MasterState, com.orbekk.same.Services.MasterState.Builder, com.orbekk.same.Services.MasterStateOrBuilder>(
+                  clientMasterStatus_,
+                  getParentForChildren(),
+                  isClean());
+          clientMasterStatus_ = null;
+        }
+        return clientMasterStatusBuilder_;
+      }
+      
+      // repeated .com.orbekk.same.Component client_state_component = 5;
+      private java.util.List<com.orbekk.same.Services.Component> clientStateComponent_ =
+        java.util.Collections.emptyList();
+      private void ensureClientStateComponentIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          clientStateComponent_ = new java.util.ArrayList<com.orbekk.same.Services.Component>(clientStateComponent_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> clientStateComponentBuilder_;
+      
+      public java.util.List<com.orbekk.same.Services.Component> getClientStateComponentList() {
+        if (clientStateComponentBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(clientStateComponent_);
+        } else {
+          return clientStateComponentBuilder_.getMessageList();
+        }
+      }
+      public int getClientStateComponentCount() {
+        if (clientStateComponentBuilder_ == null) {
+          return clientStateComponent_.size();
+        } else {
+          return clientStateComponentBuilder_.getCount();
+        }
+      }
+      public com.orbekk.same.Services.Component getClientStateComponent(int index) {
+        if (clientStateComponentBuilder_ == null) {
+          return clientStateComponent_.get(index);
+        } else {
+          return clientStateComponentBuilder_.getMessage(index);
+        }
+      }
+      public Builder setClientStateComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (clientStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.set(index, value);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setClientStateComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (clientStateComponentBuilder_ == null) {
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addClientStateComponent(com.orbekk.same.Services.Component value) {
+        if (clientStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.add(value);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addClientStateComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (clientStateComponentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.add(index, value);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addClientStateComponent(
+          com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (clientStateComponentBuilder_ == null) {
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.add(builderForValue.build());
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addClientStateComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (clientStateComponentBuilder_ == null) {
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllClientStateComponent(
+          java.lang.Iterable<? extends com.orbekk.same.Services.Component> values) {
+        if (clientStateComponentBuilder_ == null) {
+          ensureClientStateComponentIsMutable();
+          super.addAll(values, clientStateComponent_);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearClientStateComponent() {
+        if (clientStateComponentBuilder_ == null) {
+          clientStateComponent_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000040);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeClientStateComponent(int index) {
+        if (clientStateComponentBuilder_ == null) {
+          ensureClientStateComponentIsMutable();
+          clientStateComponent_.remove(index);
+          onChanged();
+        } else {
+          clientStateComponentBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.orbekk.same.Services.Component.Builder getClientStateComponentBuilder(
+          int index) {
+        return getClientStateComponentFieldBuilder().getBuilder(index);
+      }
+      public com.orbekk.same.Services.ComponentOrBuilder getClientStateComponentOrBuilder(
+          int index) {
+        if (clientStateComponentBuilder_ == null) {
+          return clientStateComponent_.get(index);  } else {
+          return clientStateComponentBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+           getClientStateComponentOrBuilderList() {
+        if (clientStateComponentBuilder_ != null) {
+          return clientStateComponentBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(clientStateComponent_);
+        }
+      }
+      public com.orbekk.same.Services.Component.Builder addClientStateComponentBuilder() {
+        return getClientStateComponentFieldBuilder().addBuilder(
+            com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public com.orbekk.same.Services.Component.Builder addClientStateComponentBuilder(
+          int index) {
+        return getClientStateComponentFieldBuilder().addBuilder(
+            index, com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public java.util.List<com.orbekk.same.Services.Component.Builder> 
+           getClientStateComponentBuilderList() {
+        return getClientStateComponentFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> 
+          getClientStateComponentFieldBuilder() {
+        if (clientStateComponentBuilder_ == null) {
+          clientStateComponentBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder>(
+                  clientStateComponent_,
+                  ((bitField0_ & 0x00000040) == 0x00000040),
+                  getParentForChildren(),
+                  isClean());
+          clientStateComponent_ = null;
+        }
+        return clientStateComponentBuilder_;
+      }
+      
+      // repeated string extra_client_info = 6;
+      private com.google.protobuf.LazyStringList extraClientInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureExtraClientInfoIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          extraClientInfo_ = new com.google.protobuf.LazyStringArrayList(extraClientInfo_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      public java.util.List<String>
+          getExtraClientInfoList() {
+        return java.util.Collections.unmodifiableList(extraClientInfo_);
+      }
+      public int getExtraClientInfoCount() {
+        return extraClientInfo_.size();
+      }
+      public String getExtraClientInfo(int index) {
+        return extraClientInfo_.get(index);
+      }
+      public Builder setExtraClientInfo(
+          int index, String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraClientInfoIsMutable();
+        extraClientInfo_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addExtraClientInfo(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureExtraClientInfoIsMutable();
+        extraClientInfo_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllExtraClientInfo(
+          java.lang.Iterable<String> values) {
+        ensureExtraClientInfoIsMutable();
+        super.addAll(values, extraClientInfo_);
+        onChanged();
+        return this;
+      }
+      public Builder clearExtraClientInfo() {
+        extraClientInfo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      void addExtraClientInfo(com.google.protobuf.ByteString value) {
+        ensureExtraClientInfoIsMutable();
+        extraClientInfo_.add(value);
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.SystemStatus)
+    }
+    
+    static {
+      defaultInstance = new SystemStatus(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.SystemStatus)
+  }
+  
   public interface ComponentOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -4848,6 +6461,227 @@ public final class Services {
     }
   }
   
+  public static abstract class SystemService
+      implements com.google.protobuf.Service {
+    protected SystemService() {}
+    
+    public interface Interface {
+      public abstract void getSystemStatus(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done);
+      
+    }
+    
+    public static com.google.protobuf.Service newReflectiveService(
+        final Interface impl) {
+      return new SystemService() {
+        @java.lang.Override
+        public  void getSystemStatus(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.Empty request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done) {
+          impl.getSystemStatus(controller, request, done);
+        }
+        
+      };
+    }
+    
+    public static com.google.protobuf.BlockingService
+        newReflectiveBlockingService(final BlockingInterface impl) {
+      return new com.google.protobuf.BlockingService() {
+        public final com.google.protobuf.Descriptors.ServiceDescriptor
+            getDescriptorForType() {
+          return getDescriptor();
+        }
+        
+        public final com.google.protobuf.Message callBlockingMethod(
+            com.google.protobuf.Descriptors.MethodDescriptor method,
+            com.google.protobuf.RpcController controller,
+            com.google.protobuf.Message request)
+            throws com.google.protobuf.ServiceException {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.callBlockingMethod() given method descriptor for " +
+              "wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return impl.getSystemStatus(controller, (com.orbekk.same.Services.Empty)request);
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getRequestPrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getRequestPrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getResponsePrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getResponsePrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.same.Services.SystemStatus.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+      };
+    }
+    
+    public abstract void getSystemStatus(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.Empty request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done);
+    
+    public static final
+        com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.getDescriptor().getServices().get(4);
+    }
+    public final com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    
+    public final void callMethod(
+        com.google.protobuf.Descriptors.MethodDescriptor method,
+        com.google.protobuf.RpcController controller,
+        com.google.protobuf.Message request,
+        com.google.protobuf.RpcCallback<
+          com.google.protobuf.Message> done) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.callMethod() given method descriptor for wrong " +
+          "service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          this.getSystemStatus(controller, (com.orbekk.same.Services.Empty)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.SystemStatus>specializeCallback(
+              done));
+          return;
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getRequestPrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getRequestPrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getResponsePrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getResponsePrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.same.Services.SystemStatus.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public static Stub newStub(
+        com.google.protobuf.RpcChannel channel) {
+      return new Stub(channel);
+    }
+    
+    public static final class Stub extends com.orbekk.same.Services.SystemService implements Interface {
+      private Stub(com.google.protobuf.RpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.RpcChannel channel;
+      
+      public com.google.protobuf.RpcChannel getChannel() {
+        return channel;
+      }
+      
+      public  void getSystemStatus(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.SystemStatus.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.SystemStatus.class,
+            com.orbekk.same.Services.SystemStatus.getDefaultInstance()));
+      }
+    }
+    
+    public static BlockingInterface newBlockingStub(
+        com.google.protobuf.BlockingRpcChannel channel) {
+      return new BlockingStub(channel);
+    }
+    
+    public interface BlockingInterface {
+      public com.orbekk.same.Services.SystemStatus getSystemStatus(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException;
+    }
+    
+    private static final class BlockingStub implements BlockingInterface {
+      private BlockingStub(com.google.protobuf.BlockingRpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.BlockingRpcChannel channel;
+      
+      public com.orbekk.same.Services.SystemStatus getSystemStatus(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.SystemStatus) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.same.Services.SystemStatus.getDefaultInstance());
+      }
+      
+    }
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_same_Empty_descriptor;
   private static
@@ -4858,6 +6692,11 @@ public final class Services {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_orbekk_same_UpdateComponentResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_SystemStatus_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_SystemStatus_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_same_Component_descriptor;
   private static
@@ -4899,35 +6738,47 @@ public final class Services {
     java.lang.String[] descriptorData = {
       "\n,src/main/java/com/orbekk/same/services" +
       ".proto\022\017com.orbekk.same\"\007\n\005Empty\"*\n\027Upda" +
-      "teComponentResponse\022\017\n\007success\030\001 \002(\010\"7\n\t" +
-      "Component\022\n\n\002id\030\001 \002(\t\022\014\n\004data\030\002 \002(\t\022\020\n\010r" +
-      "evision\030\003 \002(\003\"c\n\013MasterState\022\022\n\nmaster_u" +
-      "rl\030\001 \001(\t\022\021\n\tmaster_id\030\002 \001(\005\022\024\n\014network_n" +
-      "ame\030\003 \001(\t\022\027\n\017master_location\030\004 \001(\t\",\n\013Cl" +
-      "ientState\022\013\n\003url\030\001 \001(\t\022\020\n\010location\030\002 \001(\t" +
-      "\"A\n\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034." +
-      "com.orbekk.same.MasterState\"T\n\014PaxosRequ",
-      "est\022,\n\006client\030\001 \001(\0132\034.com.orbekk.same.Cl" +
-      "ientState\022\026\n\016proposalNumber\030\002 \001(\005\"\037\n\rPax" +
-      "osResponse\022\016\n\006result\030\001 \001(\0052\324\001\n\006Client\022>\n" +
-      "\010SetState\022\032.com.orbekk.same.Component\032\026." +
-      "com.orbekk.same.Empty\022F\n\016MasterTakeover\022" +
-      "\034.com.orbekk.same.MasterState\032\026.com.orbe" +
-      "kk.same.Empty\022B\n\nMasterDown\022\034.com.orbekk" +
-      ".same.MasterState\032\026.com.orbekk.same.Empt" +
-      "y2\260\001\n\006Master\022J\n\022JoinNetworkRequest\022\034.com" +
-      ".orbekk.same.ClientState\032\026.com.orbekk.sa",
-      "me.Empty\022Z\n\022UpdateStateRequest\022\032.com.orb" +
-      "ekk.same.Component\032(.com.orbekk.same.Upd" +
-      "ateComponentResponse2\236\001\n\tDirectory\022G\n\017Re" +
-      "gisterNetwork\022\034.com.orbekk.same.MasterSt" +
-      "ate\032\026.com.orbekk.same.Empty\022H\n\013GetNetwor" +
-      "ks\022\026.com.orbekk.same.Empty\032!.com.orbekk." +
-      "same.NetworkDirectory2\241\001\n\005Paxos\022H\n\007Propo" +
-      "se\022\035.com.orbekk.same.PaxosRequest\032\036.com." +
-      "orbekk.same.PaxosResponse\022N\n\rAcceptReque" +
-      "st\022\035.com.orbekk.same.PaxosRequest\032\036.com.",
-      "orbekk.same.PaxosResponseB\003\210\001\001"
+      "teComponentResponse\022\017\n\007success\030\001 \002(\010\"\366\002\n" +
+      "\014SystemStatus\022\022\n\nextra_info\030\007 \003(\t\0223\n\rmas" +
+      "ter_status\030\001 \001(\0132\034.com.orbekk.same.Maste" +
+      "rState\022:\n\026master_state_component\030\002 \003(\0132\032" +
+      ".com.orbekk.same.Component\022\031\n\021extra_mast" +
+      "er_info\030\003 \003(\t\0223\n\rclient_status\030\004 \001(\0132\034.c" +
+      "om.orbekk.same.ClientState\022:\n\024client_mas" +
+      "ter_status\030\010 \001(\0132\034.com.orbekk.same.Maste",
+      "rState\022:\n\026client_state_component\030\005 \003(\0132\032" +
+      ".com.orbekk.same.Component\022\031\n\021extra_clie" +
+      "nt_info\030\006 \003(\t\"7\n\tComponent\022\n\n\002id\030\001 \002(\t\022\014" +
+      "\n\004data\030\002 \002(\t\022\020\n\010revision\030\003 \002(\003\"c\n\013Master" +
+      "State\022\022\n\nmaster_url\030\001 \001(\t\022\021\n\tmaster_id\030\002" +
+      " \001(\005\022\024\n\014network_name\030\003 \001(\t\022\027\n\017master_loc" +
+      "ation\030\004 \001(\t\",\n\013ClientState\022\013\n\003url\030\001 \001(\t\022" +
+      "\020\n\010location\030\002 \001(\t\"A\n\020NetworkDirectory\022-\n" +
+      "\007network\030\001 \003(\0132\034.com.orbekk.same.MasterS" +
+      "tate\"T\n\014PaxosRequest\022,\n\006client\030\001 \001(\0132\034.c",
+      "om.orbekk.same.ClientState\022\026\n\016proposalNu" +
+      "mber\030\002 \001(\005\"\037\n\rPaxosResponse\022\016\n\006result\030\001 " +
+      "\001(\0052\324\001\n\006Client\022>\n\010SetState\022\032.com.orbekk." +
+      "same.Component\032\026.com.orbekk.same.Empty\022F" +
+      "\n\016MasterTakeover\022\034.com.orbekk.same.Maste" +
+      "rState\032\026.com.orbekk.same.Empty\022B\n\nMaster" +
+      "Down\022\034.com.orbekk.same.MasterState\032\026.com" +
+      ".orbekk.same.Empty2\260\001\n\006Master\022J\n\022JoinNet" +
+      "workRequest\022\034.com.orbekk.same.ClientStat" +
+      "e\032\026.com.orbekk.same.Empty\022Z\n\022UpdateState",
+      "Request\022\032.com.orbekk.same.Component\032(.co" +
+      "m.orbekk.same.UpdateComponentResponse2\236\001" +
+      "\n\tDirectory\022G\n\017RegisterNetwork\022\034.com.orb" +
+      "ekk.same.MasterState\032\026.com.orbekk.same.E" +
+      "mpty\022H\n\013GetNetworks\022\026.com.orbekk.same.Em" +
+      "pty\032!.com.orbekk.same.NetworkDirectory2\241" +
+      "\001\n\005Paxos\022H\n\007Propose\022\035.com.orbekk.same.Pa" +
+      "xosRequest\032\036.com.orbekk.same.PaxosRespon" +
+      "se\022N\n\rAcceptRequest\022\035.com.orbekk.same.Pa" +
+      "xosRequest\032\036.com.orbekk.same.PaxosRespon",
+      "se2Y\n\rSystemService\022H\n\017GetSystemStatus\022\026" +
+      ".com.orbekk.same.Empty\032\035.com.orbekk.same" +
+      ".SystemStatusB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4950,8 +6801,16 @@ public final class Services {
               new java.lang.String[] { "Success", },
               com.orbekk.same.Services.UpdateComponentResponse.class,
               com.orbekk.same.Services.UpdateComponentResponse.Builder.class);
-          internal_static_com_orbekk_same_Component_descriptor =
+          internal_static_com_orbekk_same_SystemStatus_descriptor =
             getDescriptor().getMessageTypes().get(2);
+          internal_static_com_orbekk_same_SystemStatus_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_SystemStatus_descriptor,
+              new java.lang.String[] { "ExtraInfo", "MasterStatus", "MasterStateComponent", "ExtraMasterInfo", "ClientStatus", "ClientMasterStatus", "ClientStateComponent", "ExtraClientInfo", },
+              com.orbekk.same.Services.SystemStatus.class,
+              com.orbekk.same.Services.SystemStatus.Builder.class);
+          internal_static_com_orbekk_same_Component_descriptor =
+            getDescriptor().getMessageTypes().get(3);
           internal_static_com_orbekk_same_Component_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_Component_descriptor,
@@ -4959,7 +6818,7 @@ public final class Services {
               com.orbekk.same.Services.Component.class,
               com.orbekk.same.Services.Component.Builder.class);
           internal_static_com_orbekk_same_MasterState_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_com_orbekk_same_MasterState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_MasterState_descriptor,
@@ -4967,7 +6826,7 @@ public final class Services {
               com.orbekk.same.Services.MasterState.class,
               com.orbekk.same.Services.MasterState.Builder.class);
           internal_static_com_orbekk_same_ClientState_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_com_orbekk_same_ClientState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_ClientState_descriptor,
@@ -4975,7 +6834,7 @@ public final class Services {
               com.orbekk.same.Services.ClientState.class,
               com.orbekk.same.Services.ClientState.Builder.class);
           internal_static_com_orbekk_same_NetworkDirectory_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_NetworkDirectory_descriptor,
@@ -4983,7 +6842,7 @@ public final class Services {
               com.orbekk.same.Services.NetworkDirectory.class,
               com.orbekk.same.Services.NetworkDirectory.Builder.class);
           internal_static_com_orbekk_same_PaxosRequest_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_PaxosRequest_descriptor,
@@ -4991,7 +6850,7 @@ public final class Services {
               com.orbekk.same.Services.PaxosRequest.class,
               com.orbekk.same.Services.PaxosRequest.Builder.class);
           internal_static_com_orbekk_same_PaxosResponse_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_PaxosResponse_descriptor,
