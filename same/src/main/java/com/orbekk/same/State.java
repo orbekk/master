@@ -38,7 +38,6 @@ public class State {
     }
 
     public synchronized void clear() {
-        logger.info("Clearing state.");
         updatedComponents.clear();
         state.clear();
     }
@@ -47,7 +46,6 @@ public class State {
             String data, long revision) {
         Component oldComponent = state.get(componentName);
         Component newComponent = new Component(componentName, revision, data);
-        logger.info("Force update: {} => {}", oldComponent, newComponent);
         state.put(componentName, newComponent);
         updatedComponents.add(componentName);
     }
@@ -68,7 +66,6 @@ public class State {
             component.setData(data);
             state.put(componentName, component);
             updatedComponents.add(componentName);
-            logger.info("Updated state: {} => {}", oldComponent, component);
             return true;
         } else {
             return false;
