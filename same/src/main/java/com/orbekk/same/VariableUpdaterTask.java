@@ -36,13 +36,14 @@ public class VariableUpdaterTask<T> extends Thread
     }
     
     private synchronized void waitFor(AtomicBoolean v) {
-        if (Thread.interrupted()) {
+        if (Thread.currentThread().isInterrupted()) {
             return;
         }
         while(!v.get()) {
             try {
                 wait();
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 return;
             }
         }
@@ -54,7 +55,7 @@ public class VariableUpdaterTask<T> extends Thread
         while (true) {
             waitFor(isReady);
             waitFor(hasNewValue);
-            if (Thread.interrupted()) {
+            if (Thread.currentThread().isInterrupted()) {
                 break;
             }
             performWork();
