@@ -53,7 +53,22 @@ public class SameController {
         }
     };
     
+    public static void enableRpcLogging() {
+        java.util.logging.Level level = java.util.logging.Level.FINEST;
+        java.util.logging.Logger rpcLog = java.util.logging.Logger.getLogger(
+                com.orbekk.protobuf.RequestDispatcher.class.getName());
+        rpcLog.setLevel(level);
+        java.util.logging.Logger channelLog = java.util.logging.Logger.getLogger(
+                com.orbekk.protobuf.RpcChannel.class.getName());
+        channelLog.setLevel(level);
+        java.util.logging.Handler handler = new java.util.logging.ConsoleHandler();
+        handler.setLevel(level);
+        rpcLog.addHandler(handler);
+        channelLog.addHandler(handler);
+    }
+    
     public static SameController create(Configuration configuration) {
+        enableRpcLogging();
         int pport = configuration.getInt("pport");
         String myLocation = configuration.get("localIp") + ":" + pport;
         
