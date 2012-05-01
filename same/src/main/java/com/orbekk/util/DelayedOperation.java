@@ -1,5 +1,7 @@
 package com.orbekk.util;
 
+import java.util.concurrent.CountDownLatch;
+
 public class DelayedOperation {
     public static class Status {
         public final static int OK = 1;
@@ -65,10 +67,10 @@ public class DelayedOperation {
         }
     }
 
-    private Status status;
-    private boolean isDone;
-    private int identifier;
-
+    private volatile Status status;
+    private volatile int identifier;
+    private final CountDownLatch done = new CountDownLatch(1);
+    
     public DelayedOperation() {
     }
 
@@ -77,26 +79,22 @@ public class DelayedOperation {
         return status;
     }
 
-    public synchronized void waitFor() {
-        while (!isDone) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                complete(new Status(Status.ERROR, "Thread interrupted."));
-            }
+    public void waitFor() {
+        try {
+            done.await();
+        } catch (InterruptedException e) {
+            complete(new Status(Status.ERROR, "Thread interrupted."));
+            Thread.currentThread().interrupt();
         }
     }
 
     public synchronized boolean isDone() {
-        return isDone;
+        return done.getCount() <= 0;
     }
 
     public synchronized void complete(Status status) {
-        if (!isDone) {
-            isDone = true;
-            this.status = status;
-            notifyAll();
-        }
+        this.status = status;
+        done.countDown();
     }
 
     public synchronized int getIdentifier() {
