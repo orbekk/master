@@ -132,7 +132,7 @@ public class SameController {
     }
     
     public static SameController create(Configuration configuration) {
-        enableRpcLogging();
+//        enableRpcLogging();
         int pport = configuration.getInt("pport");
         String myLocation = configuration.get("localIp") + ":" + pport;
         
