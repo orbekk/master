@@ -147,12 +147,9 @@ public class SameService extends Service {
                     State.Component updatedComponent =
                             new ComponentBundle(message.getData()).getComponent();
                     int id = message.arg1;
-                    logger.info("Running operation. Component: " + updatedComponent);
                     DelayedOperation op = sameController.getClient().getInterface()
                             .set(updatedComponent);
-                    logger.info("Operation finished. Sending callback.");
                     operationStatusCallback(op, id, message.replyTo);
-                    logger.info("Callback sent.");
                     break;
                 case KILL_MASTER:
                     logger.info("Kill master.");
@@ -193,10 +190,10 @@ public class SameService extends Service {
             Message message = Message.obtain(null,
                     OPERATION_STATUS_CALLBACK);
             message.arg1 = id;
-            message.arg2 = op.getStatus().getStatusCode();
-            message.obj = op.getStatus().getMessage();
+            message.getData().putInt("statusCode", op.getStatus().getStatusCode());
+            message.getData().putString("statusMessage", op.getStatus().getMessage());
             try {
-                messenger.send(message);
+                replyTo.send(message);
             } catch (RemoteException e) {
                 logger.warn("Unable to send update result: " + 
                         op.getStatus());

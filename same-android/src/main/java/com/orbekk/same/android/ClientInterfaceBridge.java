@@ -42,16 +42,17 @@ import com.orbekk.util.DelayedOperation;
 
 public class ClientInterfaceBridge implements ClientInterface {
     private State state;
-    private ArrayList<StateChangedListener> listeners = 
+    private final ArrayList<StateChangedListener> listeners = 
             new ArrayList<StateChangedListener>();
-    private Map<Integer, DelayedOperation> ongoingOperations =
+    private final Map<Integer, DelayedOperation> ongoingOperations =
             new HashMap<Integer, DelayedOperation>();
     /** This is used to queue operations until connected to the service. */
-    private ArrayList<Message> pendingOperations = new ArrayList<Message>();
-    private int nextOperationNumber = 0;
+    private final ArrayList<Message> pendingOperations = new ArrayList<Message>();
+    private volatile int nextOperationNumber = 0;
     
     class ResponseHandler extends Handler {
         @Override public synchronized void handleMessage(Message message) {
+            logger.info("ResponseHandler: Got here. Message: {}", message);
             if (serviceMessenger == null) {
                 logger.warn("Ignoring message to disabled ResponseHandler.");
                 return;
@@ -79,9 +80,9 @@ public class ClientInterfaceBridge implements ClientInterface {
     }
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private Messenger serviceMessenger = null;
-    private Messenger responseMessenger = new Messenger(new ResponseHandler());
-    private Context context;
+    private volatile Messenger serviceMessenger = null;
+    private volatile Messenger responseMessenger = new Messenger(new ResponseHandler());
+    private volatile Context context;
     
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
