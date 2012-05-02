@@ -47,6 +47,18 @@ public class DelayedOperation {
             return status == OK;
         }
         
+        public boolean isError() {
+            return status == ERROR;
+        }
+        
+        public boolean isConflict() {
+            return status == CONFLICT;
+        }
+        
+        public boolean canRetry() {
+            return isError();
+        }
+        
         public int getStatusCode() {
             return status;
         }
