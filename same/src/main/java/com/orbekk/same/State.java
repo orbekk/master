@@ -38,7 +38,6 @@ public class State {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Map<String, Component> state = new HashMap<String, Component>(); 
     private ObjectMapper mapper = new ObjectMapper();
-    private Set<String> updatedComponents = new TreeSet<String>();
 
     public static final String PARTICIPANTS = ".participants0";
     
@@ -49,11 +48,12 @@ public class State {
     }
 
     public State(State other) {
-        state.putAll(other.state);
+        for (Component c : other.getComponents()) {
+            state.put(c.getName(), c);
+        }
     }
 
     public synchronized void clear() {
-        updatedComponents.clear();
         state.clear();
     }
 
@@ -62,7 +62,6 @@ public class State {
         Component oldComponent = state.get(componentName);
         Component newComponent = new Component(componentName, revision, data);
         state.put(componentName, newComponent);
-        updatedComponents.add(componentName);
     }
 
     public synchronized boolean update(String componentName, String data,
@@ -75,12 +74,8 @@ public class State {
         }
 
         if (revision > component.getRevision()) {
-            Component oldComponent = new Component(component);
-            component.setName(componentName);
-            component.setRevision(revision);
-            component.setData(data);
-            state.put(componentName, component);
-            updatedComponents.add(componentName);
+            Component newComponent = new Component(componentName, revision, data);
+            state.put(componentName, newComponent);
             return true;
         } else {
             return false;
@@ -185,15 +180,6 @@ public class State {
             list.add(new Component(component));
         }
         return list;
-    }
-
-    public synchronized List<Component> getAndClearUpdatedComponents() {
-        List<Component> components = new ArrayList<Component>();
-        for (String name : updatedComponents) {
-            components.add(state.get(name));
-        }
-        updatedComponents.clear();
-        return components;
     }
 
     public static class Component {
