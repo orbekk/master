@@ -49,6 +49,9 @@ be working fairly well, a commit is tagged as the release version.
 * Better discovery service.
 * Better controller activity on Android. Ability to shut down master.
 * Fix lookup bug with duplicate network names.
+* RPC logging support.
+* Better VariableUpdater.
+* Monitoring support. (Use the GetSystemStatus tool)
 
 ### 0.5
 * Tag: 0.5
