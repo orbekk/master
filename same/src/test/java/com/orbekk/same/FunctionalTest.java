@@ -82,7 +82,7 @@ public class FunctionalTest {
     }
     
     Client newClient(String clientName, String clientUrl, String location) {
-        Client client = new Client(new State(clientName), connections,
+        Client client = new Client(new State(), connections,
                 clientUrl, location, rpcf, executor);
         connections.clientMap0.put(location, client.getNewService());
         clients.add(client);
@@ -127,7 +127,6 @@ public class FunctionalTest {
         }
         for (Client c : clients) {
             assertThat(c.getConnectionState(), is(ConnectionState.STABLE));
-            assertThat(c.getMaster().getMasterUrl(), is(masterUrl));
             assertThat(c.getMaster().getMasterLocation(), is(masterLocation));
         }
     }
@@ -152,7 +151,7 @@ public class FunctionalTest {
         joinClients();
         MasterController controller = new MasterController() {
             @Override
-            public void enableMaster(State lastKnownState, int masterId) {
+            public void enableMaster(String networkName, State lastKnownState, int masterId) {
                 newMaster.resumeFrom(lastKnownState, masterId);
             }
             @Override
@@ -170,15 +169,14 @@ public class FunctionalTest {
     }
     
     @Test public void onlyOneNewMaster() throws Exception {
-        String newMasterUrl = "http://newMaster/MasterService.json";
         String newMasterLocation = "newMaster:1";
         final Master newMaster = Master.create(connections,
-                newMasterUrl, "TestMaster", newMasterLocation, rpcf);
+                "NetworkName", "TestMaster", newMasterLocation, rpcf);
         joinClients();
         MasterController controller = new MasterController() {
             boolean firstMaster = true;
             @Override
-            public synchronized void enableMaster(State lastKnownState,
+            public synchronized void enableMaster(String networkName, State lastKnownState,
                     int masterId) {
                 assertThat(firstMaster, is(true));
                 newMaster.resumeFrom(lastKnownState, masterId);
@@ -194,8 +192,7 @@ public class FunctionalTest {
         client1.startMasterElection(master.getMasterInfo());
         awaitExecution();
         newMaster.performWork();
-        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
-        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client2.getMaster().getMasterLocation(), is(newMasterLocation));
     }
     
     @Test public void masterFails() throws Exception {
@@ -206,7 +203,7 @@ public class FunctionalTest {
         joinClients();
         MasterController controller = new MasterController() {
             @Override
-            public synchronized void enableMaster(State lastKnownState,
+            public synchronized void enableMaster(String networkName, State lastKnownState,
                     int masterId) {
                 newMaster.resumeFrom(lastKnownState, masterId);
             }
@@ -224,7 +221,7 @@ public class FunctionalTest {
         awaitExecution();
         performWork();
         newMaster.performWork();
-        assertThat(client1.getMaster().getMasterUrl(), is(newMasterUrl));
-        assertThat(client2.getMaster().getMasterUrl(), is(newMasterUrl));
+        assertThat(client1.getMaster().getMasterLocation(), is(newMasterLocation));
+        assertThat(client2.getMaster().getMasterLocation(), is(newMasterLocation));
     }
 }

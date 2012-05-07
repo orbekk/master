@@ -17,7 +17,6 @@ package com.orbekk.same;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -28,15 +27,14 @@ import com.google.protobuf.RpcController;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.Services.ClientState;
 import com.orbekk.same.Services.Empty;
-import com.orbekk.same.Services.UpdateComponentResponse;
 import com.orbekk.same.State.Component;
 import com.orbekk.util.WorkQueue;
 
 public class Master {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final ConnectionManager connections;
-    private String myUrl;
     private String myLocation; // Protobuf server location, i.e., myIp:port
+    private String networkName;
     private AtomicLong revision = new AtomicLong(1);
     State state;
     private volatile int masterId = 1;
@@ -65,36 +63,29 @@ public class Master {
     public static Master create(ConnectionManager connections,
             String myUrl, String networkName,
             String myLocation, RpcFactory rpcf) {
-        State state = new State(networkName);
-        state.update(".masterUrl", myUrl, 1);
-        state.update(".masterLocation", myLocation, 1);
-        return new Master(state, connections, myUrl, myLocation, rpcf);
+        State state = new State();
+        return new Master(state, connections, networkName, myLocation, rpcf);
     }
 
     Master(State initialState, ConnectionManager connections,
-            String myUrl, String myLocation, RpcFactory rpcf) {
+            String networkName, String myLocation, RpcFactory rpcf) {
         this.state = initialState;
         this.connections = connections;
-        this.myUrl = myUrl;
         this.myLocation = myLocation;
+        this.networkName = networkName;
         this.rpcf = rpcf;
     }
     
     public String getNetworkName() {
-        return state.getDataOf(".networkName");
+        return networkName;
     }
     
     public String getLocation() {
         return myLocation;
     }
 
-    public String getUrl() {
-        return myUrl;
-    }
-    
     public Services.MasterState getMasterInfo() {
         return Services.MasterState.newBuilder()
-                .setMasterUrl(getUrl())
                 .setMasterLocation(getLocation())
                 .setNetworkName(getNetworkName())
                 .setMasterId(masterId)
@@ -247,9 +238,6 @@ public class Master {
     /** This master should take over from an earlier master. */
     public void resumeFrom(State lastKnownState, final int masterId) {
         state = lastKnownState;
-        state.update(".masterUrl", myUrl, state.getRevision(".masterUrl") + 100);
-        state.update(".masterLocation", myLocation,
-                state.getRevision(".masterLocation") + 100);
         this.masterId = masterId;
         
         for (final String location : state.getList(State.PARTICIPANTS)) {
@@ -268,7 +256,5 @@ public class Master {
             }
             client.masterTakeover(rpc, getMasterInfo(), done);
         }
-        updateStateRequestThread.add(".masterUrl");
-        updateStateRequestThread.add(".masterLocation");
     }
 }

@@ -46,7 +46,7 @@ public class VariableFactoryTest {
     }
     
     public void initializeSampleState() {
-        sampleState = new State("TestState");
+        sampleState = new State();
         sampleState.update("TestVariable", "1", 1);
         sampleState.update("TestList", "[]", 1);
     }

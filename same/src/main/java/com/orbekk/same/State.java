@@ -41,9 +41,7 @@ public class State {
 
     public static final String PARTICIPANTS = ".participants0";
     
-    public State(String networkName) {
-        update(".networkName", networkName, 1);
-        updateFromObject(".participants", new ArrayList<String>(), 1);
+    public State() {
         updateFromObject(PARTICIPANTS, new ArrayList<String>(), 1);
     }
 

@@ -93,7 +93,8 @@ public class SameController {
 
     private MasterController masterController = new MasterController() {
         @Override
-        public void enableMaster(State lastKnownState, int masterId) {
+        public void enableMaster(String networkName,
+                State lastKnownState, int masterId) {
             String myLocation = configuration.get("localIp") + ":" +
                     configuration.get("pport");
             String masterUrl = configuration.get("baseUrl") +
@@ -140,7 +141,7 @@ public class SameController {
                 timeout, timeout);
         RpcFactory rpcf = new RpcFactory(timeout);
         
-        State clientState = new State(".InvalidClientNetwork");
+        State clientState = new State();
         String baseUrl = String.format("http://%s:%s/",
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
@@ -204,7 +205,7 @@ public class SameController {
 
     public void createNetwork(String networkName) {
         masterController.disableMaster();
-        masterController.enableMaster(new State(networkName), 1);
+        masterController.enableMaster(networkName, new State(), 1);
         joinNetwork(master.getMasterInfo());
     }
 

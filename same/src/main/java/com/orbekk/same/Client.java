@@ -154,9 +154,7 @@ public class Client {
             if (masterInfo != null &&
                     request.getMasterId() <= masterInfo.getMasterId()) {
                 logger.warn("{} tried to take over, but current master is " +
-                        "{}:{}. Ignoring", new Object[]{request,
-                        state.getDataOf(".masterUrl"),
-                        masterInfo.getMasterId()}); 
+                        "{}. Ignoring", masterInfo); 
                 return;
             }
             abortMasterElection();
@@ -223,7 +221,8 @@ public class Client {
             }
             if (!currentMasterProposal.isCancelled() && result != null &&
                     masterInfo.getMasterId() <= failedMaster.getMasterId()) {
-                masterController.enableMaster(new State(state), result);
+                masterController.enableMaster(failedMaster.getNetworkName(),
+                        new State(state), result);
             } else {
                 logger.info("Master election aborted. Master already chosen.");
             }

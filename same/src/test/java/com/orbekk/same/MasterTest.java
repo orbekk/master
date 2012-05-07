@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class MasterTest {
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private State state = new State("TestNetwork");
+    private State state = new State();
     private TestConnectionManager connections = new TestConnectionManager();
     private Master master;
     private RpcFactory rpcf = new RpcFactory(5000);
@@ -45,7 +45,7 @@ public class MasterTest {
     @Test
     public void clientJoin() throws Exception {
         Client client = new Client(
-                new State("ClientNetwork"), connections,
+                new State(), connections,
                 "http://client/ClientService.json", "clientLocation", rpcf,
                 executor);
         connections.clientMap0.put("clientLocation", client.getNewService());
