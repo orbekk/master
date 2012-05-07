@@ -38,6 +38,15 @@ message MasterState {
     optional int64 revision = 5;
 }
 
+message MasterTakeoverResponse {
+	optional int64 highest_known_revision = 1;
+}
+
+message FullStateResponse {
+	optional int64 revision = 1;
+	repeated Component component = 2;
+}
+
 message ClientState {
     optional string url = 1;
     optional string location = 2;
@@ -59,8 +68,9 @@ message PaxosResponse {
 
 service Client {
     rpc SetState (Component) returns (Empty);
-    rpc MasterTakeover (MasterState) returns (Empty);
     rpc MasterDown (MasterState) returns (Empty);
+    rpc MasterTakeover (MasterState) returns (MasterTakeoverResponse);
+    rpc GetFullState (Empty) returns (FullStateResponse);
 }
 
 service Master {

@@ -3470,6 +3470,967 @@ public final class Services {
     // @@protoc_insertion_point(class_scope:com.orbekk.same.MasterState)
   }
   
+  public interface MasterTakeoverResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional int64 highest_known_revision = 1;
+    boolean hasHighestKnownRevision();
+    long getHighestKnownRevision();
+  }
+  public static final class MasterTakeoverResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements MasterTakeoverResponseOrBuilder {
+    // Use MasterTakeoverResponse.newBuilder() to construct.
+    private MasterTakeoverResponse(Builder builder) {
+      super(builder);
+    }
+    private MasterTakeoverResponse(boolean noInit) {}
+    
+    private static final MasterTakeoverResponse defaultInstance;
+    public static MasterTakeoverResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public MasterTakeoverResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_MasterTakeoverResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_MasterTakeoverResponse_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // optional int64 highest_known_revision = 1;
+    public static final int HIGHEST_KNOWN_REVISION_FIELD_NUMBER = 1;
+    private long highestKnownRevision_;
+    public boolean hasHighestKnownRevision() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public long getHighestKnownRevision() {
+      return highestKnownRevision_;
+    }
+    
+    private void initFields() {
+      highestKnownRevision_ = 0L;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, highestKnownRevision_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, highestKnownRevision_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.MasterTakeoverResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.MasterTakeoverResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.MasterTakeoverResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_MasterTakeoverResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_MasterTakeoverResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.MasterTakeoverResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        highestKnownRevision_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.MasterTakeoverResponse.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.MasterTakeoverResponse getDefaultInstanceForType() {
+        return com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.MasterTakeoverResponse build() {
+        com.orbekk.same.Services.MasterTakeoverResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.MasterTakeoverResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.MasterTakeoverResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.MasterTakeoverResponse buildPartial() {
+        com.orbekk.same.Services.MasterTakeoverResponse result = new com.orbekk.same.Services.MasterTakeoverResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.highestKnownRevision_ = highestKnownRevision_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.MasterTakeoverResponse) {
+          return mergeFrom((com.orbekk.same.Services.MasterTakeoverResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.MasterTakeoverResponse other) {
+        if (other == com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance()) return this;
+        if (other.hasHighestKnownRevision()) {
+          setHighestKnownRevision(other.getHighestKnownRevision());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              highestKnownRevision_ = input.readInt64();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional int64 highest_known_revision = 1;
+      private long highestKnownRevision_ ;
+      public boolean hasHighestKnownRevision() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public long getHighestKnownRevision() {
+        return highestKnownRevision_;
+      }
+      public Builder setHighestKnownRevision(long value) {
+        bitField0_ |= 0x00000001;
+        highestKnownRevision_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearHighestKnownRevision() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        highestKnownRevision_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.MasterTakeoverResponse)
+    }
+    
+    static {
+      defaultInstance = new MasterTakeoverResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.MasterTakeoverResponse)
+  }
+  
+  public interface FullStateResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional int64 revision = 1;
+    boolean hasRevision();
+    long getRevision();
+    
+    // repeated .com.orbekk.same.Component component = 2;
+    java.util.List<com.orbekk.same.Services.Component> 
+        getComponentList();
+    com.orbekk.same.Services.Component getComponent(int index);
+    int getComponentCount();
+    java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getComponentOrBuilderList();
+    com.orbekk.same.Services.ComponentOrBuilder getComponentOrBuilder(
+        int index);
+  }
+  public static final class FullStateResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements FullStateResponseOrBuilder {
+    // Use FullStateResponse.newBuilder() to construct.
+    private FullStateResponse(Builder builder) {
+      super(builder);
+    }
+    private FullStateResponse(boolean noInit) {}
+    
+    private static final FullStateResponse defaultInstance;
+    public static FullStateResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public FullStateResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_FullStateResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orbekk.same.Services.internal_static_com_orbekk_same_FullStateResponse_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // optional int64 revision = 1;
+    public static final int REVISION_FIELD_NUMBER = 1;
+    private long revision_;
+    public boolean hasRevision() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public long getRevision() {
+      return revision_;
+    }
+    
+    // repeated .com.orbekk.same.Component component = 2;
+    public static final int COMPONENT_FIELD_NUMBER = 2;
+    private java.util.List<com.orbekk.same.Services.Component> component_;
+    public java.util.List<com.orbekk.same.Services.Component> getComponentList() {
+      return component_;
+    }
+    public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+        getComponentOrBuilderList() {
+      return component_;
+    }
+    public int getComponentCount() {
+      return component_.size();
+    }
+    public com.orbekk.same.Services.Component getComponent(int index) {
+      return component_.get(index);
+    }
+    public com.orbekk.same.Services.ComponentOrBuilder getComponentOrBuilder(
+        int index) {
+      return component_.get(index);
+    }
+    
+    private void initFields() {
+      revision_ = 0L;
+      component_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      for (int i = 0; i < getComponentCount(); i++) {
+        if (!getComponent(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, revision_);
+      }
+      for (int i = 0; i < component_.size(); i++) {
+        output.writeMessage(2, component_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, revision_);
+      }
+      for (int i = 0; i < component_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, component_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orbekk.same.Services.FullStateResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orbekk.same.Services.FullStateResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orbekk.same.Services.FullStateResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_FullStateResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orbekk.same.Services.internal_static_com_orbekk_same_FullStateResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.orbekk.same.Services.FullStateResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getComponentFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        revision_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (componentBuilder_ == null) {
+          component_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          componentBuilder_.clear();
+        }
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orbekk.same.Services.FullStateResponse.getDescriptor();
+      }
+      
+      public com.orbekk.same.Services.FullStateResponse getDefaultInstanceForType() {
+        return com.orbekk.same.Services.FullStateResponse.getDefaultInstance();
+      }
+      
+      public com.orbekk.same.Services.FullStateResponse build() {
+        com.orbekk.same.Services.FullStateResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orbekk.same.Services.FullStateResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orbekk.same.Services.FullStateResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orbekk.same.Services.FullStateResponse buildPartial() {
+        com.orbekk.same.Services.FullStateResponse result = new com.orbekk.same.Services.FullStateResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.revision_ = revision_;
+        if (componentBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            component_ = java.util.Collections.unmodifiableList(component_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.component_ = component_;
+        } else {
+          result.component_ = componentBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orbekk.same.Services.FullStateResponse) {
+          return mergeFrom((com.orbekk.same.Services.FullStateResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orbekk.same.Services.FullStateResponse other) {
+        if (other == com.orbekk.same.Services.FullStateResponse.getDefaultInstance()) return this;
+        if (other.hasRevision()) {
+          setRevision(other.getRevision());
+        }
+        if (componentBuilder_ == null) {
+          if (!other.component_.isEmpty()) {
+            if (component_.isEmpty()) {
+              component_ = other.component_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureComponentIsMutable();
+              component_.addAll(other.component_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.component_.isEmpty()) {
+            if (componentBuilder_.isEmpty()) {
+              componentBuilder_.dispose();
+              componentBuilder_ = null;
+              component_ = other.component_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              componentBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getComponentFieldBuilder() : null;
+            } else {
+              componentBuilder_.addAllMessages(other.component_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        for (int i = 0; i < getComponentCount(); i++) {
+          if (!getComponent(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              revision_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              com.orbekk.same.Services.Component.Builder subBuilder = com.orbekk.same.Services.Component.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addComponent(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional int64 revision = 1;
+      private long revision_ ;
+      public boolean hasRevision() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public long getRevision() {
+        return revision_;
+      }
+      public Builder setRevision(long value) {
+        bitField0_ |= 0x00000001;
+        revision_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRevision() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        revision_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // repeated .com.orbekk.same.Component component = 2;
+      private java.util.List<com.orbekk.same.Services.Component> component_ =
+        java.util.Collections.emptyList();
+      private void ensureComponentIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          component_ = new java.util.ArrayList<com.orbekk.same.Services.Component>(component_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> componentBuilder_;
+      
+      public java.util.List<com.orbekk.same.Services.Component> getComponentList() {
+        if (componentBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(component_);
+        } else {
+          return componentBuilder_.getMessageList();
+        }
+      }
+      public int getComponentCount() {
+        if (componentBuilder_ == null) {
+          return component_.size();
+        } else {
+          return componentBuilder_.getCount();
+        }
+      }
+      public com.orbekk.same.Services.Component getComponent(int index) {
+        if (componentBuilder_ == null) {
+          return component_.get(index);
+        } else {
+          return componentBuilder_.getMessage(index);
+        }
+      }
+      public Builder setComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (componentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureComponentIsMutable();
+          component_.set(index, value);
+          onChanged();
+        } else {
+          componentBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (componentBuilder_ == null) {
+          ensureComponentIsMutable();
+          component_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          componentBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addComponent(com.orbekk.same.Services.Component value) {
+        if (componentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureComponentIsMutable();
+          component_.add(value);
+          onChanged();
+        } else {
+          componentBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addComponent(
+          int index, com.orbekk.same.Services.Component value) {
+        if (componentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureComponentIsMutable();
+          component_.add(index, value);
+          onChanged();
+        } else {
+          componentBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addComponent(
+          com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (componentBuilder_ == null) {
+          ensureComponentIsMutable();
+          component_.add(builderForValue.build());
+          onChanged();
+        } else {
+          componentBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addComponent(
+          int index, com.orbekk.same.Services.Component.Builder builderForValue) {
+        if (componentBuilder_ == null) {
+          ensureComponentIsMutable();
+          component_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          componentBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllComponent(
+          java.lang.Iterable<? extends com.orbekk.same.Services.Component> values) {
+        if (componentBuilder_ == null) {
+          ensureComponentIsMutable();
+          super.addAll(values, component_);
+          onChanged();
+        } else {
+          componentBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearComponent() {
+        if (componentBuilder_ == null) {
+          component_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          componentBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeComponent(int index) {
+        if (componentBuilder_ == null) {
+          ensureComponentIsMutable();
+          component_.remove(index);
+          onChanged();
+        } else {
+          componentBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.orbekk.same.Services.Component.Builder getComponentBuilder(
+          int index) {
+        return getComponentFieldBuilder().getBuilder(index);
+      }
+      public com.orbekk.same.Services.ComponentOrBuilder getComponentOrBuilder(
+          int index) {
+        if (componentBuilder_ == null) {
+          return component_.get(index);  } else {
+          return componentBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.orbekk.same.Services.ComponentOrBuilder> 
+           getComponentOrBuilderList() {
+        if (componentBuilder_ != null) {
+          return componentBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(component_);
+        }
+      }
+      public com.orbekk.same.Services.Component.Builder addComponentBuilder() {
+        return getComponentFieldBuilder().addBuilder(
+            com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public com.orbekk.same.Services.Component.Builder addComponentBuilder(
+          int index) {
+        return getComponentFieldBuilder().addBuilder(
+            index, com.orbekk.same.Services.Component.getDefaultInstance());
+      }
+      public java.util.List<com.orbekk.same.Services.Component.Builder> 
+           getComponentBuilderList() {
+        return getComponentFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder> 
+          getComponentFieldBuilder() {
+        if (componentBuilder_ == null) {
+          componentBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.orbekk.same.Services.Component, com.orbekk.same.Services.Component.Builder, com.orbekk.same.Services.ComponentOrBuilder>(
+                  component_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          component_ = null;
+        }
+        return componentBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:com.orbekk.same.FullStateResponse)
+    }
+    
+    static {
+      defaultInstance = new FullStateResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:com.orbekk.same.FullStateResponse)
+  }
+  
   public interface ClientStateOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -5376,15 +6337,20 @@ public final class Services {
           com.orbekk.same.Services.Component request,
           com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
       
-      public abstract void masterTakeover(
-          com.google.protobuf.RpcController controller,
-          com.orbekk.same.Services.MasterState request,
-          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
-      
       public abstract void masterDown(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request,
           com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
+      
+      public abstract void masterTakeover(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.MasterState request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.MasterTakeoverResponse> done);
+      
+      public abstract void getFullState(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.FullStateResponse> done);
       
     }
     
@@ -5400,19 +6366,27 @@ public final class Services {
         }
         
         @java.lang.Override
-        public  void masterTakeover(
-            com.google.protobuf.RpcController controller,
-            com.orbekk.same.Services.MasterState request,
-            com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
-          impl.masterTakeover(controller, request, done);
-        }
-        
-        @java.lang.Override
         public  void masterDown(
             com.google.protobuf.RpcController controller,
             com.orbekk.same.Services.MasterState request,
             com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
           impl.masterDown(controller, request, done);
+        }
+        
+        @java.lang.Override
+        public  void masterTakeover(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.MasterState request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.MasterTakeoverResponse> done) {
+          impl.masterTakeover(controller, request, done);
+        }
+        
+        @java.lang.Override
+        public  void getFullState(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.Empty request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.FullStateResponse> done) {
+          impl.getFullState(controller, request, done);
         }
         
       };
@@ -5440,9 +6414,11 @@ public final class Services {
             case 0:
               return impl.setState(controller, (com.orbekk.same.Services.Component)request);
             case 1:
-              return impl.masterTakeover(controller, (com.orbekk.same.Services.MasterState)request);
-            case 2:
               return impl.masterDown(controller, (com.orbekk.same.Services.MasterState)request);
+            case 2:
+              return impl.masterTakeover(controller, (com.orbekk.same.Services.MasterState)request);
+            case 3:
+              return impl.getFullState(controller, (com.orbekk.same.Services.Empty)request);
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -5463,6 +6439,8 @@ public final class Services {
               return com.orbekk.same.Services.MasterState.getDefaultInstance();
             case 2:
               return com.orbekk.same.Services.MasterState.getDefaultInstance();
+            case 3:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -5482,7 +6460,9 @@ public final class Services {
             case 1:
               return com.orbekk.same.Services.Empty.getDefaultInstance();
             case 2:
-              return com.orbekk.same.Services.Empty.getDefaultInstance();
+              return com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance();
+            case 3:
+              return com.orbekk.same.Services.FullStateResponse.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -5496,15 +6476,20 @@ public final class Services {
         com.orbekk.same.Services.Component request,
         com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
     
-    public abstract void masterTakeover(
-        com.google.protobuf.RpcController controller,
-        com.orbekk.same.Services.MasterState request,
-        com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
-    
     public abstract void masterDown(
         com.google.protobuf.RpcController controller,
         com.orbekk.same.Services.MasterState request,
         com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
+    
+    public abstract void masterTakeover(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.MasterState request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.MasterTakeoverResponse> done);
+    
+    public abstract void getFullState(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.Empty request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.FullStateResponse> done);
     
     public static final
         com.google.protobuf.Descriptors.ServiceDescriptor
@@ -5534,13 +6519,18 @@ public final class Services {
               done));
           return;
         case 1:
-          this.masterTakeover(controller, (com.orbekk.same.Services.MasterState)request,
+          this.masterDown(controller, (com.orbekk.same.Services.MasterState)request,
             com.google.protobuf.RpcUtil.<com.orbekk.same.Services.Empty>specializeCallback(
               done));
           return;
         case 2:
-          this.masterDown(controller, (com.orbekk.same.Services.MasterState)request,
-            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.Empty>specializeCallback(
+          this.masterTakeover(controller, (com.orbekk.same.Services.MasterState)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.MasterTakeoverResponse>specializeCallback(
+              done));
+          return;
+        case 3:
+          this.getFullState(controller, (com.orbekk.same.Services.Empty)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.FullStateResponse>specializeCallback(
               done));
           return;
         default:
@@ -5563,6 +6553,8 @@ public final class Services {
           return com.orbekk.same.Services.MasterState.getDefaultInstance();
         case 2:
           return com.orbekk.same.Services.MasterState.getDefaultInstance();
+        case 3:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -5582,7 +6574,9 @@ public final class Services {
         case 1:
           return com.orbekk.same.Services.Empty.getDefaultInstance();
         case 2:
-          return com.orbekk.same.Services.Empty.getDefaultInstance();
+          return com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance();
+        case 3:
+          return com.orbekk.same.Services.FullStateResponse.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -5619,7 +6613,7 @@ public final class Services {
             com.orbekk.same.Services.Empty.getDefaultInstance()));
       }
       
-      public  void masterTakeover(
+      public  void masterDown(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request,
           com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
@@ -5634,19 +6628,34 @@ public final class Services {
             com.orbekk.same.Services.Empty.getDefaultInstance()));
       }
       
-      public  void masterDown(
+      public  void masterTakeover(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request,
-          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.MasterTakeoverResponse> done) {
         channel.callMethod(
           getDescriptor().getMethods().get(2),
           controller,
           request,
-          com.orbekk.same.Services.Empty.getDefaultInstance(),
+          com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance(),
           com.google.protobuf.RpcUtil.generalizeCallback(
             done,
-            com.orbekk.same.Services.Empty.class,
-            com.orbekk.same.Services.Empty.getDefaultInstance()));
+            com.orbekk.same.Services.MasterTakeoverResponse.class,
+            com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance()));
+      }
+      
+      public  void getFullState(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.FullStateResponse> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(3),
+          controller,
+          request,
+          com.orbekk.same.Services.FullStateResponse.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.FullStateResponse.class,
+            com.orbekk.same.Services.FullStateResponse.getDefaultInstance()));
       }
     }
     
@@ -5661,14 +6670,19 @@ public final class Services {
           com.orbekk.same.Services.Component request)
           throws com.google.protobuf.ServiceException;
       
-      public com.orbekk.same.Services.Empty masterTakeover(
+      public com.orbekk.same.Services.Empty masterDown(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request)
           throws com.google.protobuf.ServiceException;
       
-      public com.orbekk.same.Services.Empty masterDown(
+      public com.orbekk.same.Services.MasterTakeoverResponse masterTakeover(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request)
+          throws com.google.protobuf.ServiceException;
+      
+      public com.orbekk.same.Services.FullStateResponse getFullState(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
           throws com.google.protobuf.ServiceException;
     }
     
@@ -5691,7 +6705,7 @@ public final class Services {
       }
       
       
-      public com.orbekk.same.Services.Empty masterTakeover(
+      public com.orbekk.same.Services.Empty masterDown(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request)
           throws com.google.protobuf.ServiceException {
@@ -5703,15 +6717,27 @@ public final class Services {
       }
       
       
-      public com.orbekk.same.Services.Empty masterDown(
+      public com.orbekk.same.Services.MasterTakeoverResponse masterTakeover(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.MasterState request)
           throws com.google.protobuf.ServiceException {
-        return (com.orbekk.same.Services.Empty) channel.callBlockingMethod(
+        return (com.orbekk.same.Services.MasterTakeoverResponse) channel.callBlockingMethod(
           getDescriptor().getMethods().get(2),
           controller,
           request,
-          com.orbekk.same.Services.Empty.getDefaultInstance());
+          com.orbekk.same.Services.MasterTakeoverResponse.getDefaultInstance());
+      }
+      
+      
+      public com.orbekk.same.Services.FullStateResponse getFullState(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.FullStateResponse) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(3),
+          controller,
+          request,
+          com.orbekk.same.Services.FullStateResponse.getDefaultInstance());
       }
       
     }
@@ -6822,6 +7848,16 @@ public final class Services {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_orbekk_same_MasterState_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_MasterTakeoverResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_MasterTakeoverResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_orbekk_same_FullStateResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_orbekk_same_FullStateResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_same_ClientState_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -6866,34 +7902,40 @@ public final class Services {
       "\n\004data\030\002 \002(\t\022\020\n\010revision\030\003 \002(\003\"u\n\013Master" +
       "State\022\022\n\nmaster_url\030\001 \001(\t\022\021\n\tmaster_id\030\002" +
       " \001(\005\022\024\n\014network_name\030\003 \001(\t\022\027\n\017master_loc" +
-      "ation\030\004 \001(\t\022\020\n\010revision\030\005 \001(\003\">\n\013ClientS" +
-      "tate\022\013\n\003url\030\001 \001(\t\022\020\n\010location\030\002 \001(\t\022\020\n\010r" +
-      "evision\030\003 \001(\003\"A\n\020NetworkDirectory\022-\n\007net" +
-      "work\030\001 \003(\0132\034.com.orbekk.same.MasterState",
-      "\"T\n\014PaxosRequest\022,\n\006client\030\001 \001(\0132\034.com.o" +
-      "rbekk.same.ClientState\022\026\n\016proposalNumber" +
-      "\030\002 \001(\005\"\037\n\rPaxosResponse\022\016\n\006result\030\001 \001(\0052" +
-      "\324\001\n\006Client\022>\n\010SetState\022\032.com.orbekk.same" +
-      ".Component\032\026.com.orbekk.same.Empty\022F\n\016Ma" +
-      "sterTakeover\022\034.com.orbekk.same.MasterSta" +
-      "te\032\026.com.orbekk.same.Empty\022B\n\nMasterDown" +
-      "\022\034.com.orbekk.same.MasterState\032\026.com.orb" +
-      "ekk.same.Empty2\260\001\n\006Master\022J\n\022JoinNetwork" +
-      "Request\022\034.com.orbekk.same.ClientState\032\026.",
-      "com.orbekk.same.Empty\022Z\n\022UpdateStateRequ" +
-      "est\022\032.com.orbekk.same.Component\032(.com.or" +
-      "bekk.same.UpdateComponentResponse2\236\001\n\tDi" +
-      "rectory\022G\n\017RegisterNetwork\022\034.com.orbekk." +
-      "same.MasterState\032\026.com.orbekk.same.Empty" +
-      "\022H\n\013GetNetworks\022\026.com.orbekk.same.Empty\032" +
-      "!.com.orbekk.same.NetworkDirectory2\241\001\n\005P" +
-      "axos\022H\n\007Propose\022\035.com.orbekk.same.PaxosR" +
-      "equest\032\036.com.orbekk.same.PaxosResponse\022N" +
-      "\n\rAcceptRequest\022\035.com.orbekk.same.PaxosR",
-      "equest\032\036.com.orbekk.same.PaxosResponse2Y" +
-      "\n\rSystemService\022H\n\017GetSystemStatus\022\026.com" +
-      ".orbekk.same.Empty\032\035.com.orbekk.same.Sys" +
-      "temStatusB\003\210\001\001"
+      "ation\030\004 \001(\t\022\020\n\010revision\030\005 \001(\003\"8\n\026MasterT" +
+      "akeoverResponse\022\036\n\026highest_known_revisio" +
+      "n\030\001 \001(\003\"T\n\021FullStateResponse\022\020\n\010revision" +
+      "\030\001 \001(\003\022-\n\tcomponent\030\002 \003(\0132\032.com.orbekk.s",
+      "ame.Component\">\n\013ClientState\022\013\n\003url\030\001 \001(" +
+      "\t\022\020\n\010location\030\002 \001(\t\022\020\n\010revision\030\003 \001(\003\"A\n" +
+      "\020NetworkDirectory\022-\n\007network\030\001 \003(\0132\034.com" +
+      ".orbekk.same.MasterState\"T\n\014PaxosRequest" +
+      "\022,\n\006client\030\001 \001(\0132\034.com.orbekk.same.Clien" +
+      "tState\022\026\n\016proposalNumber\030\002 \001(\005\"\037\n\rPaxosR" +
+      "esponse\022\016\n\006result\030\001 \001(\0052\261\002\n\006Client\022>\n\010Se" +
+      "tState\022\032.com.orbekk.same.Component\032\026.com" +
+      ".orbekk.same.Empty\022B\n\nMasterDown\022\034.com.o" +
+      "rbekk.same.MasterState\032\026.com.orbekk.same",
+      ".Empty\022W\n\016MasterTakeover\022\034.com.orbekk.sa" +
+      "me.MasterState\032\'.com.orbekk.same.MasterT" +
+      "akeoverResponse\022J\n\014GetFullState\022\026.com.or" +
+      "bekk.same.Empty\032\".com.orbekk.same.FullSt" +
+      "ateResponse2\260\001\n\006Master\022J\n\022JoinNetworkReq" +
+      "uest\022\034.com.orbekk.same.ClientState\032\026.com" +
+      ".orbekk.same.Empty\022Z\n\022UpdateStateRequest" +
+      "\022\032.com.orbekk.same.Component\032(.com.orbek" +
+      "k.same.UpdateComponentResponse2\236\001\n\tDirec" +
+      "tory\022G\n\017RegisterNetwork\022\034.com.orbekk.sam",
+      "e.MasterState\032\026.com.orbekk.same.Empty\022H\n" +
+      "\013GetNetworks\022\026.com.orbekk.same.Empty\032!.c" +
+      "om.orbekk.same.NetworkDirectory2\241\001\n\005Paxo" +
+      "s\022H\n\007Propose\022\035.com.orbekk.same.PaxosRequ" +
+      "est\032\036.com.orbekk.same.PaxosResponse\022N\n\rA" +
+      "cceptRequest\022\035.com.orbekk.same.PaxosRequ" +
+      "est\032\036.com.orbekk.same.PaxosResponse2Y\n\rS" +
+      "ystemService\022H\n\017GetSystemStatus\022\026.com.or" +
+      "bekk.same.Empty\032\035.com.orbekk.same.System" +
+      "StatusB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6940,8 +7982,24 @@ public final class Services {
               new java.lang.String[] { "MasterUrl", "MasterId", "NetworkName", "MasterLocation", "Revision", },
               com.orbekk.same.Services.MasterState.class,
               com.orbekk.same.Services.MasterState.Builder.class);
-          internal_static_com_orbekk_same_ClientState_descriptor =
+          internal_static_com_orbekk_same_MasterTakeoverResponse_descriptor =
             getDescriptor().getMessageTypes().get(5);
+          internal_static_com_orbekk_same_MasterTakeoverResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_MasterTakeoverResponse_descriptor,
+              new java.lang.String[] { "HighestKnownRevision", },
+              com.orbekk.same.Services.MasterTakeoverResponse.class,
+              com.orbekk.same.Services.MasterTakeoverResponse.Builder.class);
+          internal_static_com_orbekk_same_FullStateResponse_descriptor =
+            getDescriptor().getMessageTypes().get(6);
+          internal_static_com_orbekk_same_FullStateResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_com_orbekk_same_FullStateResponse_descriptor,
+              new java.lang.String[] { "Revision", "Component", },
+              com.orbekk.same.Services.FullStateResponse.class,
+              com.orbekk.same.Services.FullStateResponse.Builder.class);
+          internal_static_com_orbekk_same_ClientState_descriptor =
+            getDescriptor().getMessageTypes().get(7);
           internal_static_com_orbekk_same_ClientState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_ClientState_descriptor,
@@ -6949,7 +8007,7 @@ public final class Services {
               com.orbekk.same.Services.ClientState.class,
               com.orbekk.same.Services.ClientState.Builder.class);
           internal_static_com_orbekk_same_NetworkDirectory_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_com_orbekk_same_NetworkDirectory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_NetworkDirectory_descriptor,
@@ -6957,7 +8015,7 @@ public final class Services {
               com.orbekk.same.Services.NetworkDirectory.class,
               com.orbekk.same.Services.NetworkDirectory.Builder.class);
           internal_static_com_orbekk_same_PaxosRequest_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(9);
           internal_static_com_orbekk_same_PaxosRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_PaxosRequest_descriptor,
@@ -6965,7 +8023,7 @@ public final class Services {
               com.orbekk.same.Services.PaxosRequest.class,
               com.orbekk.same.Services.PaxosRequest.Builder.class);
           internal_static_com_orbekk_same_PaxosResponse_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(10);
           internal_static_com_orbekk_same_PaxosResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_orbekk_same_PaxosResponse_descriptor,
