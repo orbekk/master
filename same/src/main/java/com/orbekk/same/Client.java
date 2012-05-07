@@ -21,6 +21,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ public class Client {
     private final RpcFactory rpcf;
     private final ExecutorService executor;
     private final ClientInterface clientInterface = new ClientInterfaceImpl();
+    private final AtomicLong revision = new AtomicLong(0);
     
     private List<StateChangedListener> stateListeners =
             new ArrayList<StateChangedListener>();
@@ -136,6 +138,7 @@ public class Client {
                 for (StateChangedListener listener : stateListeners) {
                     listener.stateChanged(state.getComponent(request.getId()));
                 }
+                updateRevision(request.getRevision());
             } else {
                 logger.warn("Ignoring update: {) => {}",
                         state.getComponent(request.getId()),
@@ -257,6 +260,7 @@ public class Client {
         return Services.ClientState.newBuilder()
                 .setUrl(myUrl)
                 .setLocation(myLocation)
+                .setRevision(revision.get())
                 .build();
     }
     
@@ -335,6 +339,15 @@ public class Client {
             if (client != null) {
                 client.masterDown(rpc, failedMaster, done);
             }
+        }
+    }
+    
+    public void updateRevision(long newRevision) {
+        boolean updated = false;
+        while (!updated) {
+            long expected = revision.get();
+            long update = Math.max(expected, newRevision);
+            updated = revision.compareAndSet(expected, update);
         }
     }
 }

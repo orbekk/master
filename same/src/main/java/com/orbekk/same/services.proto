@@ -41,6 +41,7 @@ message MasterState {
 message ClientState {
     optional string url = 1;
     optional string location = 2;
+    optional int64 revision = 3;
 }
 
 message NetworkDirectory {
