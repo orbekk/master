@@ -57,11 +57,9 @@ public class Client {
         private ClientInterfaceImpl() {
         }
 
-        /** Get a copy of all the client state.
-         */
         @Override
         public State getState() {
-            return new State(state);
+            return state;
         }
 
         @Override

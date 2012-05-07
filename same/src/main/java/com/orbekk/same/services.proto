@@ -29,12 +29,13 @@ message Component {
     required int64 revision = 3;
 }
 
-// Next tag: 5
+// Next tag: 6
 message MasterState {
     optional string master_url = 1;
     optional int32 master_id = 2;
     optional string network_name = 3;
     optional string master_location = 4;
+    optional int64 revision = 5;
 }
 
 message ClientState {

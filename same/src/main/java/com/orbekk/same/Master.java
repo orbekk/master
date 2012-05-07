@@ -18,6 +18,7 @@ package com.orbekk.same;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ public class Master {
     private final ConnectionManager connections;
     private String myUrl;
     private String myLocation; // Protobuf server location, i.e., myIp:port
+    private AtomicLong revision = new AtomicLong(1);
     State state;
     private volatile int masterId = 1;
     private final RpcFactory rpcf;
@@ -96,6 +98,7 @@ public class Master {
                 .setMasterLocation(getLocation())
                 .setNetworkName(getNetworkName())
                 .setMasterId(masterId)
+                .setRevision(revision.get())
                 .build();
     }
     
@@ -112,13 +115,15 @@ public class Master {
                 Services.Component request,
                 RpcCallback<Services.UpdateComponentResponse> done) {
             logger.info("updateStateRequest({})", request);
-            boolean updated = state.update(request.getId(), request.getData(),
-                    request.getRevision() + 1);
-            if (updated) {
+            boolean success = false;
+            if (state.checkRevision(request.getId(), request.getRevision())) {
+                success = true;
+                long newRevision = revision.incrementAndGet();
+                state.forceUpdate(request.getId(), request.getData(), newRevision);
                 updateStateRequestThread.add(request.getId());
             }
             done.run(Services.UpdateComponentResponse.newBuilder()
-                    .setSuccess(updated).build());
+                    .setSuccess(success).build());
         }
     };
     
@@ -264,6 +269,6 @@ public class Master {
             client.masterTakeover(rpc, getMasterInfo(), done);
         }
         updateStateRequestThread.add(".masterUrl");
-        updateStateRequestThread .add(".masterLocation");
+        updateStateRequestThread.add(".masterLocation");
     }
 }

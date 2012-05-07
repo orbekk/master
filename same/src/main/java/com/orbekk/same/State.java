@@ -57,6 +57,18 @@ public class State {
         state.clear();
     }
 
+    public synchronized boolean checkRevision(String componentName,
+            long expectedRevision) {
+        Component component = state.get(componentName);
+        if (component == null) {
+            return true;
+        } else if (component.getRevision() == expectedRevision) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public synchronized void forceUpdate(String componentName,
             String data, long revision) {
         Component oldComponent = state.get(componentName);
