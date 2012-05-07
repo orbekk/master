@@ -49,17 +49,7 @@ public class SameController {
     private static final int timeout = 10000;
 
     private class SystemServiceImpl extends Services.SystemService {
-        private List<Services.Component> componentsToPb(List<State.Component> components) {
-            List<Services.Component> results = new ArrayList<Services.Component>();
-            for (State.Component c : components) {
-                results.add(Services.Component.newBuilder()
-                                .setId(c.getName())
-                                .setRevision(c.getRevision())
-                                .setData(c.getData())
-                                .build());
-            }
-            return results;
-        }
+
         
         private void addMasterInfo(SystemStatus.Builder response) {
             Master currentMaster = master;
@@ -67,7 +57,7 @@ public class SameController {
                 response.setMasterStatus(currentMaster.getMasterInfo());
                 State masterState = new State(currentMaster.state);
                 response.addAllMasterStateComponent(
-                        componentsToPb(masterState.getComponents()));
+                        ServicesPbConversion.componentsToPb(masterState.getComponents()));
             }
         }
         
@@ -78,7 +68,7 @@ public class SameController {
             }
             State clientState = new State(client.state);
             response.addAllClientStateComponent(
-                    componentsToPb(clientState.getComponents()));
+                    ServicesPbConversion.componentsToPb(clientState.getComponents()));
         }
         
         @Override

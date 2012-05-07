@@ -27,6 +27,7 @@ import com.google.protobuf.RpcController;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.Services.ClientState;
 import com.orbekk.same.Services.Empty;
+import com.orbekk.same.Services.MasterTakeoverResponse;
 import com.orbekk.same.State.Component;
 import com.orbekk.util.WorkQueue;
 
@@ -166,8 +167,8 @@ public class Master {
                 
                 { // Send masterTakeover().
                     Rpc rpc = rpcf.create();
-                    RpcCallback<Empty> done =
-                            new RemoveParticipantIfFailsCallback<Empty>(
+                    RpcCallback<MasterTakeoverResponse> done =
+                            new RemoveParticipantIfFailsCallback<MasterTakeoverResponse>(
                                     clientLocation, rpc);
                     client.masterTakeover(rpc, getMasterInfo(), done);
                 }
@@ -243,13 +244,7 @@ public class Master {
         for (final String location : state.getList(State.PARTICIPANTS)) {
             Services.Client client = connections.getClient0(location);
             final Rpc rpc = rpcf.create();
-            RpcCallback<Empty> done = new RpcCallback<Empty>() {
-                @Override public void run(Empty unused) {
-                    if (!rpc.isOk()) {
-                        removeParticipant(location);
-                    }
-                }
-            };
+            RpcCallback<MasterTakeoverResponse> done = new RemoveParticipantIfFailsCallback<Services.MasterTakeoverResponse>(location, rpc);
             if (client == null) {
                 removeParticipant(location);
                 continue;

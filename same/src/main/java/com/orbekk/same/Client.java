@@ -31,7 +31,10 @@ import com.google.protobuf.RpcController;
 import com.orbekk.paxos.MasterProposer;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.Services.Empty;
+import com.orbekk.same.Services.FullStateResponse;
+import com.orbekk.same.Services.FullStateResponse.Builder;
 import com.orbekk.same.Services.MasterState;
+import com.orbekk.same.Services.MasterTakeoverResponse;
 import com.orbekk.same.State.Component;
 import com.orbekk.util.DelayedOperation;
 
@@ -149,7 +152,7 @@ public class Client {
         }
 
         @Override public void masterTakeover(RpcController controller,
-                MasterState request, RpcCallback<Empty> done) {
+                MasterState request, RpcCallback<MasterTakeoverResponse> done) {
             logger.info("MasterTakeover({})", request);
             if (masterInfo != null &&
                     request.getMasterId() <= masterInfo.getMasterId()) {
@@ -158,9 +161,15 @@ public class Client {
                 return;
             }
             abortMasterElection();
+            long highestRevision = 0;
+            if (masterInfo != null && request.getNetworkName().equals(masterInfo.getNetworkName())) {
+                highestRevision = revision.get();
+            }
             masterInfo = request;
             connectionState = ConnectionState.STABLE;
-            done.run(Empty.getDefaultInstance());
+            done.run(MasterTakeoverResponse.newBuilder()
+                    .setHighestKnownRevision(highestRevision)
+                    .build());
         }
 
         @Override public void masterDown(RpcController controller, MasterState request,
@@ -174,6 +183,16 @@ public class Client {
             connectionState = ConnectionState.UNSTABLE;
             executor.execute(new MasterStarter(request));
             done.run(Empty.getDefaultInstance());
+        }
+
+        @Override
+        public void getFullState(RpcController controller, Empty request,
+                RpcCallback<FullStateResponse> done) {
+            FullStateResponse.Builder response = FullStateResponse.newBuilder();
+            response.setRevision(revision.get());
+            response.addAllComponent(
+                    ServicesPbConversion.componentsToPb(state.getComponents()));
+            done.run(response.build());
         }
     };
     
