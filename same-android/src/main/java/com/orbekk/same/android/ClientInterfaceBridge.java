@@ -136,7 +136,7 @@ public class ClientInterfaceBridge implements ClientInterface {
     }
     
     public synchronized void connect() {
-        state = new State(".Temporary");
+        state = new State();
         Intent intent = new Intent(context, SameService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
