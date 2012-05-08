@@ -34,6 +34,7 @@ import android.os.RemoteException;
 
 import com.orbekk.same.ClientInterface;
 import com.orbekk.same.ConnectionState;
+import com.orbekk.same.ConnectionStateListener;
 import com.orbekk.same.State;
 import com.orbekk.same.State.Component;
 import com.orbekk.same.StateChangedListener;
@@ -216,4 +217,13 @@ public class ClientInterfaceBridge implements ClientInterface {
         return null;
     }
 
+    @Override
+    public void addConnectionStateListener(ConnectionStateListener listener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeConnectionStateListener(ConnectionStateListener listener) {
+        throw new UnsupportedOperationException();
+    }
 }
