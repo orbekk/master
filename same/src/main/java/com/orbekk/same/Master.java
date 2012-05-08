@@ -51,10 +51,8 @@ public class Master {
 
         @Override
         public void run(T unused) {
-            if (rpc.isOk()) {
-                if (rpc.failed()) {
-                    removeParticipant(participantLocation);
-                }
+            if (rpc.failed()) {
+                removeParticipant(participantLocation);
             }
         }
     }
