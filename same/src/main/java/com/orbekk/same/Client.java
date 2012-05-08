@@ -174,17 +174,15 @@ public class Client {
                     request.getMasterId() <= masterInfo.getMasterId()) {
                 logger.warn("{} tried to take over, but current master is " +
                         "{}. Ignoring", masterInfo); 
+                done.run(MasterTakeoverResponse.newBuilder().setSuccess(false).build());
                 return;
             }
             abortMasterElection();
-            long highestRevision = 0;
-            if (masterInfo != null && request.getNetworkName().equals(masterInfo.getNetworkName())) {
-                highestRevision = revision.get();
-            }
             masterInfo = request;
-            setConnectionState(ConnectionState.STABLE);
+            setConnectionState(ConnectionState.UNSTABLE);
             done.run(MasterTakeoverResponse.newBuilder()
-                    .setHighestKnownRevision(highestRevision)
+                    .setSuccess(true)
+                    .setClientState(getClientState())
                     .build());
         }
 
@@ -209,6 +207,21 @@ public class Client {
             response.addAllComponent(
                     ServicesPbConversion.componentsToPb(state.getComponents()));
             done.run(response.build());
+        }
+
+        @Override
+        public void masterTakeoverFinished(RpcController controller,
+                MasterState request, RpcCallback<Empty> done) {
+            if (masterInfo != null && request.getMasterId() < masterInfo.getMasterId()) {
+                logger.warn("MasterTakeoverFinished({}) failed. Current master: {}", request, masterInfo);
+            }
+            if (revision.get() < masterInfo.getRevision()) {
+                logger.error("My revision ({}) < master revision ({}). Possible inconsistency.",
+                        revision.get(), masterInfo.getRevision());
+            }
+            masterInfo = request;
+            setConnectionState(ConnectionState.STABLE);
+            done.run(Empty.getDefaultInstance());
         }
     };
     

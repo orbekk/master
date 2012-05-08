@@ -38,8 +38,10 @@ message MasterState {
     optional int64 revision = 5;
 }
 
+// Next tag: 4
 message MasterTakeoverResponse {
-	optional int64 highest_known_revision = 1;
+	optional bool success = 2;
+	optional ClientState client_state = 3;
 }
 
 message FullStateResponse {
@@ -71,6 +73,7 @@ service Client {
     rpc MasterDown (MasterState) returns (Empty);
     rpc MasterTakeover (MasterState) returns (MasterTakeoverResponse);
     rpc GetFullState (Empty) returns (FullStateResponse);
+    rpc MasterTakeoverFinished (MasterState) returns (Empty);
 }
 
 service Master {
