@@ -32,7 +32,6 @@ import com.orbekk.paxos.MasterProposer;
 import com.orbekk.protobuf.Rpc;
 import com.orbekk.same.Services.Empty;
 import com.orbekk.same.Services.FullStateResponse;
-import com.orbekk.same.Services.FullStateResponse.Builder;
 import com.orbekk.same.Services.MasterState;
 import com.orbekk.same.Services.MasterTakeoverResponse;
 import com.orbekk.same.State.Component;
