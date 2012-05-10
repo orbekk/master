@@ -15,18 +15,16 @@
  */
 package com.orbekk.same.android;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -38,15 +36,19 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.protobuf.RpcCallback;
+import com.orbekk.protobuf.Rpc;
+import com.orbekk.protobuf.RpcChannel;
+import com.orbekk.same.Services;
 import com.orbekk.same.android.net.Networking;
 import com.orbekk.same.android.widget.NetworkListAdapter;
 
 public class SameControllerActivity extends Activity { 
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Messenger sameService = null;
-    private List<String> networkNames = new ArrayList<String>();
-    private List<String> networkUrls = new ArrayList<String>();
+    private volatile Services.NetworkDirectory networks = null;
     
     private ServiceConnection sameConnection = new ServiceConnection() {
         @Override
@@ -60,34 +62,24 @@ public class SameControllerActivity extends Activity {
         }
     };
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public synchronized void onReceive(Context context, Intent intent) {
-            if (SameService.AVAILABLE_NETWORKS_UPDATE.equals(intent.getAction())) {
-                networkNames = intent.getStringArrayListExtra(
-                        SameService.AVAILABLE_NETWORKS);
-                networkUrls = intent.getStringArrayListExtra(
-                        SameService.NETWORK_URLS);
-                updateNetworkList();
-            }
-        }
-    };
-
     private AdapterView.OnItemClickListener networkListClickListener =
             new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String networkName = networkNames.get(position);
-            String masterUrl = networkUrls.get(position);
-            joinNetwork(masterUrl);      
+            Services.MasterState network = networks.getNetwork(position);
+            joinNetwork(network.getMasterLocation());      
         }
     };
     
     private void updateNetworkList() {
+        Services.NetworkDirectory currentNetworks = networks;
+        if (currentNetworks == null) {
+            return;
+        }
         ListView list = (ListView)findViewById(R.id.network_list);
         list.setAdapter(new NetworkListAdapter(
                 SameControllerActivity.this,
-                R.layout.list_text_item, networkNames, networkUrls));        
+                R.layout.list_text_item, currentNetworks));        
     }
     
     
@@ -142,7 +134,47 @@ public class SameControllerActivity extends Activity {
     }
     
     public void searchNetworks(View unused) {
-        logger.info("SearchNetworks() not working");
+        logger.info("Looking up networks.");
+        final Toast failedToast = Toast.makeText(this, "No networks found!", Toast.LENGTH_SHORT);
+        RpcChannel channel = null;
+        try {
+            channel = RpcChannel.create(
+                    SameService.DIRECTORY_HOST, SameService.DIRECTORY_PORT);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            failedToast.show();
+            e.printStackTrace();
+            return;
+        }
+        Services.Directory directory = Services.Directory.newStub(channel);
+        if (directory == null) {
+            logger.warn("No discovery service configured.");
+            return;
+        }
+        final Rpc rpc = new Rpc();
+        rpc.setTimeout(10000);
+        RpcCallback<Services.NetworkDirectory> done =
+                new RpcCallback<Services.NetworkDirectory>() {
+            @Override public void run(Services.NetworkDirectory networks) {
+                if (!rpc.isOk()) {
+                    failedToast.show();
+                    logger.warn("Unable to find networks: {}", rpc.errorText());
+                    return;
+                }
+                setAvailableNetworks(networks);
+            }
+        };
+        directory.getNetworks(rpc, Services.Empty.getDefaultInstance(), done);
+    }
+    
+    private void setAvailableNetworks(final Services.NetworkDirectory networks) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                SameControllerActivity.this.networks = networks;
+                updateNetworkList();
+            }
+        });
     }
 
     @Override
@@ -157,8 +189,6 @@ public class SameControllerActivity extends Activity {
         
         ListView networkList = (ListView)findViewById(R.id.network_list);
         networkList.setOnItemClickListener(networkListClickListener);
-        
-        updateNetworkList();
     }
     
     @Override public void onResume() {
@@ -167,9 +197,7 @@ public class SameControllerActivity extends Activity {
         Intent intent = new Intent(this, SameService.class);
         bindService(intent, sameConnection, Context.BIND_AUTO_CREATE);
         
-        IntentFilter sameServiceUpdates = new IntentFilter(
-                SameService.AVAILABLE_NETWORKS_UPDATE);
-        registerReceiver(broadcastReceiver, sameServiceUpdates);
+        searchNetworks(null);
     }
     
     @Override public void onStop() {
@@ -177,7 +205,6 @@ public class SameControllerActivity extends Activity {
         if (sameService != null) {
             unbindService(sameConnection);
         }
-        unregisterReceiver(broadcastReceiver);
     }
     
     @Override

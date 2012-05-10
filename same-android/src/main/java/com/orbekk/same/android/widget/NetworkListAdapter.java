@@ -23,6 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.orbekk.same.Services;
+import com.orbekk.same.Services.NetworkDirectory;
 import com.orbekk.same.android.R;
 
 /**
@@ -32,15 +35,13 @@ import com.orbekk.same.android.R;
  * 
  *   list.setAdapter(new NetworkListAdapter(...));
  */
-public class NetworkListAdapter extends ArrayAdapter<String> {
-    private List<String> networkNames;
-    private List<String> masterUrls;
+public class NetworkListAdapter extends ArrayAdapter<Services.MasterState> {
+    private NetworkDirectory networks;
     
     public NetworkListAdapter(Context context, int resource_id,
-            List<String> networkNames, List<String> masterUrls) {
-        super(context, resource_id, networkNames);
-        this.networkNames = networkNames;
-        this.masterUrls = masterUrls;
+            Services.NetworkDirectory networks) {
+        super(context, resource_id, networks.getNetworkList());
+        this.networks = networks;
     }
     
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,13 +49,14 @@ public class NetworkListAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = getLayoutInflater();
             convertView = inflater.inflate(R.layout.network_list_item, null);
         }
-        if (networkNames.get(position) != null) {
+        Services.MasterState network = networks.getNetwork(position);
+        if (network != null) {
             TextView nameText = (TextView)convertView.findViewById(
                     R.id.network_name_text);
             TextView urlText = (TextView)convertView.findViewById(
                     R.id.master_url_text);
-            nameText.setText(networkNames.get(position));
-            urlText.setText(masterUrls.get(position));
+            nameText.setText(network.getNetworkName());
+            urlText.setText(network.getMasterLocation());
         }
         return convertView;
     }

@@ -14,7 +14,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="com.orbekk.same.SameService.action.AVAILABLE_NETWORKS_UPDATE" />
             </intent-filter>
         </activity>
         
