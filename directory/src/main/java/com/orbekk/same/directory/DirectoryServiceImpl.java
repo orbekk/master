@@ -16,8 +16,10 @@
 package com.orbekk.same.directory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,25 +34,23 @@ import com.orbekk.same.Services.NetworkDirectory;
 public class DirectoryServiceImpl extends Services.Directory {
     private Logger logger = LoggerFactory.getLogger(getClass());
     public final static long EXPIRE_TIME = 15 * 60l * 1000;  // 15 minutes
-    List<NetworkEntry> networkList = new ArrayList<NetworkEntry>();
+    Map<String, NetworkEntry> networkMap = new HashMap<String, NetworkEntry>();
     
     synchronized void cleanNetworkList() {
         long expiredTime = System.currentTimeMillis() - EXPIRE_TIME;
-        for (Iterator<NetworkEntry> it = networkList.iterator(); it.hasNext();) {
-            NetworkEntry e = it.next();
-            if (e.hasExpired(expiredTime)) {
-                it.remove();
+        for (NetworkEntry entry : networkMap.values()) {
+            if (entry.hasExpired(expiredTime)) {
+                networkMap.remove(entry.networkName);
             }
         }
-        logger.info("Cleaned network list. Networks: {}", networkList);
+        logger.info("Cleaned network list. Networks: {}", networkMap);
     }
 
     public void registerNetwork(String networkName, String masterUrl) {
-        cleanNetworkList();
         NetworkEntry entry = new NetworkEntry(networkName, masterUrl);
         entry.register(System.currentTimeMillis());
-        networkList.remove(entry);
-        networkList.add(entry);
+        networkMap.put(networkName, entry);
+        cleanNetworkList();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DirectoryServiceImpl extends Services.Directory {
             RpcCallback<NetworkDirectory> done) {
         cleanNetworkList();
         NetworkDirectory.Builder directory = NetworkDirectory.newBuilder();
-        for (NetworkEntry e : networkList) {
+        for (NetworkEntry e : networkMap.values()) {
             directory.addNetwork(MasterState.newBuilder()
                     .setMasterLocation(e.masterUrl)
                     .setNetworkName(e.networkName)
