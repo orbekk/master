@@ -172,6 +172,11 @@ public class Master {
             }
         }
         
+        private void updateParticipants() throws InterruptedException {
+            long newRevision = revision.incrementAndGet();
+            state.updateFromObject(State.PARTICIPANTS, clients, newRevision);
+        }
+        
         private void sendFullState() throws InterruptedException {
             RpcList rpcs = new RpcList();
             for (String location : clients) {
@@ -211,10 +216,12 @@ public class Master {
             try {
                 sendTakeovers();
                 getMostRecentState();
+                updateParticipants();
                 sendFullState();
                 finishTakeover();
             } catch (InterruptedException e) {
                 // Abort master takeover.
+                logger.warn("Master takeover aborted: ", e);
                 aborted.set(true);
             }
         }
@@ -357,8 +364,9 @@ public class Master {
         List<String> participants = state.getList(State.PARTICIPANTS);
         if (!participants.contains(location)) {
             participants.add(location);
+            long newRevision = revision.incrementAndGet();
             state.updateFromObject(State.PARTICIPANTS, participants,
-                    state.getRevision(State.PARTICIPANTS) + 1);
+                    newRevision);
             sendStateToClients(state.getComponent(State.PARTICIPANTS));
         }
         
@@ -369,8 +377,9 @@ public class Master {
         if (participants0.contains(url)) {
             logger.info("removeParticipant({})", url);
             participants0.remove(url);
+            long newRevision = revision.incrementAndGet();
             state.updateFromObject(State.PARTICIPANTS, participants0, 
-                    state.getRevision(State.PARTICIPANTS) + 1);
+                    newRevision);
             sendStateToClients(state.getComponent(State.PARTICIPANTS));
         }
     }
