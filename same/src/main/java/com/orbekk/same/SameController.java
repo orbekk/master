@@ -42,6 +42,7 @@ public class SameController {
     private final Configuration configuration;
     private final ConnectionManager connections;
     private final RpcFactory rpcf;
+    private final RpcFactory masterRpcf;
 
     /**
      * Timeout for remote operations in milliseconds.
@@ -91,7 +92,7 @@ public class SameController {
                     "MasterService.json";
             master = Master.create(connections,
                     masterUrl, configuration.get("networkName"), myLocation,
-                    rpcf);
+                    masterRpcf);
             master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
             master.start();
@@ -130,6 +131,7 @@ public class SameController {
         ConnectionManagerImpl connections = new ConnectionManagerImpl(
                 timeout, timeout);
         RpcFactory rpcf = new RpcFactory(timeout);
+        RpcFactory masterRpcf = new RpcFactory(timeout / 2);
         
         State clientState = new State();
         String baseUrl = String.format("http://%s:%s/",
@@ -147,7 +149,7 @@ public class SameController {
         
         SameController controller = new SameController(
                 configuration, connections, client,
-                paxos, pServer, rpcf);
+                paxos, pServer, rpcf, masterRpcf);
         
         pServer.registerService(controller.new SystemServiceImpl());
         return controller;
@@ -159,13 +161,15 @@ public class SameController {
             Client client,
             PaxosServiceImpl paxos,
             SimpleProtobufServer pServer,
-            RpcFactory rpcf) {
+            RpcFactory rpcf,
+            RpcFactory masterRpcf) {
         this.configuration = configuration;
         this.connections = connections;
         this.client = client;
         this.paxos = paxos;
         this.pServer = pServer;
         this.rpcf = rpcf;
+        this.masterRpcf = masterRpcf;
     }
 
     public void start() throws Exception {
