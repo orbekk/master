@@ -70,6 +70,7 @@ public class SameController {
             State clientState = new State(client.state);
             response.addAllClientStateComponent(
                     ServicesPbConversion.componentsToPb(clientState.getComponents()));
+            response.addExtraClientInfo("connection_state: " + client.getConnectionState());
         }
         
         @Override
