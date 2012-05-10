@@ -94,8 +94,8 @@ public class SameController {
             master = Master.create(connections,
                     masterUrl, configuration.get("networkName"), myLocation,
                     masterRpcf);
-            master.resumeFrom(lastKnownState, masterId);
             pServer.registerService(master.getNewService());
+            master.resumeFrom(lastKnownState, masterId);
             master.start();
             registerNetwork(master);
         }
