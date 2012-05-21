@@ -1,0 +1,15 @@
+package com.orbekk.stats;
+
+option java_generic_services = true;
+
+message Empty {
+}
+
+message SimpleTiming {
+    optional double timing = 1;
+    optional int32 numDevices = 2;
+}
+
+service Experiment1 {
+    rpc RegisterSample (SimpleTiming) returns (Empty);
+}
