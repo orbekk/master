@@ -3,7 +3,7 @@ package com.orbekk.stats;
 import com.orbekk.protobuf.SimpleProtobufServer;
 
 public class Server {
-    final Experiment1Impl exp1 = new Experiment1Impl();
+    private final Experiment1Impl exp1 = new Experiment1Impl();
     
     public static void main(String[] args) {
         new Server().run();

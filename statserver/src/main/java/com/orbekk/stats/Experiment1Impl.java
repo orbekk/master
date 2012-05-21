@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
@@ -12,11 +13,13 @@ import com.orbekk.stats.Experiments.Experiment1;
 import com.orbekk.stats.Experiments.SimpleTiming;
 
 public class Experiment1Impl extends Experiment1 {
-    List<SimpleTiming> samples = new ArrayList<SimpleTiming>();
+    private final static Logger logger = Logger.getLogger(Experiment1Impl.class.getName());
+    private List<SimpleTiming> samples = new ArrayList<SimpleTiming>();
     
     @Override
     public synchronized void registerSample(RpcController controller, SimpleTiming request,
             RpcCallback<Empty> done) {
+        logger.info(request.toString());
         samples.add(request);
         done.run(Empty.getDefaultInstance());
     }
