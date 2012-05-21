@@ -141,7 +141,9 @@ public class SameControllerActivity extends Activity {
             channel = RpcChannel.create(
                     SameService.DIRECTORY_HOST, SameService.DIRECTORY_PORT);
         } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+            logger.warn("Could not retrieve networks.", e);
+            e.printStackTrace();
+            return;
         } catch (IOException e) {
             failedToast.show();
             e.printStackTrace();

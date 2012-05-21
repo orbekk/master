@@ -119,7 +119,6 @@ public class SameService extends Service {
                     stateReceivers.remove(droppedMessenger);
                     break;
                 case SET_STATE:
-                    logger.info("SET_STATE: oId: {}, comp: {}", message.arg1, message.obj); 
                     State.Component updatedComponent =
                             new ComponentBundle(message.getData()).getComponent();
                     int id = message.arg1;
@@ -133,7 +132,6 @@ public class SameService extends Service {
                 default:
                     super.handleMessage(message);
             }
-            logger.info("Finished handling message.");
         }
     }
     

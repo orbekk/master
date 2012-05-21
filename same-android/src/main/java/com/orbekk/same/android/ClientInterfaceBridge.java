@@ -55,7 +55,6 @@ public class ClientInterfaceBridge implements ClientInterface {
     
     class ResponseHandler extends Handler {
         @Override public synchronized void handleMessage(Message message) {
-            logger.info("ResponseHandler: Got here. Message: {}", message);
             if (serviceMessenger == null) {
                 logger.warn("Ignoring message to disabled ResponseHandler.");
                 return;
@@ -68,7 +67,6 @@ public class ClientInterfaceBridge implements ClientInterface {
                 break;
             case SameService.OPERATION_STATUS_CALLBACK:
                 int operationNumber = message.arg1;
-                logger.info("Received callback for operation {}", operationNumber);
                 int statusCode = message.getData().getInt("statusCode");
                 String statusMessage = message.getData().getString("statusMessage");
                 DelayedOperation.Status status =

@@ -271,7 +271,6 @@ public class Master {
         @Override public void updateStateRequest(RpcController controller,
                 Services.Component request,
                 RpcCallback<Services.UpdateComponentResponse> done) {
-            logger.info("updateStateRequest({})", request);
             boolean success = false;
             if (state.checkRevision(request.getId(), request.getRevision())) {
                 success = true;

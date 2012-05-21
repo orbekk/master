@@ -46,7 +46,7 @@ public class Experiment1Activity extends Activity {
     
     private int warmupIterationsPerformed;
     private int iterationsPerformed;
-    private Timer timer;
+    private volatile Timer timer;
     
     private Variable<Integer> variable;
     
@@ -74,13 +74,11 @@ public class Experiment1Activity extends Activity {
         RpcChannel channel = null;
         try {
             RpcCallback<Empty> done = new RpcCallback<Empty>() {
-                @Override public void run(Empty unused) {
+                @Override public void run(Empty response) {
                 }
             };
             channel = RpcChannel.create(Common.HOSTNAME, Common.PORT);
             Experiment1 exp1 = Experiment1.newStub(channel);
-            Rpc rpc = new Rpc();
-            rpc.setTimeout(5000);
             int warmupIterationsLeft = WARMUP_ITERATIONS;
             for (Long sample : timer.getTimes()) {
                 if (warmupIterationsLeft-- > 0) {
@@ -90,9 +88,14 @@ public class Experiment1Activity extends Activity {
                         .setTiming(sample)
                         .setNumDevices(numDevices)
                         .build();
+                Rpc rpc = new Rpc();
+                rpc.setTimeout(5000);
                 exp1.registerSample(rpc, timing, done);
+                rpc.await();
+                if (!rpc.isOk()) {
+                    logger.warn(rpc.toString());
+                }
             }
-            rpc.await();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -104,6 +107,7 @@ public class Experiment1Activity extends Activity {
                 channel.close();
             }
         }
+        Toast.makeText(this, "Finished benchmark", Toast.LENGTH_LONG).show();
     }
     
     /** Returns whether or not we should continue. */
@@ -139,8 +143,8 @@ public class Experiment1Activity extends Activity {
         variable.set(0);
     }
     
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onStart();
         client.disconnect();
     }
     
