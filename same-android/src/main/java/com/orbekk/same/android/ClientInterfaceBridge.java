@@ -17,7 +17,9 @@ package com.orbekk.same.android;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +45,8 @@ import com.orbekk.util.DelayedOperation;
 
 public class ClientInterfaceBridge implements ClientInterface {
     private State state;
-    private final ArrayList<StateChangedListener> listeners = 
-            new ArrayList<StateChangedListener>();
+    private final List<StateChangedListener> listeners = 
+            new CopyOnWriteArrayList<StateChangedListener>();
     private final Map<Integer, DelayedOperation> ongoingOperations =
             new HashMap<Integer, DelayedOperation>();
     /** This is used to queue operations until connected to the service. */
