@@ -15,6 +15,8 @@
  */
 package com.orbekk.same;
 
+import java.util.List;
+
 import org.codehaus.jackson.type.TypeReference;
 
 public class Types {
@@ -22,4 +24,6 @@ public class Types {
             new TypeReference<String>() {};
     public final static TypeReference<Integer> INTEGER =
             new TypeReference<Integer>() {};
+    public final static TypeReference<List<String>> STRING_LIST =
+            new TypeReference<List<String>>() {};
 }

@@ -17,6 +17,7 @@ package com.orbekk.same.android.benchmark;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,6 @@ import com.orbekk.same.Variable;
 import com.orbekk.same.Variable.OnChangeListener;
 import com.orbekk.same.android.ClientInterfaceBridge;
 import com.orbekk.stats.Common;
-import com.orbekk.stats.Experiments.Experiment1;
 import com.orbekk.stats.Experiments.Empty;
 import com.orbekk.stats.Experiments.Experiment1;
 import com.orbekk.stats.Experiments.SimpleTiming;
@@ -67,6 +67,10 @@ public class Experiment1Activity extends Activity {
     };
     
     private void finalizeBenchmark() {
+        Variable<List<String>> participants =
+                client.createVariableFactory().create(
+                        ".participants0", Types.STRING_LIST);
+        int numDevices = participants.get().size();
         RpcChannel channel = null;
         try {
             RpcCallback<Empty> done = new RpcCallback<Empty>() {
@@ -84,7 +88,7 @@ public class Experiment1Activity extends Activity {
                 }
                 SimpleTiming timing = SimpleTiming.newBuilder()
                         .setTiming(sample)
-                        .setNumDevices(-1)
+                        .setNumDevices(numDevices)
                         .build();
                 exp1.registerSample(rpc, timing, done);
             }
