@@ -82,11 +82,14 @@ public class MasterProposer extends Thread {
         }
         
         private void checkDone() {
-            if (numPromises.get() > numRequests / 2) {
-                result.set(proposalNumber);
-                done.countDown();
-            } else if (numResponses.get() >= numRequests) {
-                result.set(bestPromise.get());
+            if (numPromises.get() > numRequests / 2 ||
+                    numResponses.get() >= numRequests) {
+                // Test again to avoid race condition.
+                if (numPromises.get() > numRequests / 2) {
+                    result.set(proposalNumber);
+                } else {
+                    result.set(bestPromise.get());
+                }
                 done.countDown();
             }
         }
