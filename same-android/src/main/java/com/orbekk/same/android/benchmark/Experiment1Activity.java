@@ -144,7 +144,7 @@ public class Experiment1Activity extends Activity {
     }
     
     public void onPause() {
-        super.onStart();
+        super.onPause();
         client.disconnect();
     }
     

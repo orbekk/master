@@ -38,8 +38,6 @@ public class PaxosServiceImpl {
         @Override
         public void propose(RpcController controller, PaxosRequest request,
                 RpcCallback<PaxosResponse> done) {
-            logger.info("propose({}). Highest promise: {}, Highest accepted: {}",
-                    new Object[]{request, highestPromise, highestAcceptedValue});
             String clientUrl = request.getClient().getLocation();
             int proposalNumber = request.getProposalNumber();
             int response = 
@@ -53,8 +51,6 @@ public class PaxosServiceImpl {
         @Override
         public void acceptRequest(RpcController controller,
                 PaxosRequest request, RpcCallback<PaxosResponse> done) {
-            logger.info("acceptRequest({}). Highest promise: {}, Highest accepted: {}",
-                    new Object[]{request, highestPromise, highestAcceptedValue});
             String clientUrl = request.getClient().getLocation();
             int proposalNumber = request.getProposalNumber();
             int response = 
@@ -78,15 +74,9 @@ public class PaxosServiceImpl {
     private synchronized int propose(String clientUrl,
             int proposalNumber) {
         if (proposalNumber > highestPromise) {
-            logger.info(tag + "propose({}, {}) = accepted",
-                    new Object[]{clientUrl, proposalNumber});
             highestPromise = proposalNumber;
             return highestPromise;
         } else {
-            logger.info(tag + "propose({}, {}) = rejected " +
-                    "(promised: {})",
-                    new Object[]{clientUrl, proposalNumber,
-                    highestPromise});
             return -highestPromise;
         }
     }
@@ -94,15 +84,9 @@ public class PaxosServiceImpl {
     private synchronized int acceptRequest(String clientUrl,
             int proposalNumber) {
         if (proposalNumber == highestPromise) {
-            logger.info(tag + "acceptRequest({}, {}) = accepted",
-                    new Object[]{clientUrl, proposalNumber});
             highestAcceptedValue = proposalNumber;
             return highestAcceptedValue;
         } else {
-            logger.info(tag + "acceptRequest({}, {}) = rejected " +
-                    "(promise={})",
-                    new Object[]{clientUrl, proposalNumber,
-                    highestPromise});
             return -highestPromise;
         }
     }

@@ -13,3 +13,7 @@ message SimpleTiming {
 service Experiment1 {
     rpc RegisterSample (SimpleTiming) returns (Empty);
 }
+
+service Experiment2 {
+    rpc RegisterSample (SimpleTiming) returns (Empty);
+}

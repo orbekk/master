@@ -75,11 +75,11 @@ public class SameService extends Service {
 
     public final static int KILL_MASTER = 10;
 
-    final static int PPORT = 15070;
-    final static int SERVICE_PORT = 15068;
+    public final static int PPORT = 15070;
+    public final static int SERVICE_PORT = 15068;
     
-    final static String DIRECTORY_HOST = "flode.pvv.ntnu.no";
-    final static int DIRECTORY_PORT = 15072;
+    public final static String DIRECTORY_HOST = "flode.pvv.ntnu.no";
+    public final static int DIRECTORY_PORT = 15072;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     private SameController sameController = null;

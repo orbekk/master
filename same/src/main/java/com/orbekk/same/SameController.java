@@ -115,8 +115,9 @@ public class SameController {
 
     private MasterController masterController = new MasterController() {
         @Override
-        public void enableMaster(String networkName,
+        public synchronized void enableMaster(String networkName,
                 State lastKnownState, int masterId) {
+            disableMaster();
             String myLocation = configuration.get("localIp") + ":" +
                     configuration.get("pport");
             String masterUrl = configuration.get("baseUrl") +
@@ -131,7 +132,7 @@ public class SameController {
         }
 
         @Override
-        public void disableMaster() {
+        public synchronized void disableMaster() {
             if (master != null) {
                 pServer.removeService(master.getNewService());
                 master.interrupt();

@@ -33,6 +33,7 @@ import android.widget.ListView;
 
 import com.orbekk.same.android.benchmark.ExampleProtobufServerActivity;
 import com.orbekk.same.android.benchmark.Experiment1Activity;
+import com.orbekk.same.android.benchmark.Experiment2Activity;
 import com.orbekk.same.android.benchmark.RepeatedSetVariableActivity;
 
 public class MainActivity extends Activity {
@@ -51,6 +52,7 @@ public class MainActivity extends Activity {
                 ExampleProtobufServerActivity.class);
         
         activities.put("Experiment 1", Experiment1Activity.class);
+        activities.put("Experiment 2", Experiment2Activity.class);
     }
     
     public final static List<String> activityList =

@@ -900,6 +900,227 @@ public final class Experiments {
     }
   }
   
+  public static abstract class Experiment2
+      implements com.google.protobuf.Service {
+    protected Experiment2() {}
+    
+    public interface Interface {
+      public abstract void registerSample(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.stats.Experiments.SimpleTiming request,
+          com.google.protobuf.RpcCallback<com.orbekk.stats.Experiments.Empty> done);
+      
+    }
+    
+    public static com.google.protobuf.Service newReflectiveService(
+        final Interface impl) {
+      return new Experiment2() {
+        @java.lang.Override
+        public  void registerSample(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.stats.Experiments.SimpleTiming request,
+            com.google.protobuf.RpcCallback<com.orbekk.stats.Experiments.Empty> done) {
+          impl.registerSample(controller, request, done);
+        }
+        
+      };
+    }
+    
+    public static com.google.protobuf.BlockingService
+        newReflectiveBlockingService(final BlockingInterface impl) {
+      return new com.google.protobuf.BlockingService() {
+        public final com.google.protobuf.Descriptors.ServiceDescriptor
+            getDescriptorForType() {
+          return getDescriptor();
+        }
+        
+        public final com.google.protobuf.Message callBlockingMethod(
+            com.google.protobuf.Descriptors.MethodDescriptor method,
+            com.google.protobuf.RpcController controller,
+            com.google.protobuf.Message request)
+            throws com.google.protobuf.ServiceException {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.callBlockingMethod() given method descriptor for " +
+              "wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return impl.registerSample(controller, (com.orbekk.stats.Experiments.SimpleTiming)request);
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getRequestPrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getRequestPrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.stats.Experiments.SimpleTiming.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getResponsePrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getResponsePrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.orbekk.stats.Experiments.Empty.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+      };
+    }
+    
+    public abstract void registerSample(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.stats.Experiments.SimpleTiming request,
+        com.google.protobuf.RpcCallback<com.orbekk.stats.Experiments.Empty> done);
+    
+    public static final
+        com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptor() {
+      return com.orbekk.stats.Experiments.getDescriptor().getServices().get(1);
+    }
+    public final com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    
+    public final void callMethod(
+        com.google.protobuf.Descriptors.MethodDescriptor method,
+        com.google.protobuf.RpcController controller,
+        com.google.protobuf.Message request,
+        com.google.protobuf.RpcCallback<
+          com.google.protobuf.Message> done) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.callMethod() given method descriptor for wrong " +
+          "service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          this.registerSample(controller, (com.orbekk.stats.Experiments.SimpleTiming)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.stats.Experiments.Empty>specializeCallback(
+              done));
+          return;
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getRequestPrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getRequestPrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.stats.Experiments.SimpleTiming.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getResponsePrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getResponsePrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.orbekk.stats.Experiments.Empty.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public static Stub newStub(
+        com.google.protobuf.RpcChannel channel) {
+      return new Stub(channel);
+    }
+    
+    public static final class Stub extends com.orbekk.stats.Experiments.Experiment2 implements Interface {
+      private Stub(com.google.protobuf.RpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.RpcChannel channel;
+      
+      public com.google.protobuf.RpcChannel getChannel() {
+        return channel;
+      }
+      
+      public  void registerSample(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.stats.Experiments.SimpleTiming request,
+          com.google.protobuf.RpcCallback<com.orbekk.stats.Experiments.Empty> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.stats.Experiments.Empty.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.stats.Experiments.Empty.class,
+            com.orbekk.stats.Experiments.Empty.getDefaultInstance()));
+      }
+    }
+    
+    public static BlockingInterface newBlockingStub(
+        com.google.protobuf.BlockingRpcChannel channel) {
+      return new BlockingStub(channel);
+    }
+    
+    public interface BlockingInterface {
+      public com.orbekk.stats.Experiments.Empty registerSample(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.stats.Experiments.SimpleTiming request)
+          throws com.google.protobuf.ServiceException;
+    }
+    
+    private static final class BlockingStub implements BlockingInterface {
+      private BlockingStub(com.google.protobuf.BlockingRpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.BlockingRpcChannel channel;
+      
+      public com.orbekk.stats.Experiments.Empty registerSample(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.stats.Experiments.SimpleTiming request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.stats.Experiments.Empty) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.orbekk.stats.Experiments.Empty.getDefaultInstance());
+      }
+      
+    }
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_orbekk_stats_Empty_descriptor;
   private static
@@ -924,7 +1145,9 @@ public final class Experiments {
       "\014SimpleTiming\022\016\n\006timing\030\001 \001(\001\022\022\n\nnumDevi" +
       "ces\030\002 \001(\0052X\n\013Experiment1\022I\n\016RegisterSamp" +
       "le\022\036.com.orbekk.stats.SimpleTiming\032\027.com" +
-      ".orbekk.stats.EmptyB\003\210\001\001"
+      ".orbekk.stats.Empty2X\n\013Experiment2\022I\n\016Re" +
+      "gisterSample\022\036.com.orbekk.stats.SimpleTi" +
+      "ming\032\027.com.orbekk.stats.EmptyB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
