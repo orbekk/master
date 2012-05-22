@@ -93,4 +93,5 @@ service Paxos {
 
 service SystemService {
 	rpc GetSystemStatus (Empty) returns (SystemStatus);
+    rpc KillMaster (Empty) returns (Empty);
 }

@@ -27,6 +27,7 @@ import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.orbekk.paxos.PaxosServiceImpl;
 import com.orbekk.protobuf.Rpc;
+import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.protobuf.SimpleProtobufServer;
 import com.orbekk.same.Services.Empty;
 import com.orbekk.same.Services.MasterState;
@@ -50,8 +51,6 @@ public class SameController {
     private static final int timeout = 10000;
 
     private class SystemServiceImpl extends Services.SystemService {
-
-        
         private void addMasterInfo(SystemStatus.Builder response) {
             Master currentMaster = master;
             if (currentMaster != null) {
@@ -80,6 +79,37 @@ public class SameController {
             addMasterInfo(response);
             addClientInfo(response);
             done.run(response.build());
+        }
+
+        @Override
+        public void killMaster(final RpcController rpc, Empty unused,
+                final RpcCallback<Empty> done) {
+            logger.info("KillMaster().");
+            String clientLocation = client.getClientState().getLocation();
+            String masterLocation = client.getMaster().getMasterLocation();
+            if (clientLocation.equals(masterLocation)) {
+                SameController.this.killMaster();
+                done.run(Empty.getDefaultInstance());
+                return;
+            } else {
+                RpcChannel channel = connections.getChannel(masterLocation);
+                if (channel == null) {
+                    logger.error("Unable to contact master.");
+                    done.run(Empty.getDefaultInstance());
+                    return;
+                }
+                Services.SystemService system = Services.SystemService.newStub(channel);
+                final Rpc rpc_ = rpcf.create();
+                RpcCallback<Empty> done_ = new RpcCallback<Empty>() {
+                    @Override public void run(Empty unused) {
+                        if (!rpc_.isOk()) {
+                            rpc.setFailed(rpc_.errorText());
+                        }
+                        done.run(Empty.getDefaultInstance());
+                    }
+                };
+                system.killMaster(rpc_, Empty.getDefaultInstance(), done_);
+            }
         }
     }
 

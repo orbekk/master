@@ -7819,6 +7819,11 @@ public final class Services {
           com.orbekk.same.Services.Empty request,
           com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done);
       
+      public abstract void killMaster(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
+      
     }
     
     public static com.google.protobuf.Service newReflectiveService(
@@ -7830,6 +7835,14 @@ public final class Services {
             com.orbekk.same.Services.Empty request,
             com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done) {
           impl.getSystemStatus(controller, request, done);
+        }
+        
+        @java.lang.Override
+        public  void killMaster(
+            com.google.protobuf.RpcController controller,
+            com.orbekk.same.Services.Empty request,
+            com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
+          impl.killMaster(controller, request, done);
         }
         
       };
@@ -7856,6 +7869,8 @@ public final class Services {
           switch(method.getIndex()) {
             case 0:
               return impl.getSystemStatus(controller, (com.orbekk.same.Services.Empty)request);
+            case 1:
+              return impl.killMaster(controller, (com.orbekk.same.Services.Empty)request);
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -7871,6 +7886,8 @@ public final class Services {
           }
           switch(method.getIndex()) {
             case 0:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
+            case 1:
               return com.orbekk.same.Services.Empty.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
@@ -7888,6 +7905,8 @@ public final class Services {
           switch(method.getIndex()) {
             case 0:
               return com.orbekk.same.Services.SystemStatus.getDefaultInstance();
+            case 1:
+              return com.orbekk.same.Services.Empty.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -7900,6 +7919,11 @@ public final class Services {
         com.google.protobuf.RpcController controller,
         com.orbekk.same.Services.Empty request,
         com.google.protobuf.RpcCallback<com.orbekk.same.Services.SystemStatus> done);
+    
+    public abstract void killMaster(
+        com.google.protobuf.RpcController controller,
+        com.orbekk.same.Services.Empty request,
+        com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done);
     
     public static final
         com.google.protobuf.Descriptors.ServiceDescriptor
@@ -7928,6 +7952,11 @@ public final class Services {
             com.google.protobuf.RpcUtil.<com.orbekk.same.Services.SystemStatus>specializeCallback(
               done));
           return;
+        case 1:
+          this.killMaster(controller, (com.orbekk.same.Services.Empty)request,
+            com.google.protobuf.RpcUtil.<com.orbekk.same.Services.Empty>specializeCallback(
+              done));
+          return;
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -7943,6 +7972,8 @@ public final class Services {
       }
       switch(method.getIndex()) {
         case 0:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
+        case 1:
           return com.orbekk.same.Services.Empty.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
@@ -7960,6 +7991,8 @@ public final class Services {
       switch(method.getIndex()) {
         case 0:
           return com.orbekk.same.Services.SystemStatus.getDefaultInstance();
+        case 1:
+          return com.orbekk.same.Services.Empty.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -7995,6 +8028,21 @@ public final class Services {
             com.orbekk.same.Services.SystemStatus.class,
             com.orbekk.same.Services.SystemStatus.getDefaultInstance()));
       }
+      
+      public  void killMaster(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request,
+          com.google.protobuf.RpcCallback<com.orbekk.same.Services.Empty> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.Empty.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.orbekk.same.Services.Empty.class,
+            com.orbekk.same.Services.Empty.getDefaultInstance()));
+      }
     }
     
     public static BlockingInterface newBlockingStub(
@@ -8004,6 +8052,11 @@ public final class Services {
     
     public interface BlockingInterface {
       public com.orbekk.same.Services.SystemStatus getSystemStatus(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException;
+      
+      public com.orbekk.same.Services.Empty killMaster(
           com.google.protobuf.RpcController controller,
           com.orbekk.same.Services.Empty request)
           throws com.google.protobuf.ServiceException;
@@ -8025,6 +8078,18 @@ public final class Services {
           controller,
           request,
           com.orbekk.same.Services.SystemStatus.getDefaultInstance());
+      }
+      
+      
+      public com.orbekk.same.Services.Empty killMaster(
+          com.google.protobuf.RpcController controller,
+          com.orbekk.same.Services.Empty request)
+          throws com.google.protobuf.ServiceException {
+        return (com.orbekk.same.Services.Empty) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          com.orbekk.same.Services.Empty.getDefaultInstance());
       }
       
     }
@@ -8143,10 +8208,11 @@ public final class Services {
       "\n\007Propose\022\035.com.orbekk.same.PaxosRequest" +
       "\032\036.com.orbekk.same.PaxosResponse\022N\n\rAcce" +
       "ptRequest\022\035.com.orbekk.same.PaxosRequest" +
-      "\032\036.com.orbekk.same.PaxosResponse2Y\n\rSyst",
-      "emService\022H\n\017GetSystemStatus\022\026.com.orbek" +
-      "k.same.Empty\032\035.com.orbekk.same.SystemSta" +
-      "tusB\003\210\001\001"
+      "\032\036.com.orbekk.same.PaxosResponse2\227\001\n\rSys",
+      "temService\022H\n\017GetSystemStatus\022\026.com.orbe" +
+      "kk.same.Empty\032\035.com.orbekk.same.SystemSt" +
+      "atus\022<\n\nKillMaster\022\026.com.orbekk.same.Emp" +
+      "ty\032\026.com.orbekk.same.EmptyB\003\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
