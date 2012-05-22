@@ -9,10 +9,9 @@ system.
 ## Feature list
 An incomplete list of implemented and planned features.
 
-* Fault-tolerance with automatic master selection. (Planned)
-* Network discovery with directory service. (Planned)
+* Fault-tolerance with automatic master selection. (0.6)
+* Network discovery with directory service. (0.3)
 * Ability to share variables with other peers. (Implemented, 0.1)
-* Network discovery with UDP broadcast. (Implemented, 0.1)
 
 ## Example
 With Same you can share variables easily, like so:
@@ -45,13 +44,14 @@ try {
 Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
-### Next release
-* Better discovery service.
-* Better controller activity on Android. Ability to shut down master.
-* Fix lookup bug with duplicate network names.
+### 0.6
+* Improved discovery service. Overwrite network after master takeover.
+* Add master kill switch in SystemService.
 * RPC logging support.
-* Better VariableUpdater.
-* Monitoring support. (Use the GetSystemStatus tool)
+* Monitoring support with SystemService and GetSystemStatus.
+* Fixes VariableUpdater.
+* Fixes lookup bug with duplicate network names.
+* Experiment and support for generating statistics. (Statsserver)
 
 ### 0.5
 * Tag: 0.5
