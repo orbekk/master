@@ -40,7 +40,7 @@ import com.orbekk.same.State.Component;
 import com.orbekk.util.DelayedOperation;
 
 public class Client {
-    public static long MASTER_TAKEOVER_TIMEOUT = 4000l;
+    public static long MASTER_TAKEOVER_TIMEOUT = 500l;
     private Logger logger = LoggerFactory.getLogger(getClass());
     /** TODO: Not really useful yet. Remove? */
     private volatile ConnectionState connectionState = ConnectionState.DISCONNECTED;
