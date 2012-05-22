@@ -15,6 +15,8 @@
  */
 package com.orbekk.same;
 
+import com.orbekk.protobuf.RpcChannel;
+
 /**
  * An interface that returns a connection for a participant.
  *
@@ -25,4 +27,5 @@ public interface ConnectionManager {
     Services.Client getClient0(String location);
     Services.Directory getDirectory(String location);
     Services.Paxos getPaxos0(String location);
+    RpcChannel getChannel(String location);
 }

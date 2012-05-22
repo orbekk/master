@@ -18,6 +18,7 @@ package com.orbekk.same;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.orbekk.protobuf.RpcChannel;
 import com.orbekk.same.Services.Directory;
 import com.orbekk.same.Services.Master;
 import com.orbekk.same.Services.Paxos;
@@ -56,5 +57,10 @@ public class TestConnectionManager implements ConnectionManager {
     @Override
     public Services.Paxos getPaxos0(String location) {
         return paxosMap0.get(location);
+    }
+    
+    @Override
+    public RpcChannel getChannel(String location) {
+        throw new RuntimeException("Not implemented.");
     }
 }

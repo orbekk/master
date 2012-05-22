@@ -65,7 +65,8 @@ public class ConnectionManagerImpl implements ConnectionManager {
         return true;
     }
     
-    private RpcChannel getChannel(String location) {
+    @Override
+    public RpcChannel getChannel(String location) {
         Future<RpcChannel> channel = channels.get(location);
         if (channel == null) {
             if (!isValidLocation(location)) {
