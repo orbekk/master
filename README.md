@@ -44,7 +44,8 @@ try {
 Pre-1.0: A release is a milestone in the project. Whenever the system seems to
 be working fairly well, a commit is tagged as the release version.
 
-### 0.6
+### 0.6.1
+* Tag: 0.6.1
 * Improved discovery service. Overwrite network after master takeover.
 * Add master kill switch in SystemService.
 * RPC logging support.
