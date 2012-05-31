@@ -41,7 +41,7 @@ import com.orbekk.stats.Experiments.SimpleTiming;
 public class Experiment1Activity extends Activity {
     private Logger logger = LoggerFactory.getLogger(getClass());
     public static final int WARMUP_ITERATIONS = 10;
-    public static final int ITERATIONS = 100;
+    public static final int ITERATIONS = 2000;
     private ClientInterfaceBridge client;
     
     private int warmupIterationsPerformed;
