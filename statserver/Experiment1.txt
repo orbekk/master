@@ -1,0 +1,34 @@
+Device #1: Trygves Galaxy S2
+CPU: Dual-core 1.2 GHz Cortex-A9
+RAM: 1G
+Version: CyanogenMod 9 Android 4.0.4
+
+Device #2: IDIs HTC Desire HD
+CPU: 1 GHz Scorpion
+RAM:768M
+Version: HTC Sense Android 2.3.3
+
+Device #3: Min Galaxy S
+CPU: 1 GHz Cortex-A8
+RAM: 512M
+Version: CyanogenMod 9 Android 4.0.3
+
+Device #4: Simens Galaxy S2
+CPU: Dual-core 1.2 GHz Cortex-A9
+RAM: 1G
+Version: Samsung Android 4.0.3
+
+Device #5: IDIs HTC Desire HD // Liten tabbe med State monitor
+CPU: 1 GHz Scorpion
+RAM:768M
+Version: HTC Sense Android 2.3.3
+
+Device #6: Kathis Nexus S
+RAM: 512M
+CPU: 1 GHz Cortex-A8
+Version: Google Android 4.0.4
+
+Device #7: Trygves Fire
+CPU: Dual-core 1 GHz TI OMAP 4 4430
+RAM: 512M
+Version: CyanogenMod 9 Android 4.0.4
