@@ -64,6 +64,7 @@ public class VariableUpdaterTask<T> extends Thread
     @Override
     public void valueChanged(Variable<T> variable) {
         isReady.countDown();
+        variable.update();
     }
     
     @Override

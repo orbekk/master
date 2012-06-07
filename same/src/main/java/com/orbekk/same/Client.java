@@ -17,11 +17,13 @@ package com.orbekk.same;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -40,7 +42,7 @@ import com.orbekk.same.State.Component;
 import com.orbekk.util.DelayedOperation;
 
 public class Client {
-    public static long MASTER_TAKEOVER_TIMEOUT = 500l;
+    public static int MASTER_TAKEOVER_TIMEOUT = 500;
     private Logger logger = LoggerFactory.getLogger(getClass());
     /** TODO: Not really useful yet. Remove? */
     private volatile ConnectionState connectionState = ConnectionState.DISCONNECTED;
@@ -52,7 +54,7 @@ public class Client {
     private volatile Future<Integer> currentMasterProposal = null;
     private volatile MasterState masterInfo;
     private final RpcFactory rpcf;
-    private final ExecutorService executor;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final ClientInterface clientInterface = new ClientInterfaceImpl();
     private final AtomicLong revision = new AtomicLong(0);
     
@@ -246,8 +248,10 @@ public class Client {
             Runnable sleeperTask = new Runnable() {
                 @Override public synchronized void run() {
                     try {
-                        wait(MASTER_TAKEOVER_TIMEOUT);
+                        long timeout = MASTER_TAKEOVER_TIMEOUT -  new Random().nextInt(100);
+                        wait(timeout);
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             };
@@ -263,9 +267,14 @@ public class Client {
             try {
                 result = currentMasterProposal.get();
             } catch (InterruptedException e) {
+                result = null;
             } catch (ExecutionException e) {
                 logger.error("Error electing master: ", e);
             } catch (CancellationException e) {
+                result = null;
+            }
+            if (Thread.currentThread().isInterrupted()) {
+                return;
             }
             if (!currentMasterProposal.isCancelled() && result != null &&
                     masterInfo.getMasterId() <= failedMaster.getMasterId()) {
@@ -278,14 +287,12 @@ public class Client {
     }
     
     public Client(State state, ConnectionManager connections,
-            String myUrl, String myLocation, RpcFactory rpcf,
-            ExecutorService executor) {
+            String myUrl, String myLocation, RpcFactory rpcf) {
         this.state = state;
         this.connections = connections;
         this.myUrl = myUrl;
         this.myLocation = myLocation;
         this.rpcf = rpcf;
-        this.executor = executor;
     }
     
     public void start() {

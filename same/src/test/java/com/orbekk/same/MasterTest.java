@@ -46,8 +46,7 @@ public class MasterTest {
     public void clientJoin() throws Exception {
         Client client = new Client(
                 new State(), connections,
-                "http://client/ClientService.json", "clientLocation", rpcf,
-                executor);
+                "http://client/ClientService.json", "clientLocation", rpcf);
         connections.clientMap0.put("clientLocation", client.getNewService());
         client.joinNetwork(master.getMasterInfo());
         master.performWork();

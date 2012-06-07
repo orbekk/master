@@ -82,15 +82,14 @@ public class SameController {
         }
 
         @Override
-        public void killMaster(final RpcController rpc, Empty unused,
-                final RpcCallback<Empty> done) {
+        public void killMaster(RpcController rpc, Empty unused,
+                RpcCallback<Empty> done) {
             logger.info("KillMaster().");
             String clientLocation = client.getClientState().getLocation();
             String masterLocation = client.getMaster().getMasterLocation();
             if (clientLocation.equals(masterLocation)) {
                 SameController.this.killMaster();
                 done.run(Empty.getDefaultInstance());
-                return;
             } else {
                 RpcChannel channel = connections.getChannel(masterLocation);
                 if (channel == null) {
@@ -99,16 +98,13 @@ public class SameController {
                     return;
                 }
                 Services.SystemService system = Services.SystemService.newStub(channel);
-                final Rpc rpc_ = rpcf.create();
+                Rpc rpc_ = rpcf.create();
                 RpcCallback<Empty> done_ = new RpcCallback<Empty>() {
                     @Override public void run(Empty unused) {
-                        if (!rpc_.isOk()) {
-                            rpc.setFailed(rpc_.errorText());
-                        }
-                        done.run(Empty.getDefaultInstance());
                     }
                 };
                 system.killMaster(rpc_, Empty.getDefaultInstance(), done_);
+                done.run(Empty.getDefaultInstance());
             }
         }
     }
@@ -170,9 +166,8 @@ public class SameController {
                 configuration.get("localIp"), configuration.getInt("port"));
         String clientUrl = baseUrl + "ClientService.json";
 
-        ExecutorService clientExecutor = Executors.newCachedThreadPool();
         Client client = new Client(clientState, connections,
-                clientUrl, myLocation, rpcf, clientExecutor);
+                clientUrl, myLocation, rpcf);
         PaxosServiceImpl paxos = new PaxosServiceImpl("");
         
         SimpleProtobufServer pServer = SimpleProtobufServer.create(pport);

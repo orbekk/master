@@ -214,15 +214,28 @@ public class Master {
         
         @Override public void run() {
             try {
+                logger.info("Starting master takeover.");
                 sendTakeovers();
-                getMostRecentState();
-                updateParticipants();
-                sendFullState();
-                finishTakeover();
+                if (!aborted.get()) {
+                    getMostRecentState();
+                }
+                if (!aborted.get()) {
+                    updateParticipants();
+                }
+                if (!aborted.get()) {
+                    sendFullState();
+                }
+                if (!aborted.get()) {
+                    finishTakeover();
+                }
             } catch (InterruptedException e) {
                 // Abort master takeover.
-                logger.warn("Master takeover aborted: ", e);
                 aborted.set(true);
+                Thread.currentThread().interrupt();
+            }
+            
+            if (aborted.get()) {
+                logger.warn("Master takeover aborted.");
             }
         }
     }
@@ -392,7 +405,7 @@ public class Master {
         this.masterId = masterId;
         MasterTakeover takeover = new MasterTakeover(
                 state.getList(State.PARTICIPANTS), getMasterInfo());
-        takeover.run();
+        new Thread(takeover).start();
     }
     
     public void updateRevision(long newRevision) {
