@@ -28,13 +28,13 @@ set style line 2 lt rgb "#00A000" lw 2 pt 6
 set style line 3 lt rgb "#5060D0" lw 2 pt 2
 set style line 4 lt rgb "#F25900" lw 2 pt 9
 
-set output "experiment1.pdf"
+set output "experiment2.pdf"
 set xlabel "Number of devices"
 set ylabel "Latency (ms)"
 
 set key bottom right
 
-set xrange [0:8]
+set xrange [1:8]
 # set yrange [0:1]
 set xtics 1
 
@@ -42,4 +42,4 @@ set xtics 1
 #    index 0 title "Example line" w lp ls 1, \
 # "" index 1 title "Another example" w lp ls 2
 
-plot "experiment1.data" title "Update latency" w errorbars ls 1
+plot "experiment2.data" title "Master recovery time" w errorbars ls 1
